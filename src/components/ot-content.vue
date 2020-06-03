@@ -347,7 +347,7 @@ export default {
         this.isLoading = true;
         this.$http
           .get(`https://scm.dragarwal.com/api-super-ot/${date}`)
-         //  .get(`http://localhost:8888/api-super-ot/${date}`)
+          // .get(`http://localhost:8888/api-super-ot/${date}`)
                     .then(response => {
 					
 					console.log(response.data);

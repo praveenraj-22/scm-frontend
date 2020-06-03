@@ -1118,8 +1118,8 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr> -->
-				
-				
+
+
 				<tr
                   scope="row"
                   v-for="(item,index) in pondycherry"
@@ -1173,19 +1173,19 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <tr
                   scope="row"
                   v-for="(item,index) in tirunelveli"
@@ -1239,7 +1239,7 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
+
 				<tr
                   scope="row"
                   v-for="(item,index) in coimbatore"
@@ -1293,10 +1293,10 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
                 <tr
                   scope="row"
                   v-for="(item,index) in tuti_madurai"
@@ -1508,8 +1508,8 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
-				
+
+
 				<tr
                   scope="row"
                   v-for="(item,index) in tiruppur"
@@ -1563,10 +1563,10 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
                 <tr
                   scope="row"
                   v-for="(item,index) in andaman"
@@ -1881,7 +1881,7 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
+
 				<tr
                   scope="row"
                   v-for="(item,index) in maharashtra"
@@ -1987,10 +1987,10 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
                 <tr
                   scope="row"
                   v-for="(item,index) in telangana"
@@ -2305,9 +2305,9 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-                <tr
+                  <tr
                   scope="row"
-                  v-for="(item,index) in triv"
+                  v-for="(item,index) in kerla"
                   :key="index+item.branch"
                   class="font-weight-black indigo lighten-2"
                 >
@@ -2315,7 +2315,59 @@
                     scope="row"
                     :class="changeColorRevenueSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-                    @click="processDialogRevenueSuper(item,triv)"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpharev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdoptrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdotrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlabrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpharev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdoptrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdotrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlabrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in kerla_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorRevenueSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogRevenueSuper(item,kerla_branches)"
+                    style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2463,7 +2515,7 @@
                     class="text-xs-center"
                   >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
                 </tr>
-				
+
                 <tr
                   scope="row"
                   v-for="(item,index) in ahmedabad"
@@ -2519,7 +2571,7 @@
                 </tr>
                 <tr
                   scope="row"
-                  v-for="(item,index) in indore"
+                  v-for="(item,index) in madhyapradesh"
                   :key="index+item.branch"
                   class="font-weight-black indigo lighten-2"
                 >
@@ -2527,7 +2579,59 @@
                     scope="row"
                     :class="changeColorRevenueSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-                    @click="processDialogRevenueSuper(item,indore)"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpharev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdoptrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdotrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlabrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpharev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdoptrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdotrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlabrev| lakshFormatRevenueSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakshFormatRevenueSuper}}</td>
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in madhyapradesh_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorRevenueSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogRevenueSuper(item,madhyapradesh_branches)"
+                    style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3643,11 +3747,13 @@ export default {
     andhra: null,
     andhra_branches: null,
     roi: null,
-    triv: null,
+    kerla: null,
+    kerla_branches: null,
     kolk: null,
-    kolk_branches: null,    
+    kolk_branches: null,
     ahmedabad: null,
-    indore: null,
+    madhyapradesh :null,
+	madhyapradesh_branches :null,
     odisha: null,
     odisha_branches: null,
 	maharashtra :null,
@@ -3709,8 +3815,8 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .get(`https://scm.dragarwal.com/api-revenue-super/${date}`)
-         //.get(`http://localhost:8888/api-revenue-super/${date}`)
+        //  .get(`https://scm.dragarwal.com/api-revenue-super/${date}`)
+         .get(`http://localhost:8888/api-revenue-super/${date}`)
                     .then(response => {
             this.processDataRevenueSuper(response.data);
             this.isLoading = false;
@@ -3751,7 +3857,7 @@ export default {
       this.trichy = data.branchwise["Trichy"];
       // this.thanjavur = [data.ahcgroup["Thanjavur"]];
       this.thanjavur = data.branchwise["Thanjavur"];
-	  
+
       this.andaman = [data.ahcgroup["Andaman"]];
       this.karnataka = [data.ahcgroup["Karnataka"]];
       this.banglore = [data.ahcgroup["Banglore"]];
@@ -3764,18 +3870,19 @@ export default {
       this.andhra = [data.ahcgroup["Andhra Pradesh"]];
       this.andhra_branches = data.branchwise["Andhra Pradesh"];
       this.roi = [data.ahcgroup["Rest of India(incl. Jaipur)"]];
-      // this.triv = [data.ahcgroup["Trivandrum"]];
-      this.triv = data.branchwise["Trivandrum"];
+      this.kerla = [data.ahcgroup["Kerala"]];
+      this.kerla_branches = data.branchwise["Kerala"];
       this.kolk = [data.ahcgroup["Kolkata"]];
       this.kolk_branches = data.branchwise["Kolkata"];
       this.ahmedabad = data.branchwise["Ahmedabad"];
-      this.indore = data.branchwise["Indore"];
+      this.madhyapradesh = [data.ahcgroup["Madhya Pradesh"]];
+      this.madhyapradesh_branches = data.branchwise["Madhya Pradesh"];
       this.odisha = [data.ahcgroup["Odisha"]];
       this.odisha_branches = data.branchwise["Odisha"];
 	  this.pondycherry = data.branchwise["Pondycherry"];
-	  this.tiruppur = data.branchwise["Tiruppur"];	  
+	  this.tiruppur = data.branchwise["Tiruppur"];
 	  this.maharashtra = [data.ahcgroup["Maharashtra"]];
-      this.maharashtra_branches = data.branchwise["Maharashtra"];	  
+      this.maharashtra_branches = data.branchwise["Maharashtra"];
       // this.amb = [data.ahcgroup["Ambattur"]];
       this.show = true;
     },
@@ -3786,7 +3893,7 @@ export default {
           this.aeh,
           this.cmh,
           this.aeh_chennai,
-          this.aeh_chennai_branches,		  
+          this.aeh_chennai_branches,
           this.kanchi_vel,
           this.kanchi_vel_branches,
           this.kum_ney_vil,
@@ -3801,7 +3908,7 @@ export default {
           this.ahc_chennai_branches,
 		  this.pondycherry,
           this.tirunelveli,
-		  this.coimbatore,		  
+		  this.coimbatore,
           this.tuti_madurai,
           this.tuti_madurai_branches,
           this.trichy,
@@ -3813,18 +3920,20 @@ export default {
           this.hub_mys,
           this.hub_mys_branches,
 		  this.maharashtra,
-          this.maharashtra_branches,		  
+          this.maharashtra_branches,
           this.telangana,
           this.hyderabad,
           this.hyderabad_branches,
           this.andhra,
           this.andhra_branches,
           this.roi,
-          this.triv,
+          this.kerla,
+		  this.kerla_branches,
           this.kolk,
-          this.kolk_branches,          
+          this.kolk_branches,
           this.ahmedabad,
-          this.indore,
+          this.madhyapradesh,
+		  this.madhyapradesh_branches,
           this.odisha,
           this.odisha_branches
           // this.amb
@@ -4058,10 +4167,9 @@ export default {
             "TVL",
             "TRI",
             "TNJ",
-            "TVM",
             "PUN",
-            "AHM",
-            "IND"
+            "AHM"
+
           ].includes(data.code)
         ) {
           this.rowColor = "text-xs-center";

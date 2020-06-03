@@ -22,7 +22,7 @@
             flat
             color="grey lighten-2"
           >
-            <v-toolbar-title>NewOPD </v-toolbar-title>
+            <v-toolbar-title>NewConsultation </v-toolbar-title>
             <v-divider
               class="mx-2 black"
               inset
@@ -69,7 +69,7 @@
                 <v-btn
                   flat
                   color="primary"
-                  @click="$refs.menu.save(date);apiRequestOPDSuper(date)"
+                  @click="$refs.menu.save(date);apiRequestOPDConsultSuper(date)"
                   style="outline:none"
                 >Generate</v-btn>
               </v-date-picker>
@@ -84,7 +84,7 @@
               :fields="json_fields"
               type="csv"
               :name="fileName"
-              :fetch="downloadExcelRevenueSuper"
+              :fetch="downloadExcelconsultationSuper"
             >
               <v-btn
                 fab
@@ -115,34 +115,43 @@
               v-if="show"
             >
               <thead>
+
                 <tr class="grey lighten-2">
                   <th
                     class="text-xs-left"
                     width="15%"
                     scope="col"
+                    rowspan="2"
                   >Branch</th>
                   <th
                     class="text-xs-center"
                     scope="col"
-
-                  >FTD</th>
+                    colspan="2"
+                  >New OPD</th>
                   <th
                     class="text-xs-center"
                     scope="col"
-
-                  >MTD</th>
-				  <th
-                    class="text-xs-center"
-                    scope="col"
-
-                  >LMTD</th>
-				  <th
-                    class="text-xs-center"
-                    scope="col"
-
-                  >MTD%</th>
+                    colspan="2"
+                  >Bill Count</th>
                 </tr>
-
+                <tr class="grey lighten-2">
+                  <th
+                    scope="col"
+                    class="text-xs-center"
+                  >FTD</th>
+                  <th
+                    scope="col"
+                    class="text-xs-center"
+                  >MTD</th>
+                  <th
+                    scope="col"
+                    class="text-xs-center"
+                  >FTD</th>
+                  <th
+                    scope="col"
+                    class="text-xs-center"
+                  >MTD</th>
+                  </tr>
               </thead>
               <tbody v-if="user_role=='super_user'">
 
@@ -160,20 +169,20 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
 
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -190,20 +199,20 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
 
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -220,19 +229,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 				<tr
@@ -249,19 +258,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -280,19 +289,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -304,7 +313,7 @@
                     scope="row"
                     :class="text-xs-left"
 
-                  >AEH:</td>
+                  >AEH</td>
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -338,19 +347,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -367,19 +376,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -397,19 +406,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -426,19 +435,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -456,19 +465,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -485,19 +494,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -515,19 +524,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -544,19 +553,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -574,19 +583,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -603,19 +612,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -633,19 +642,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.ftdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -663,19 +672,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -686,7 +695,7 @@
                     scope="row"
                     :class="text-xs-left"
                     style="cursor:pointer"
-                  >AHC:</td>
+                  >AHC </td>
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -719,19 +728,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -749,19 +758,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                   <!-- <tr
@@ -779,19 +788,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr> -->
 
@@ -811,19 +820,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -843,19 +852,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -874,19 +883,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -907,19 +916,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -937,19 +946,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -967,19 +976,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -997,19 +1006,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1029,19 +1038,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1059,19 +1068,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1088,19 +1097,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1118,19 +1127,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1147,19 +1156,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1177,19 +1186,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1207,19 +1216,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1237,19 +1246,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1275,19 +1284,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1304,19 +1313,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1334,19 +1343,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1363,19 +1372,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1393,19 +1402,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1423,19 +1432,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                  <tr
@@ -1452,19 +1461,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1482,19 +1491,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1511,19 +1520,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1541,19 +1550,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1575,19 +1584,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                <tr
@@ -1604,19 +1613,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1634,19 +1643,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1663,19 +1672,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1693,19 +1702,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <!-- <tr
@@ -1723,19 +1732,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr> -->
 
@@ -1786,19 +1795,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -1816,19 +1825,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1846,21 +1855,81 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 				</tr>
-				<!--<tr
+
+        <tr
+                  scope="row"
+                  v-for="(item,index) in rwanda"
+                  :key="index+item.branch"
+                  class="font-weight-black rotgrp"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdcount}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdcount}}</td>
+           <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdconsultcount}}</td>
+          <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdconsultcount}}</td>
+
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in rwanda_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4 "
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdcount}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdcount}}</td>
+           <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdconsultcount}}</td>
+          <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdconsultcount}}</td>
+        </tr>
+
+      	<!--<tr
                   scope="row"
                   v-for="(item,index) in nigeria"
                   :key="index+item.branch"
@@ -1875,52 +1944,23 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>-->
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in rwanda"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
 
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
-
-                </tr>
 				 <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -1935,19 +1975,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -1965,19 +2005,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 				</tr>
 				<tr
                   scope="row"
@@ -1994,19 +2034,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2025,19 +2065,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2056,19 +2096,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2087,19 +2127,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2118,19 +2158,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2154,20 +2194,20 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
 
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2184,19 +2224,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 				<tr
@@ -2213,19 +2253,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2271,19 +2311,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2300,19 +2340,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2330,19 +2370,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2359,19 +2399,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2389,19 +2429,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2418,19 +2458,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2448,19 +2488,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2477,19 +2517,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2507,19 +2547,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2536,19 +2576,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2566,19 +2606,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2596,19 +2636,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2652,19 +2692,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2682,19 +2722,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                   <!-- <tr
@@ -2712,19 +2752,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr> -->
 
@@ -2743,19 +2783,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2773,19 +2813,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 				<tr
@@ -2803,19 +2843,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2832,19 +2872,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2862,19 +2902,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2892,19 +2932,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -2922,19 +2962,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2955,19 +2995,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -2985,19 +3025,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3014,19 +3054,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3044,19 +3084,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3073,19 +3113,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3103,19 +3143,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3133,19 +3173,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3163,19 +3203,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3203,19 +3243,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3232,19 +3272,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3262,19 +3302,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3291,19 +3331,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3321,19 +3361,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3351,19 +3391,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3381,19 +3421,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3410,19 +3450,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3440,19 +3480,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3472,19 +3512,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3502,19 +3542,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3531,19 +3571,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3561,19 +3601,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
               </tbody>
@@ -3596,19 +3636,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 				<tr
@@ -3626,19 +3666,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3656,19 +3696,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
                 <tr
@@ -3686,52 +3726,84 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 				</tr>
-				<!--<tr
+
+
+
+        <!-- <tr
                   scope="row"
-                  v-for="(item,index) in nigeria"
+                  v-for="(item,index) in rwanda"
                   :key="index+item.branch"
-                  class="font-weight-black ochfont"
+                  class="font-weight-black rotgrp"
                 >
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
                   >{{item.branch}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
-				   <td
+                  >{{item.mtdopdcount}}</td>
+           <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
-				  <td
+                  >{{item.ftdconsultcount}}</td>
+          <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
-                </tr>-->
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in rwanda_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4 "
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
 
-				<tr
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdcount}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdcount}}</td>
+           <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdconsultcount}}</td>
+          <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdconsultcount}}</td>
+        </tr>
+ -->
+
+        <!-- <tr
                   scope="row"
                   v-for="(item,index) in rwanda"
                   :key="index+item.branch"
@@ -3751,17 +3823,17 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrev}}</td>
-				   <td
+           <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrevlastyear}}</td>
-				  <td
+          <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
 
-                </tr>
-				 <tr
+                </tr> -->
+         <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
                   :key="index+item.branch"
@@ -3780,11 +3852,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrev}}</td>
-				   <td
+           <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrevlastyear}}</td>
-				  <td
+          <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
@@ -3810,14 +3882,44 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrev}}</td>
-				   <td
+           <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdrevlastyear}}</td>
-				  <td
+          <td
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
+        </tr>
+
+              <tr
+                  scope="row"
+                  v-for="(item,index) in mauritius_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdcount}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdcount}}</td>
+				   <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdconsultcount}}</td>
+				  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdconsultcount}}</td>
 				</tr>
 				<tr
                   scope="row"
@@ -3834,19 +3936,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3865,19 +3967,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3896,19 +3998,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3927,19 +4029,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
 
@@ -3958,19 +4060,19 @@
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
+                  >{{item.ftdopdcount}}</td>
                   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
+                  >{{item.mtdopdcount}}</td>
 				   <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
+                  >{{item.ftdconsultcount}}</td>
 				  <td
                     scope="row"
                     class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+                  >{{item.mtdconsultcount}}</td>
 
                 </tr>
               </tbody>
@@ -4087,6 +4189,7 @@ export default {
     mozambique_branches: null,
 	nigeria: null,
 	rwanda: null,
+  rwanda_branches: null,
 	mauritius: null,
     mauritius_branches: null,
 	zambia: null,
@@ -4103,10 +4206,10 @@ export default {
     ],
     json_fields: {
       "Group/Branch": "branch",
-      "FTD": "ftdopdrev",
-      "MTD": "mtdopdrev",
-	  "LMTD": "mtdopdrevlastyear",
-	  "MTD%": "mtdopdpercentage",
+      "FTD": "ftdopdcount",
+      "MTD": "mtdopdcount",
+	  "FTDConsultation": "ftdconsultcount",
+	  "MTDConsultation": "mtdconsultcount",
 
 
     },
@@ -4121,25 +4224,26 @@ export default {
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-    apiRequestOPDSuper (date) {
+    apiRequestOPDConsultSuper (date) {
       // let superUserName = sessionStorage.getItem("super_user");
       if (date !== null) {
         this.fileDate = date;
-        this.fileName = `NewOPD_Report_${this.fileDate}.csv`;
+        this.fileName = `NewOPDConsultation_Report_${this.fileDate}.csv`;
         this.loading = true;
         this.isLoading = true;
         this.$http
-          //.get(`https://scm.dragarwal.com/api-newpod-super/${date}`)
-          .get(`http://localhost:8888/api-newpod-super/${date}`)
+      //   .get(`https://scm.dragarwal.com/api-consultation-super/${date}`)
+          .get(`http://localhost:8888/api-consultation-super/${date}`)
                     .then(response => {
-            this.processDataOPDSuper(response.data);
+            this.processDataOPDCONSULTSuper(response.data);
+              console.log(response.data);
             this.isLoading = false;
           });
       } else {
         return null;
       }
     },
-    processDataOPDSuper (data) {
+    processDataOPDCONSULTSuper (data) {
 	  if (sessionStorage.getItem('super_user')){
 	     this.user_role = 'super_user';
 	  }else if(sessionStorage.getItem('overseas_user')){
@@ -4210,10 +4314,17 @@ export default {
 	  this.tiruppur = data.branchwise["Tiruppur"];
 
 	  this.madagascar = data.branchwise["Madagascar"];
-	  this.mozambique = [data.ohcgroup["Mozambique"]];
+
+    this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
+
+      this.rwanda = [data.ohcgroup["Rwanda"]];
+        this.rwanda_branches = data.branchwise["Rwanda"];
+
+
 	  this.nigeria = data.branchwise["Nigeria"];
-	  this.rwanda = data.branchwise["Rwanda"];
+
+
 	  this.mauritius = [data.ohcgroup["Mauritius"]];
       this.mauritius_branches = data.branchwise["Mauritius"];
 	  this.zambia = data.branchwise["Zambia"];
@@ -4229,7 +4340,7 @@ export default {
       // this.amb = [data.ahcgroup["Ambattur"]];
       this.show = true;
     },
-    downloadExcelRevenueSuper () {
+    downloadExcelconsultationSuper () {
 
 		if(this.user_role=='super_user'){
 		  let tempDataArr = [];
@@ -4285,6 +4396,7 @@ export default {
 			  this.mozambique,
 			  this.mozambique_branches,
 			  this.rwanda,
+        this.rwanda_branches,
 			  this.mauritius,
 			  this.mauritius_branches,
 			  this.zambia,
@@ -4307,6 +4419,7 @@ export default {
 			  this.mozambique,
 			  this.mozambique_branches,
 			  this.rwanda,
+         this.rwanda_branches,
 			  this.mauritius,
 			  this.mauritius_branches,
 			  this.zambia,

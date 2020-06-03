@@ -1048,8 +1048,8 @@ ROIbranches:null,
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
-      //    .get(`http://localhost:7777/api-opticals-super/${date}`)
+        //  .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
+        .get(`http://localhost:8888/api-opticals-super/${date}`)
                     .then(response => {
             this.processDataOPDSuper(response.data);
             this.isLoading = false;
@@ -1195,7 +1195,7 @@ return null;
 
 
 
-    
+
     },
 
     changeColorOPDSuper (data) {

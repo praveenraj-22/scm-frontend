@@ -63,7 +63,7 @@
                 class="red--text font-weight-regular"
                 :v-if="errors.length"
               >{{errors.toString()}}</span>
-			  
+
 			  <span
                 class="green--text font-weight-regular"
                 :v-if="success.length"
@@ -94,22 +94,22 @@ export default {
     errors: [],
 	success:[]
   }),
-  created () {  
+  created () {
 	 if (sessionStorage.getItem('normal_user')) {
-        let normSess = JSON.parse(sessionStorage.getItem('normal_user'))        
-		this.userId = normSess.name		
+        let normSess = JSON.parse(sessionStorage.getItem('normal_user'))
+		this.userId = normSess.name
       }else if(sessionStorage.getItem('super_user')){
-		 let superSess = JSON.parse(sessionStorage.getItem('super_user'))      
-		this.userId = superSess.name		
+		 let superSess = JSON.parse(sessionStorage.getItem('super_user'))
+		this.userId = superSess.name
 	  }else if(sessionStorage.getItem('overseas_user')){
-		 let superSess = JSON.parse(sessionStorage.getItem('overseas_user'))        
-		this.userId = superSess.name		
+		 let superSess = JSON.parse(sessionStorage.getItem('overseas_user'))
+		this.userId = superSess.name
 	  }else {
-        let superSess = JSON.parse(sessionStorage.getItem('indian_user'))        
-		this.userId = superSess.name		
+        let superSess = JSON.parse(sessionStorage.getItem('indian_user'))
+		this.userId = superSess.name
       }
    },
-  methods: { 
+  methods: {
 	submit () {
 		if (this.$refs.form.validate()) {
 			if(this.newpassword.length<5){
@@ -119,29 +119,29 @@ export default {
 			}else if(this.newpassword==this.confirmpassword){
 				this.loading = true;
 				this.axios
-				  .post(`https://scm.dragarwal.com/api-changepassword`, {
-					//.post(`http://localhost:8888/api-changepassword`, {
+				 // .post(`https://scm.dragarwal.com/api-changepassword`, {
+					.post(`http://localhost:8888/api-changepassword`, {
 					user: this.userId,
 					confirmpassword: this.confirmpassword.trim()
 				  })
-				  .then(response => {			  
+				  .then(response => {
 					console.log(response);
 					this.loading = false;
 					if (response.data.isAuthenticated === true) {
 					   sessionStorage.clear();
-					  this.success = ["Password change successfully"];					  
-                      setTimeout(function(){ 
-							serverBus.$emit("changeComponent", "login");	
+					  this.success = ["Password change successfully"];
+                      setTimeout(function(){
+							serverBus.$emit("changeComponent", "login");
 							this.loading = true;
-							location.reload();	
-					  
-					  }, 500);				
-					  				  
+							location.reload();
+
+					  }, 500);
+
 					}else {
 					  this.errors = ["Password not change"];
 					}
 				  });
-			  
+
 			}else{
 				this.errors = ["New and Confirm Password not match"];
 			}

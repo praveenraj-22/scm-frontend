@@ -123,7 +123,7 @@ export default {
 	revenuereport,
 	newpod,
 	newopdnormal
-	
+
   },
   created () {
     serverBus.$on("changeComponent", component => {
@@ -151,7 +151,7 @@ export default {
 		this.userId = superSess.name
 		this.userType = 'super'
       }
-	  
+
 	  if(this.userType=='super' && this.userId!=103292){
 	    this.tabItems = ['Revenue', 'Cogs Vs Revn','Dashboard','NewOPD']
 	  }
@@ -159,12 +159,12 @@ export default {
 		  this.tabItems = ['Revenue', 'Cogs Vs Revn','Dashboard','Surgery','NewOPD']
 	  }else if(this.userType=='overcease') {
 		  this.tabItems = ['NewOPD']
-	  }  
+	  }
 	  else{
 		    this.tabItems = ['Revenue', 'Cogs Vs Revn','NewOPD']
 	  }
-	
-	  
+
+
     });
     timer.on("idle", () => {
       this.logout();
@@ -172,8 +172,8 @@ export default {
   },
   methods: {
     logout () {
-    this.$http.get(`https://scm.dragarwal.com/logout`).then(response => {
-       //this.$http.get(`http://localhost:8888/logout`).then(response => {
+    //this.$http.get(`https://scm.dragarwal.com/logout`).then(response => {
+       this.$http.get(`http://localhost:8888/logout`).then(response => {
         this.errors = [];
         this.dynamicComponent = "login";
         this.show = false;
@@ -181,12 +181,12 @@ export default {
       });
     },
     changeCategory (item) {
-      
+
       if ((sessionStorage.getItem('super_user')) || (sessionStorage.getItem('overseas_user')) || (sessionStorage.getItem('indian_user'))) {
-	  
+
 	    if (item === 'Revenue') serverBus.$emit('changeComponent', 'revenueSuper')
         if (item === 'Cogs Vs Revn') serverBus.$emit('changeComponent', 'cogsSuper')
-        
+
       }
       else {
         if (item === 'Revenue') serverBus.$emit('changeComponent', 'revenue')
@@ -194,12 +194,12 @@ export default {
       }
 	  if ((sessionStorage.getItem('super_user')) || (sessionStorage.getItem('overseas_user')) || (sessionStorage.getItem('indian_user'))) {
        if (item === 'NewOPD') serverBus.$emit('changeComponent', 'newpod')
-        
+
       }
       else {
 	   if (item === 'NewOPD') serverBus.$emit('changeComponent', 'newopdnormal')
-        
-       
+
+
       }
 	  if(item==='Dashboard'){
 	  serverBus.$emit('changeComponent', 'chart')
@@ -210,8 +210,8 @@ export default {
 	  if(item==='RevenueReport'){
 	  serverBus.$emit('changeComponent', 'revenuereport')
 	  }
-	  
-	  
+
+
     }
     // ,
     // home () {

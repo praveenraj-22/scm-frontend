@@ -1699,8 +1699,8 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .get(`https://scm.dragarwal.com/api-normal/${date}/${normalusername.name}`)
-          // .get(`http://localhost:7777/${date}/${normalusername.name}`)
+        //  .get(`https://scm.dragarwal.com/api-normal/${date}/${normalusername.name}`)
+          .get(`http://localhost:8888/api-normal/${date}/${normalusername.name}`)
           .then(response => {
             this.processData(response.data);
             this.isLoading = false;

@@ -120,25 +120,25 @@
                   <th
                     class="text-xs-center"
                     scope="col"
-                   
+
                   >FTD</th>
                   <th
                     class="text-xs-center"
                     scope="col"
-                  
+
                   >MTD</th>
 				  <th
                     class="text-xs-center"
                     scope="col"
-                  
+
                   >LMTD</th>
 				  <th
                     class="text-xs-center"
                     scope="col"
-                  
+
                   >MTD%</th>
                 </tr>
-                
+
               </thead>
               <tbody>
                 <tr
@@ -149,7 +149,7 @@
                 >
                   <td
                     scope="row"
-                    :class="changeColorRevenue(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"                    
+                    :class="changeColorRevenue(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -168,7 +168,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-                
+
                 </tr>
               </tbody>
             </table>
@@ -189,7 +189,7 @@
           </back-to-top>
           <!-- end Data Tabel -->
         </v-flex>
-		
+
       </v-layout>
     </v-slide-y-transition>
   </v-container>
@@ -229,7 +229,7 @@ export default {
     rowdata: null,
     rowColor: null,
     headingdata: null,
-    tabledata: null,  
+    tabledata: null,
     json_data: null,
     json_meta: [
       {
@@ -244,8 +244,8 @@ export default {
 	  "LMTD": "mtdopdrevlastyear",
 	  "MTD%": "mtdopdpercentage",
     },
-    fileName: null    
-    
+    fileName: null
+
   }),
   created () {
     this.getToday();
@@ -272,11 +272,11 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-         .get(`https://scm.dragarwal.com/api-newpod-normal/${date}/${normalusername.name}`)
-         //.get(`http://localhost:8888/api-newpod-normal/${date}/${normalusername.name}`)
-         
+         //.get(`https://scm.dragarwal.com/api-newpod-normal/${date}/${normalusername.name}`)
+         .get(`http://localhost:8888/api-newpod-normal/${date}/${normalusername.name}`)
+
          .then(response => {
-		 
+
 		 //connsole.log(response.data);		 
             this.processDataRevenue(response.data);
             this.isLoading = false;
@@ -344,7 +344,7 @@ export default {
         return null;
       }
     }
-   
+
   }
 };
 </script>

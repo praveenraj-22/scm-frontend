@@ -49,9 +49,9 @@
                 prepend-inner-icon="event"
                 readonly
               ></v-text-field>
-			  
-			  
-			  
+
+
+
               <v-date-picker
                 color="primary"
                 v-model="date"
@@ -76,8 +76,8 @@
                   style="outline:none"
                 >Generate</v-btn>
               </v-date-picker>
-			  
-			  
+
+
             </v-menu>
             <download-excel
               :data="json_data"
@@ -1084,16 +1084,16 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .get(`https://scm.dragarwal.com/api-revenue-normal/${date}/${normalusername.name}`)
-         //.get(`http://localhost:8888/api-revenue-normal/${date}/${normalusername.name}`)
-         
+          //.get(`https://scm.dragarwal.com/api-revenue-normal/${date}/${normalusername.name}`)
+         .get(`http://localhost:8888/api-revenue-normal/${date}/${normalusername.name}`)
+
          .then(response => {
-		 
-		 //connsole.log(response.data);
-		 
-		 
-		 
-		 
+
+	//	console.log(response.data);
+
+
+
+
             this.processDataRevenue(response.data);
             this.isLoading = false;
           });

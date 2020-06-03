@@ -188,8 +188,8 @@
                 </tr>
               </thead>
               <tbody>
-			  
-			  
+
+
 			   <tr v-if="user_role=='super_user'"
                   scope="row"
                   v-for="(item,index) in group"
@@ -394,8 +394,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in ahc"
@@ -464,8 +464,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in ohc"
@@ -534,19 +534,19 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
 				<tr v-if="user_role!='overseas_user'"
-                  scope="row"                 
+                  scope="row"
                   class="font-weight-black branchesgrp"
                 >
                   <td
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-                    
+
                   >AEH:</td>
                   <td
                     scope="row"
@@ -572,7 +572,7 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-                  
+
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -605,10 +605,10 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-                  
+
                 </tr>
-				
-				
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in cmh"
@@ -1455,12 +1455,12 @@
                 </tr>-->
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
-               
+
                   class="font-weight-black allindiagroup"
                 >
                   <td
-                    scope="row" 
-                    class="text-xs-left"					
+                    scope="row"
+                    class="text-xs-left"
                     style="cursor:pointer"
                   >AHC:</td>
                   <td
@@ -1657,8 +1657,8 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in pondycherry"
@@ -1728,9 +1728,9 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in tirunelveli"
@@ -1800,8 +1800,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in coimbatore"
@@ -1871,8 +1871,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in tuti_madurai"
@@ -2148,8 +2148,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in tiruppur"
@@ -2219,11 +2219,11 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
-				
-				
+
+
+
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in andaman"
@@ -2634,9 +2634,9 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
 				<tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in maharashtra"
@@ -2774,23 +2774,23 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in telangana"
@@ -3203,7 +3203,7 @@
                 </tr>
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
-                  v-for="(item,index) in triv"
+                  v-for="(item,index) in kerla"
                   :key="index+item.branch"
                   class="font-weight-black indigo lighten-2"
                 >
@@ -3211,7 +3211,6 @@
                     scope="row"
                     :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-                    @click="processDialogSuper(item,triv)"
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3268,6 +3267,75 @@
                   <td
                     scope="row"
                     class="text-xs-center"
+                  >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
+                </tr>
+                <tr v-if="user_role!='overseas_user'"
+                  scope="row"
+                  v-for="(item,index) in kerla_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogSuper(item,kerla_branches)"
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.ftd_cogs_percent.toFixed(2)}} %</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
                 <tr v-if="user_role!='overseas_user'"
@@ -3408,9 +3476,9 @@
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
 
-               
-				
-				
+
+
+
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
                   v-for="(item,index) in ahmedabad"
@@ -3482,7 +3550,7 @@
                 </tr>
                 <tr v-if="user_role!='overseas_user'"
                   scope="row"
-                  v-for="(item,index) in indore"
+                  v-for="(item,index) in madhyapradesh"
                   :key="index+item.branch"
                   class="font-weight-black indigo lighten-2"
                 >
@@ -3490,7 +3558,6 @@
                     scope="row"
                     :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-                    @click="processDialogSuper(item,indore)"
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3547,6 +3614,75 @@
                   <td
                     scope="row"
                     class="text-xs-center"
+                  >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
+                </tr>
+                <tr v-if="user_role!='overseas_user'"
+                  scope="row"
+                  v-for="(item,index) in madhyapradesh_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogSuper(item,madhyapradesh_branches)"
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.ftd_cogs_percent.toFixed(2)}} %</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
                 <tr v-if="user_role!='overseas_user'"
@@ -3686,17 +3822,17 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
+
 				<tr v-if="user_role=='super_user'"
                   scope="row"
-                  
+
                   class="font-weight-black ochfont"
                 >
                   <td
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-                   
+
                   >OHC:</td>
                   <td
                     scope="row"
@@ -3755,10 +3891,10 @@
                     class="text-xs-center"
                   ></td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in madagascar"
@@ -3828,9 +3964,9 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in mozambique"
@@ -3899,9 +4035,9 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
 				 <tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in mozambique_branches"
@@ -3971,10 +4107,10 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
-				
+
+
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in rwanda"
@@ -4044,7 +4180,7 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -4113,8 +4249,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				 <tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in mauritius_branches"
@@ -4184,9 +4320,9 @@
                     class="text-xs-center grey lighten-1"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in zambia"
@@ -4256,8 +4392,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in ghana"
@@ -4327,8 +4463,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in nairobi"
@@ -4398,8 +4534,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in uganda"
@@ -4469,8 +4605,8 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
+
+
 				<tr v-if="user_role=='super_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in tanzania"
@@ -4540,9 +4676,9 @@
                     class="text-xs-center"
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
-				
-				
-				
+
+
+
                 <!-- <tr
                   scope="row"
                   v-for="(item,index) in amb"
@@ -6059,11 +6195,13 @@ export default {
     andhra: null,
     andhra_branches: null,
     roi: null,
-    triv: null,
+    kerla: null,
+    kerla_branches: null,
     kolk: null,
-    kolk_branches: null,   
+    kolk_branches: null,
     ahmedabad: null,
-    indore: null,
+    madhyapradesh :null,
+	madhyapradesh_branches :null,
     odisha: null,
     odisha_branches: null,
 	maharashtra :null,
@@ -6082,8 +6220,8 @@ export default {
 	nairobi: null,
 	uganda: null,
 	tanzania: null,
-	
-	
+
+
     json_data: null,
     json_meta: [
       {
@@ -6153,8 +6291,8 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          //.get(`http://localhost:8888/api-super/${date}`) // https need for server
-           .get(`https://scm.dragarwal.com/api-super/${date}`)
+          .get(`http://localhost:8888/api-super/${date}`) // https need for server
+      //    .get(`https://scm.dragarwal.com/api-super/${date}`)
           .then(response => {
             this.processDataSuper(response.data);
             this.isLoading = false;
@@ -6166,13 +6304,13 @@ export default {
     processDataSuper (data) {
 	   if (sessionStorage.getItem('super_user')){
 	     this.user_role = 'super_user';
-	  }else if(sessionStorage.getItem('overseas_user')){		
+	  }else if(sessionStorage.getItem('overseas_user')){
 	    this.user_role = 'overseas_user';
-	  }else if(sessionStorage.getItem('indian_user')){	  
+	  }else if(sessionStorage.getItem('indian_user')){
 		this.user_role = 'indian_user';
 	  }
-	
-	
+
+
 	  this.group = [data.group];
       this.alin = [data.alin];
       this.aeh = [data.aeh];
@@ -6198,7 +6336,7 @@ export default {
       // this.tirunelveli = [data.ahcgroup["Tirunelveli"]];
       this.tirunelveli = data.branchwise["Tirunelveli"];
 	  this.coimbatore = data.branchwise["Coimbatore"];
-	 
+
       this.tuti_madurai = [data.ahcgroup["Tuticorin + Madurai"]];
       this.tuti_madurai_branches = data.branchwise[
         "Tuticorin + Madurai"
@@ -6207,7 +6345,7 @@ export default {
       this.trichy = data.branchwise["Trichy"];
       // this.thanjavur = [data.ahcgroup["Thanjavur"]];
       this.thanjavur = data.branchwise["Thanjavur"];
-	  
+
       this.andaman = [data.ahcgroup["Andaman"]];
       this.karnataka = [data.ahcgroup["Karnataka"]];
       this.banglore = [data.ahcgroup["Banglore"]];
@@ -6220,20 +6358,22 @@ export default {
       this.andhra = [data.ahcgroup["Andhra Pradesh"]];
       this.andhra_branches = data.branchwise["Andhra Pradesh"];
       this.roi = [data.ahcgroup["Rest of India(incl. Jaipur)"]];
-      // this.triv = [data.ahcgroup["Trivandrum"]];
+	  this.kerla = [data.ahcgroup["Kerala"]];
+      this.kerla_branches = data.branchwise["Kerala"];
       this.triv = data.branchwise["Trivandrum"];
       this.kolk = [data.ahcgroup["Kolkata"]];
-      this.kolk_branches = data.branchwise["Kolkata"];      
+      this.kolk_branches = data.branchwise["Kolkata"];
       this.ahmedabad = data.branchwise["Ahmedabad"];
-      this.indore = data.branchwise["Indore"];
+      this.madhyapradesh = [data.ahcgroup["Madhya Pradesh"]];
+      this.madhyapradesh_branches = data.branchwise["Madhya Pradesh"];
       this.odisha = [data.ahcgroup["Odisha"]];
-      this.odisha_branches = data.branchwise["Odisha"];	  
+      this.odisha_branches = data.branchwise["Odisha"];
 	  this.maharashtra = [data.ahcgroup["Maharashtra"]];
       this.maharashtra_branches = data.branchwise["Maharashtra"];
 	  this.pondycherry = data.branchwise["Pondycherry"];
 	  this.tiruppur = data.branchwise["Tiruppur"];
-	  
-	  
+
+
 	  this.madagascar = data.branchwise["Madagascar"];
 	  this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
@@ -6258,7 +6398,7 @@ export default {
 			  this.ahc,
 			  this.cmh,
 			  this.aeh_chennai,
-			  this.aeh_chennai_branches,			 
+			  this.aeh_chennai_branches,
 			  this.kanchi_vel,
 			  this.kanchi_vel_branches,
 			  this.kum_ney_vil,
@@ -6267,12 +6407,12 @@ export default {
 			  this.dha_salem_krish_branches,
 			  this.erod_hosure,
 			  this.erod_hosure_branches,
-			  this.jaipur,          
+			  this.jaipur,
 			  this.ahc_chennai,
 			  this.ahc_chennai_branches,
 			  this.pondycherry,
 			  this.tirunelveli,
-			  this.coimbatore,		  
+			  this.coimbatore,
 			  this.tuti_madurai,
 			  this.tuti_madurai_branches,
 			  this.trichy,
@@ -6291,16 +6431,17 @@ export default {
 			  this.andhra,
 			  this.andhra_branches,
 			  this.roi,
-			  this.triv,
+			  this.kerla,
+			  this.kerla_branches,
 			  this.kolk,
-			  this.kolk_branches,			  
+			  this.kolk_branches,
 			  this.ahmedabad,
 			  this.indore,
 			  this.odisha,
-			  this.odisha_branches,			  
+			  this.odisha_branches,
 				this.madagascar,
 				this.mozambique,
-				this.mozambique_branches,			 
+				this.mozambique_branches,
 				this.rwanda,
 				this.mauritius,
 				this.mauritius_branches,
@@ -6317,10 +6458,10 @@ export default {
 		}else if(this.user_role=='overseas_user'){
 		  let tempDataArr = [];
 		  if (this.fileDate !== null) {
-			tempDataArr = this.ohc.concat(			  
+			tempDataArr = this.ohc.concat(
 				this.madagascar,
 				this.mozambique,
-				this.mozambique_branches,			 
+				this.mozambique_branches,
 				this.rwanda,
 				this.mauritius,
 				this.mauritius_branches,
@@ -6342,7 +6483,7 @@ export default {
 			  this.ahc,
 			  this.cmh,
 			  this.aeh_chennai,
-			  this.aeh_chennai_branches,			 
+			  this.aeh_chennai_branches,
 			  this.kanchi_vel,
 			  this.kanchi_vel_branches,
 			  this.kum_ney_vil,
@@ -6351,12 +6492,12 @@ export default {
 			  this.dha_salem_krish_branches,
 			  this.erod_hosure,
 			  this.erod_hosure_branches,
-			  this.jaipur,          
+			  this.jaipur,
 			  this.ahc_chennai,
 			  this.ahc_chennai_branches,
 			   this.pondycherry,
 			  this.tirunelveli,
-			  this.coimbatore,		  
+			  this.coimbatore,
 			  this.tuti_madurai,
 			  this.tuti_madurai_branches,
 			  this.trichy,
@@ -6375,14 +6516,16 @@ export default {
 			  this.andhra,
 			  this.andhra_branches,
 			  this.roi,
-			  this.triv,
+			  this.kerla,
+			  this.kerla_branches,
 			  this.kolk,
-			  this.kolk_branches,			 
+			  this.kolk_branches,
 			  this.ahmedabad,
-			  this.indore,
+			  this.madhyapradesh,
+			  this.madhyapradesh_branches,
 			  this.odisha,
 			  this.odisha_branches,
-				
+
 			);
 			return tempDataArr;
 		  } else {
@@ -6614,10 +6757,9 @@ export default {
             "TVL",
             "TRI",
             "TNJ",
-            "TVM",
             "PUN",
-            "AHM",
-            "IND"
+            "AHM"
+
           ].includes(data.code)
         ) {
           this.rowColor = "text-xs-center";
