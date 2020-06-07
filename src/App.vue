@@ -57,8 +57,10 @@ import Collection from "./components/collection";
 import avamagic from "./components/avamagic";
 import Newconsultation from "./components/consultation";
 import DRT from "./components/chdrt";
-import DRTApproval from "./components/schdrt"
-import AdminApproval from "./components/admindrt.vue"
+import DRTApproval from "./components/schdrt";
+import AdminApproval from "./components/admindrt.vue";
+import DRTreport from "./components/admindrtreports.vue";
+
 import {
   serverBus
 } from "./main";
@@ -105,7 +107,7 @@ export default {
     DRT,
     DRTApproval,
     AdminApproval,
-
+    DRTreport
   },
   created() {
     serverBus.$on("changeComponent", component => {
@@ -167,7 +169,7 @@ export default {
         this.userId = superSess.name
         this.userType = 'super'
       }
-console.log("user type : "+this.userType);
+
       if (this.userType == 'super' && this.userId != 103292) {
 
         if (this.userId == 103390) {
@@ -202,7 +204,7 @@ console.log("user type : "+this.userType);
       }
       else if (this.userType == 'financeuser') {
 
-        this.tabItems = ['AdminApproval']
+        this.tabItems = ['AdminApproval','DRTreport']
       } else {
         this.tabItems = ['Revenue', 'Cogs Vs Revn', 'NewOPD']
       }
@@ -287,6 +289,9 @@ console.log("user type : "+this.userType);
       }
       if (item === 'AdminApproval') {
         serverBus.$emit('changeComponent', 'AdminApproval')
+      }
+      if (item === 'DRTreport') {
+        serverBus.$emit('changeComponent', 'DRTreport')
       }
 
 

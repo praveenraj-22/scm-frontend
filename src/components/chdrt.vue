@@ -92,7 +92,7 @@
       <v-flex xs12 sm6 md4>
         <td class="text-xs-left">Ref By : {{ refby }}</td>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 md4>
         <td class="text-xs-left">Bill No : {{ Billno }}</td>
 
       </v-flex>

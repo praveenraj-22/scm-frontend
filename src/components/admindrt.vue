@@ -36,6 +36,15 @@
 
           <v-btn rounded color="primary" dark @click="apiRequestfindrtbill(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
 
+          <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelDrt">
+            <v-btn fab flat medium color="black">
+              <v-tooltip bottom>
+                <v-icon slot="activator" color="green darken-4">fas fa-file-excel</v-icon>
+                <span>Export</span>
+              </v-tooltip>
+            </v-btn>
+          </download-excel>
+
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->
@@ -75,123 +84,123 @@
 
                 </td>
 
-                                <td class="text-xs-right">
-                                  <v-layout row justify-center>
-                                    <v-dialog v-model="dialog" persistent max-width="800px" lazy absolute>
+                <td class="text-xs-right">
+                  <v-layout row justify-center>
+                    <v-dialog v-model="dialog" persistent max-width="800px" lazy absolute>
 
-                                      <v-card>
-                                        <v-card-title>
-                                          <span class="headline">Information</span>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">Information</span>
 
-                                        </v-card-title>
-                                        <v-card-text>
-                                          <v-container grid-list-md>
-                                            <v-layout wrap>
-                                              <v-flex xs12>
-                                                <div class="table-responsive">
-                                                  <table align="center" class="table table-hover table-bordered" v-if="show">
-                                                    <thead>
-                                                      <!-- <tr>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container grid-list-md>
+                            <v-layout wrap>
+                              <v-flex xs12>
+                                <div class="table-responsive">
+                                  <table align="center" class="table table-hover table-bordered" v-if="show">
+                                    <thead>
+                                      <!-- <tr>
                                                         <th class="text-left">Service/Item</th>
                                                         <th class="text-left">QTY</th>
                                                         <th class="text-left">Amount</th>
                                                       </tr> -->
-                                                    </thead>
-                                                    <tbody>
-                                                      <tr>
-                                                        <td class="text-xs-left">Mrn : {{ Mrn }}</td>
-                                                        <td class="text-xs-left">Name : {{ Name }}</td>
-                                                        <td class="text-xs-left">Visited date : {{ vdate }}</td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td class="text-xs-left">Ref Type : {{ reftype }}</td>
-                                                        <td class="text-xs-left">Ref Sub : {{ refsub }}</td>
-                                                        <td class="text-xs-left">Ref By : {{ refby }}</td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td class="text-xs-left">Bill No : {{ Billno }}</td>
-                                                        <td class="text-xs-left" colspan="2">Bill Date : {{ vdate}}</td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td class="text-xs-left">Bill Amount : {{ billamount}}</td>
-                                                        <td class="text-xs-left">Discount Amount : {{ discount }}</td>
-                                                        <td class="text-xs-left">Net Amount : {{ netamount }}</td>
-                                                      </tr>
-                                                    </tbody>
-                                                  </table>
-                                                </div>
-                                              </v-flex>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td class="text-xs-left">Mrn : {{ Mrn }}</td>
+                                        <td class="text-xs-left">Name : {{ Name }}</td>
+                                        <td class="text-xs-left">Visited date : {{ vdate }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Ref Type : {{ reftype }}</td>
+                                        <td class="text-xs-left">Ref Sub : {{ refsub }}</td>
+                                        <td class="text-xs-left">Ref By : {{ refby }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Bill No : {{ Billno }}</td>
+                                        <td class="text-xs-left" colspan="2">Bill Date : {{ vdate}}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Bill Amount : {{ billamount}}</td>
+                                        <td class="text-xs-left">Discount Amount : {{ discount }}</td>
+                                        <td class="text-xs-left">Net Amount : {{ netamount }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </v-flex>
 
-                      <v-flex xs12>
-                        <div class="table-responsive">
-                          <table align="center" class="table table-hover table-bordered" v-if="show">
-                            <thead>
-                              <tr>
-                                <th class="text-left">Service/Item</th>
-                                <th class="text-left">QTY</th>
-                                <th class="text-left">Amount</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="item in drtbilldetail" :key="item.name">
-                                <td>{{ item.ITEMNAME }}</td>
-                                <td>{{ item.QUANTITY }}</td>
-                                <td>{{ item.NET_AMOUNT }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </v-flex>
-                      <v-flex xs12>
-                        <div class="table-responsive">
-                          <table align="center" class="table table-hover table-bordered" v-if="show">
-                            <thead>
-
-
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td class="text-xs-left" colspan="2">Selected DRT : {{ drtcusname }}</td>
-                                <td class="text-xs-left">PAN no : {{ panno }}</td>
-
-                              </tr>
-                              <tr>
-                                <td class="text-xs-left">Agreed % : {{ aggcommission }}</td>
-                                <td class="text-xs-left">Given % : {{ drtcommission }}</td>
-                                <td class="text-xs-left">DRT Amount : {{ drtamount }}</td>
-                              </tr>
-                              <tr>
-                                <td class="text-xs-left" colspan="3">Comments : {{ drtcomments }}</td>
-                              </tr>
-                              <tr>
-                                <td class="text-xs-left">Selected category : {{ drtcat }}</td>
-                              </tr>
-                              <tr>
-                                <td class="text-xs-left">Created by : {{ Createdby }}</td>
-                                <td class="text-xs-left">Sch Approved by : {{ schapprovedby }}</td>
-                                <td class="text-xs-left">Finance Approved by : {{ Financeapprovedby }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </v-flex>
+                              <v-flex xs12>
+                                <div class="table-responsive">
+                                  <table align="center" class="table table-hover table-bordered" v-if="show">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-left">Service/Item</th>
+                                        <th class="text-left">QTY</th>
+                                        <th class="text-left">Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr v-for="item in drtbilldetail" :key="item.name">
+                                        <td>{{ item.ITEMNAME }}</td>
+                                        <td>{{ item.QUANTITY }}</td>
+                                        <td>{{ item.NET_AMOUNT }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </v-flex>
+                              <v-flex xs12>
+                                <div class="table-responsive">
+                                  <table align="center" class="table table-hover table-bordered" v-if="show">
+                                    <thead>
 
 
-                    </v-layout>
-                </v-container>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td class="text-xs-left" colspan="2">Selected DRT : {{ drtcusname }}</td>
+                                        <td class="text-xs-left">PAN no : {{ panno }}</td>
 
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Agreed % : {{ aggcommission }}</td>
+                                        <td class="text-xs-left">Given % : {{ drtcommission }}</td>
+                                        <td class="text-xs-left">DRT Amount : {{ drtamount }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left" colspan="3">Comments : {{ drtcomments }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Selected category : {{ drtcat }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-xs-left">Created by : {{ Createdby }}</td>
+                                        <td class="text-xs-left">Sch Approved by : {{ schapprovedby }}</td>
+                                        <td class="text-xs-left">Finance Approved by : {{ Financeapprovedby }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </v-flex>
 
-                </v-card-actions>
-                </v-card>
+
+                            </v-layout>
+                          </v-container>
+
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+
+                        </v-card-actions>
+                      </v-card>
 
 
 
-                </v-dialog>
-                </v-layout>
+                    </v-dialog>
+                  </v-layout>
                 </td>
               </tr>
 </template>
@@ -284,7 +293,35 @@ export default {
     dialog: false,
     test: true,
     GSTIN: '',
-
+    json_data: null,
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
+    json_fields: {
+      "Bill No": "Bill_no",
+      "Bill Date": "bill_date",
+      "Mrn": "Mrn",
+      "Name": "Name",
+      "Total Net Amount": "Net_amount",
+      "Reference": "Reference",
+      "DRT Name": "DRTNAME",
+      "Agreed %": "Aggreed_percentage_value",
+      "Comm %":"Drt_percentage_value",
+      "Comm Amt":"Drt_amount",
+      "Comments":"Comments",
+      "Net Amount":"Net_amount",
+      "Status":"drtApproval_status",
+      "Created by":"Created_by",
+      "Submitted time":"Drt_Created_on",
+      "SCH Approved by":"sch_Approved_by",
+      "SCH Approved Time":"Drt_Approved_time",
+      "Finance Approved by":"Admin_approved_by",
+      "Finance Approved Time":"Drt_Admin_Approved_time",
+      "Cancelled By":"Cancelled_by",
+      "Cancelled Time":"Drt_Cancelled_time"
+    },
+    fileName: null,
     headers: [{
         text: 'Bill no',
         align: 'left',
@@ -440,10 +477,10 @@ export default {
 
   methods: {
     rowClick(id) {
-// alert(id);
-this.billid = id;
-      this.dialog=true;
-      this.axios.get(`http://localhost:8888/api-approvalbills/${this.billid}`).then(response=>{
+      // alert(id);
+      this.billid = id;
+      this.dialog = true;
+      this.axios.get(`http://localhost:8888/api-approvalbills/${this.billid}`).then(response => {
         this.drtbilldetail = response.data;
         console.log(this.drtbilldetail);
         this.Name = this.drtbilldetail[0]["PATIENT_NAME"]
@@ -467,10 +504,10 @@ this.billid = id;
         this.drtcusname = this.drtbilldetail[0]["DRT_Name"];
         this.drtcat = this.drtbilldetail[0]["DRT_Category"];
         this.drtcusid = this.drtbilldetail[0]["DRT_Id"]
-        this.discount=this.drtbilldetail[0]["BILL_DISCOUNT_AMOUNT"];
-          this.Createdby=this.drtbilldetail[0]["Created_by"];
-            this.schapprovedby=this.drtbilldetail[0]["sch_Approved_by"];
-              this.Financeapprovedby=this.drtbilldetail[0]["Admin_approved_by"];
+        this.discount = this.drtbilldetail[0]["BILL_DISCOUNT_AMOUNT"];
+        this.Createdby = this.drtbilldetail[0]["Created_by"];
+        this.schapprovedby = this.drtbilldetail[0]["sch_Approved_by"];
+        this.Financeapprovedby = this.drtbilldetail[0]["Admin_approved_by"];
       })
     },
 
@@ -881,15 +918,12 @@ this.billid = id;
         }
 
 
-
-        branch = this.SetBranch;
-        status = this.SetStatus;
         var str = "_"
         this.fileDate = this.fromdate.concat(str, this.todate);
-        this.file = status.concat(str, branch, str, this.fileDate)
+
         console.log(this.fileDate);
 
-        this.fileName = `Collection_Report_${this.file}.csv`;
+        this.fileName = `Drt_Report_${this.fileDate}.csv`;
 
 
       }
@@ -907,8 +941,7 @@ this.billid = id;
         this.user_role = 'optical_user';
       } else if (sessionStorage.getItem('coll_user')) {
         this.user_role = 'coll_user';
-      }
-      else if (sessionStorage.getItem('fin_user')) {
+      } else if (sessionStorage.getItem('fin_user')) {
         this.user_role = 'fin_user';
       }
 
@@ -917,7 +950,7 @@ this.billid = id;
       this.show = true;
     },
 
-    downloadExcelCollectionSuper() {
+    downloadExcelDrt() {
       let tempDataArr = [];
       if (this.fileDate !== null) {
         tempDataArr = this.billdata
