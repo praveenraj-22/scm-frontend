@@ -59,8 +59,9 @@ import Newconsultation from "./components/consultation";
 import DRT from "./components/chdrt";
 import DRTApproval from "./components/schdrt";
 import AdminApproval from "./components/admindrt.vue";
-import DRTreport from "./components/admindrtreports.vue";
-
+import chicdoctorlist from "./components/chicdoctor.vue";
+import admindoctorapproval from "./components/admindoctorapproval.vue"
+import subbill from "./components/subbills.vue"
 import {
   serverBus
 } from "./main";
@@ -107,7 +108,9 @@ export default {
     DRT,
     DRTApproval,
     AdminApproval,
-    DRTreport
+    chicdoctorlist,
+    admindoctorapproval,
+    subbill
   },
   created() {
     serverBus.$on("changeComponent", component => {
@@ -136,6 +139,7 @@ export default {
         }
       } else if (sessionStorage.getItem('super_user')) {
         let superSess = JSON.parse(sessionStorage.getItem('super_user'))
+        console.log(superSess);
         this.userName = superSess.userName
         this.userId = superSess.name
         this.userType = 'super'
@@ -156,6 +160,7 @@ export default {
         this.userType = 'collection'
       }
       else if (sessionStorage.getItem('fin_user')) {
+
         let superSess = JSON.parse(sessionStorage.getItem('fin_user'))
         this.userName = superSess.userName
         console.log(this.userName);
@@ -183,7 +188,7 @@ export default {
         }
       }
       else if (this.userType == 'super' && this.userId == 103292) {
-        this.tabItems = ['Revenue', 'Cogs Vs Revn', 'Dashboard', 'Surgery', 'NewOPD', 'Optical', 'Discount', 'Collection', 'AVA-Magic50', 'Newconsultation']
+        this.tabItems = ['Revenue', 'Cogs Vs Revn', 'Dashboard', 'Surgery', 'NewOPD', 'Optical', 'Discount', 'Collection', 'AVA-Magic50', 'Newconsultation','AdminApproval']
       }
       else if (this.userType == 'overcease') {
         this.tabItems = ['Cogs Vs Revn', 'NewOPD']
@@ -204,7 +209,7 @@ export default {
       }
       else if (this.userType == 'financeuser') {
 
-        this.tabItems = ['AdminApproval','DRTreport']
+        this.tabItems = ['AdminApproval']
       } else {
         this.tabItems = ['Revenue', 'Cogs Vs Revn', 'NewOPD']
       }
@@ -290,9 +295,17 @@ export default {
       if (item === 'AdminApproval') {
         serverBus.$emit('changeComponent', 'AdminApproval')
       }
-      if (item === 'DRTreport') {
-        serverBus.$emit('changeComponent', 'DRTreport')
+      if (item === 'chicdoctorlist') {
+        serverBus.$emit('changeComponent', 'chicdoctorlist')
       }
+      if (item === 'admindoctorapproval') {
+        serverBus.$emit('changeComponent', 'admindoctorapproval')
+      }
+      if (item === 'subbill') {
+        serverBus.$emit('changeComponent', 'subbill')
+      }
+
+
 
 
     }

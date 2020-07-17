@@ -36,13 +36,22 @@
 
           <v-btn rounded color="primary" dark @click="apiRequestschdrtbill(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
 
+          <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelschDrt">
+            <v-btn fab flat medium color="black">
+              <v-tooltip bottom>
+                <v-icon slot="activator" color="green darken-4">fas fa-file-excel</v-icon>
+                <span>Export</span>
+              </v-tooltip>
+            </v-btn>
+          </download-excel>
+
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->
 
         <template>
           <v-card-title>
-            <v-toolbar-title>DRT Approval</v-toolbar-title>
+            <v-toolbar-title>IC Approval</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
@@ -122,41 +131,7 @@
                                   </table>
                                 </div>
                               </v-flex>
-                              <!--
-                              <v-flex xs12 sm6 md4>
-                <td class="text-xs-left">Mrn : {{ Mrn }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Name : {{ Name }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Visited date : {{ vdate }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Ref Type : {{ reftype }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Ref Sub : {{ refsub }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Ref By : {{ refby }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Bill No : {{ Billno }}</td>
 
-      </v-flex>
-      <v-flex xs12 sm6>
-        <td class="text-xs-left">Bill Date : {{ vdate }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Bill Amount : {{ billamount}}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Discount Amount : {{ discount }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Net Amount : {{ netamount }}</td>
-      </v-flex> -->
                               <v-flex xs12>
                                 <div class="table-responsive">
                                   <table align="center" class="table table-hover table-bordered" v-if="show">
@@ -213,36 +188,6 @@
                                 </div>
                               </v-flex>
 
-                              <!-- <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Selected DRT : {{ drtcusname }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Selected category : {{ drtcat }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">PAN no : {{ panno }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Agreed % : {{ aggcommission }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">DRT % : {{ drtcommission }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">DRT Amount : {{ drtamount }}</td>
-      </v-flex>
-      <v-flex xs12>
-        <td class="text-xs-left">Comments : {{ drtcomments }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Created by : {{ Createdby }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Sch Approved by : {{ schapprovedby }}</td>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
-        <td class="text-xs-left">Finance Approved by : {{ Financeapprovedby }}</td>
-      </v-flex> -->
 
 
                             </v-layout>
@@ -353,6 +298,37 @@ export default {
     test: true,
     GSTIN: '',
     dialog: false,
+    json_data: null,
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
+    json_fields: {
+      "Bill No": "Bill_no",
+      "Bill Date": "bill_date",
+      "Mrn": "Mrn",
+      "Name": "Name",
+      "Total Net Amount": "Net_amount",
+      "Reference": "Reference",
+      "DRT Name": "DRTNAME",
+      "Agreed %": "Aggreed_percentage_value",
+      "Comm %":"Drt_percentage_value",
+      "Comm Amt":"Drt_amount",
+      "Comments":"Comments",
+      "Net Amount":"Net_amount",
+      "Status":"drtApproval_status",
+      "Created by":"Created_by",
+      "Submitted time":"Created_on",
+      "SCH Approved by":"sch_Approved_by",
+      "SCH Approved Time":"Approved_time",
+      "Finance Approved by":"Admin_approved_by",
+      "Finance Approved Time":"Admin_Approved_time",
+      "Cancelled By":"Cancelled_by",
+      "Cancelled Time":"Cancelled_time",
+      "Ch Name " : "CH_Name",
+      "Ch Branch":"CH_branch"
+    },
+    fileName: null,
 
     headers: [{
         text: 'Bill no',
@@ -947,16 +923,12 @@ export default {
 
         }
 
+                var str = "_"
+                this.fileDate = this.fromdate.concat(str, this.todate);
 
+                console.log(this.fileDate);
 
-        branch = this.SetBranch;
-        status = this.SetStatus;
-        var str = "_"
-        this.fileDate = this.fromdate.concat(str, this.todate);
-        this.file = status.concat(str, branch, str, this.fileDate)
-        console.log(this.fileDate);
-
-        this.fileName = `Collection_Report_${this.file}.csv`;
+                this.fileName = `Drt_Report_${this.fileDate}.csv`;
 
 
       }
@@ -981,7 +953,7 @@ export default {
       this.show = true;
     },
 
-    downloadExcelCollectionSuper() {
+    downloadExcelschDrt() {
       let tempDataArr = [];
       if (this.fileDate !== null) {
         tempDataArr = this.billdata

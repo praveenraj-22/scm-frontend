@@ -6,13 +6,17 @@
         <v-toolbar flat color="grey lighten-2">
 
           <v-spacer></v-spacer>
-          <v-select :items=entities v-model="SetVisit" label="Visit Type" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
-          <v-spacer></v-spacer>
-          <th width="20%">
-            <v-select :items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+          <th width="10%">
+            <v-select :items="entities" v-model="SetVisit" label="Visit Type" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
           </th>
           <v-spacer></v-spacer>
-          <v-select :items=drttype v-model="Setdrttype" label="Drt Type" id="SelDrttype" item-text="shortCode" item-value="text"></v-select>
+          <th width="10%">
+            <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+          </th>
+          <v-spacer></v-spacer>
+          <th width="20%">
+            <v-select :items="drttype" v-model="Setdrttype" label="Drt Type" id="SelDrttype" item-text="shortCode" item-value="text"></v-select>
+          </th>
           <v-spacer></v-spacer>
 
 
@@ -43,7 +47,15 @@
 
         <template>
           <v-card-title>
-            <v-toolbar-title>DRT </v-toolbar-title>
+            <v-toolbar-title>IC claim</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark @click="billreference()">
+              Submitted Bills
+            </v-btn>
+
+            <v-btn color="primary" dark @click="doctorreference()">
+              View Doctor Reference
+            </v-btn>
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
@@ -75,6 +87,7 @@
                           <v-container grid-list-md>
                             <v-layout wrap>
                               <v-flex xs12 sm6 md4>
+
                 <td class="text-xs-left">Mrn : {{ Mrn }}</td>
       </v-flex>
       <v-flex xs12 sm6 md4>
@@ -129,7 +142,7 @@
         </div>
       </v-flex>
       <v-flex xs12 sm6>
-        <v-autocomplete clearable v-bind:items="drt" label="Select DRT" required item-text="Name" item-value="ID" v-on:change='getDRTdetail'></v-autocomplete>
+        <v-autocomplete clearable autocomplete='off' default="" v-model="memberSelected" :items="drt" label="Select DRT" required item-text="Name" item-value="ID" v-on:change='getDRTdetail'></v-autocomplete>
       </v-flex>
       <v-flex xs12 sm6>
         <v-autocomplete clearable :items="category" label="Category" required item-text="shortCode" item-value="text" v-on:change='getDRTcategory'></v-autocomplete>
@@ -202,6 +215,8 @@
 
 <script>
 import moment from "moment";
+import chicdoctorlist from "@/components/chicdoctor";
+import subbill from "@/components/subbills.vue"
 import {
   serverBus
 } from "../main";
@@ -220,9 +235,21 @@ var curday = function(sp) {
 
 export default {
 
-
+  components: {
+    chicdoctorlist,
+    subbill
+  },
   data: () => ({
+    refdocemail: '',
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+/.test(v) || 'E-mail must be valid',
+    ],
 
+    fileagreementupload: '',
+    filepanupload: '',
+    filepassbookupload: '',
+    newdoctor: false,
     approval: true,
     Mrn: '',
     search: '',
@@ -358,13 +385,40 @@ export default {
       }
 
     ],
+    paymententities: [{
+        shortCode: 'Cash',
+        text: 'Cash'
+      },
+      {
+        shortCode: 'Card',
+        text: 'Card'
+      },
+      {
+        shortCode: 'Cheque',
+        text: 'Cheque'
+      },
+      {
+        shortCode: 'DD',
+        text: 'DD'
+      },
+      {
+        shortCode: 'Fund Transfer',
+        text: 'Fund Transfer'
+      },
+      {
+        shortCode: 'Paytm',
+        text: 'paytm'
+      },
+    ],
 
     SetBranch: [],
     SetVisit: [],
+    Setpayment: [],
     Setdrttype: {
       shortCode: 'YPP',
       text: 'YPP'
     },
+
     userName: null,
     isLoading: false,
     fullPage: true,
@@ -425,7 +479,21 @@ export default {
 
 
     },
-    fileName: null
+    fileName: null,
+    refdoctor: '',
+    refinfavourdoctor: '',
+    refdocbranch: '',
+    refdoccontact: '',
+    refdocemail: '',
+    refdocpan: '',
+    refdocgstin: '',
+    refdocagreed: "",
+    refdocacc: '',
+    refdocaccifsc: '',
+    refdocaccbank: '',
+    agreementupload: '',
+    panupload: '',
+    passbookupload: ''
   }),
   created() {
     this.getToday();
@@ -434,10 +502,64 @@ export default {
 
   mounted() {
     this.loadbranch();
-    //  this.loaddrt();
-  },
 
+  },
+  watch: {
+    dialog: function(val) {
+      if (!val) {
+        this.memberSelected = null;
+
+      }
+    }
+  },
   methods: {
+    billreference() {
+
+      serverBus.$emit('changeComponent', 'subbill')
+    },
+    doctorreference() {
+
+      serverBus.$emit('changeComponent', 'chicdoctorlist')
+    },
+
+    handleFileUploadagreement() {
+      this.fileagreementupload = this.$refs.agreementupload.files[0];
+      console.log(this.fileagreementupload);
+      console.log((this.fileagreementupload.size / 1024 / 1024).toFixed(2));
+      if ((this.fileagreementupload.size / 1024 / 1024).toFixed(2) > 2) {
+        alert("Agreement file is greater than 2MB")
+
+
+        this.fileagreementupload = '';
+        console.log(this.$refs.agreementupload.files = null);
+        // this.$refs.agreementupload.files[0]='';
+
+        console.log(this.fileagreementupload);
+      }
+    },
+
+    handleFileUploadpan() {
+      this.filepanupload = this.$refs.panupload.files[0];
+      console.log(this.filepanupload);
+      console.log((this.filepanupload.size / 1024 / 1024).toFixed(2));
+      if ((this.filepanupload.size / 1024 / 1024).toFixed(2) > 2) {
+        alert("Pan file is greater than 2MB")
+
+        this.filepanupload = '';
+        console.log(this.filepanupload);
+      }
+    },
+    handleFileUploadpassbook() {
+      this.filepassbookupload = this.$refs.passbookupload.files[0];
+      console.log(this.filepassbookupload);
+      console.log((this.filepassbookupload.size / 1024 / 1024).toFixed(2));
+      if ((this.filepassbookupload.size / 1024 / 1024).toFixed(2) > 2) {
+        alert("Passbook file is greater than 2MB")
+
+        this.filepassbookupload = null;
+        console.log(this.filepassbookupload);
+      }
+    },
     drtamountvalue(a) {
       this.drtamount = a;
       this.drtcommission = Math.round((this.drtamount / this.netamount) * 100);
@@ -445,7 +567,7 @@ export default {
     },
     drtcommissionvalue(b) {
       this.drtcommission = b;
-      this.drtamount = ((this.drtcommission * this.netamount) / 100);
+      this.drtamount = Math.round((this.drtcommission * this.netamount) / 100);
       console.log("drt amount---- : " + this.drtamount);
     },
 
@@ -458,12 +580,16 @@ export default {
       this.isLoading = true;
       this.gstin = '';
       this.panno = '';
-      this.drt = null;
-
+      // this.drt = null;
+      // this.$nextTick(() => {
+      //     this.drtid = null
+      // })
+      console.log("drt id : " + this.drtid);
+      console.log("drt : " + this.drt);
       this.aggcommission = '',
-      this.commission = '';
+        this.commission = '';
       this.drtdetail = '';
-      // this.drtid = '';
+      this.drtid = '';
       this.drtcusid = '';
       this.drtcomments = '';
       this.aggcommission = '';
@@ -480,7 +606,7 @@ export default {
               console.log(this.drt);
               // this.isLoading = true;
             });
-        // this.isLoading = false;
+          // this.isLoading = false;
 
 
           console.log(this.drtbilldetail);
@@ -543,7 +669,6 @@ export default {
         })
 
     },
-
     loadbranch() {
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
       this.SetBranch = [];
@@ -573,6 +698,140 @@ export default {
       var fNumber = number;
       var sNumber = parseFloat(fNumber.toFixed(2)).toLocaleString('en-IN');
       return sNumber;
+    },
+    previewFiles(event) {
+      console.log(event.target.files);
+    },
+
+    apiinsertrefdoc(refdoctor, refinfavourdoctor, Setpayment, refdocbranch, refdoccontact, refdocemail, refdocpan, refdocgstin, refdocagreed, refdocacc, refdocaccifsc, refdocaccbank) {
+      let ref_doctor = '';
+      let ref_docbranch = '';
+      let ref_doccontact = '';
+      let ref_docemail = '';
+      let ref_docpan = '';
+      let ref_docgstin = '';
+      let ref_docagreedperc = '';
+      let ref_docacc = '';
+      let ref_docaccifsc = '';
+      let ref_docaccbank = '';
+      let ref_agreementupload = '';
+      let ref_panupload = '';
+      let ref_passbookupload = '';
+      let ref_infavourdoctor = '';
+      let ref_payment = '';
+      var formData = new FormData();
+
+      let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+
+
+      formData.append("doctorname", this.refdoctor);
+      formData.append("docfavourname", this.refinfavourdoctor);
+      formData.append("docpaymenttype", this.Setpayment);
+      formData.append("doctorbranch", this.refdocbranch);
+      formData.append("doctorcontact", this.refdoccontact);
+      formData.append("doctoremail", this.refdocemail);
+      formData.append("doctorpan", this.refdocpan);
+      formData.append("doctorgstin", this.refdocgstin);
+      formData.append("doctoragreed", this.refdocagreed);
+      formData.append("doctoracc", this.refdocacc);
+      formData.append("doctorIFSC", this.refdocaccifsc);
+      formData.append("doctorbankbranch", this.refdocaccbank);
+      formData.append("username", normalusername.name);
+
+
+      formData.append("fileagreementupload", this.fileagreementupload);
+      formData.append("filepanupload", this.filepanupload);
+      formData.append("filepassbookupload", this.filepassbookupload);
+
+      console.log(Array.from(formData));
+
+      console.log("---------------------------------------------------");
+
+      console.log("doctname : " + this.refdoctor);
+      console.log("infavour : " + this.refinfavourdoctor);
+      console.log("paymennt : " + this.Setpayment);
+      console.log("doc branch : " + this.refdocbranch);
+      console.log("doc contact : " + this.refdoccontact);
+      console.log("doc email : " + this.refdocemail);
+      console.log("doc pan: " + this.refdocpan);
+      console.log("doc gstin : " + this.refdocgstin);
+      console.log("doc agreedperc : " + this.refdocagreed);
+      console.log("doc acc :" + this.refdocacc);
+      console.log("doc acc ifsc :" + this.refdocaccifsc);
+      console.log("doc acc bank :" + this.refdocaccbank);
+      console.log("Created user :" + normalusername.name);
+      console.log("---------------------------------------------------");
+
+
+      console.log(this.fileagreementupload);
+      console.log(this.filepanupload);
+      console.log(this.filepassbookupload);
+
+      if ((this.refdoctor == null) || (this.refdoctor == '')) {
+        alert("please enter Doctor name")
+        return false;
+      }
+      if ((this.refdocbranch == null) || (this.refdocbranch == '')) {
+        alert("please enter Doctor branch")
+        return false;
+      }
+
+      if ((this.refdocpan == null) || (this.refdocpan == '')) {
+        alert("please enter Doctor Pan number")
+        return false;
+      }
+      if ((this.refdocagreed == null) || (this.refdocagreed == '')) {
+        alert("please enter Agreed Percentage")
+        return false;
+      }
+      if ((this.refdoccontact.length > 10) || (this.refdoccontact.length < 10)) {
+        alert("please enter 10 Digit mobile number ")
+        return false;
+      }
+      if ((this.refdocpan.length > 10) || (this.refdocpan.length < 10)) {
+        alert("please enter 10 Digit Pan number")
+        return false;
+      }
+      if ((this.refdocagreed > 100) || (this.refdocagreed < 0)) {
+        alert("please enter valid Percentage")
+        return false;
+      }
+      if ((this.refdocagreed = null) || (this.refdocagreed = '')) {
+        alert("please enter Agreed Percentage")
+        return false;
+      }
+
+      this.loading = true;
+      this.isLoading = true;
+
+      this.$http.post('http://localhost:8888/api-uploaddoctor', formData, {}).then(res => {
+        this.isLoading = false;
+
+
+        if (res.data.doctordatainserted === true) {
+          alert(" Doctor name addtion is sent for approval")
+          this.refdoctor = null;
+          this.refdocbranch = null;
+          this.refdoccontact = null;
+          this.refdocemail = null;
+          this.refdocpan = null;
+          this.refdocgstin = null;
+          this.refdocagreed = null;
+          this.refdocacc = null;
+          this.refdocaccifsc = null;
+          this.refdocaccbank = null;
+          this.refinfavourdoctor = null
+          this.Setpayment = null;
+          formData = null;
+          this.newdoctor = false;
+          console.log(formData);
+        } else if (res.data.doctordatainserted === 'Available') {
+          alert("the mentioned Pan number is already Exist")
+          return false;
+        }
+
+      })
+
     },
     apiinsertbill(billid, netamount, aggcommission, drtcommission, drtamount, drtid, drtcategory, drtcomments, buttonstatus) {
       let bill_id = '';
@@ -606,10 +865,18 @@ export default {
       console.log("Mrn : " + this.Mrn);
       console.log("name : " + this.Name);
       console.log("reference : " + this.reftype);
+
       if (this.billid == '') {
         alert("please select DRT name");
         return false;
-      } else if (this.drtcategory == '') {
+      } else if ((this.drtid == "") || (this.drtid === undefined)) {
+        alert("Please select Drt Name ")
+        return false
+      } else if (this.aggcommission === null) {
+        alert("Aggreed percentage is null please select the DRT name");
+        this.drtid = '';
+        return false;
+      } else if ((this.drtcategory == '') || (this.drtcategory === undefined)) {
         alert("please select Category")
         return false;
       } else if (this.drtcommission > 100) {
@@ -617,10 +884,6 @@ export default {
         return false;
       } else if (!(this.drtamount <= this.netamount)) {
         alert("Enter amount is greater than Net amount")
-        return false;
-      } else if (this.drtid == '') {
-
-        alert('Please select the DRT name')
         return false;
       } else {
         let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
@@ -650,20 +913,8 @@ export default {
             if (response.data.Datainserted === true) {
               alert("Drt amount sent for approval")
               this.approval = false;
-              // this.gstin = '',
-              //   this.panno = '';
-              // this.aggcommission = '',
-              //   this.commission = '';
-              // this.drtdetail = '';
-              // this.drtid = '';
-              this.drt = null;
-              // this.drtcomments = '';
-              // this.aggcommission = '';
-              // this.drtamount = '';
-              // this.datatable='inserted';
-              // this.Billno='';
-              // this.billedbranch='';
-
+              this.drtid = '';
+              this.drt = '';
               console.log("this.SetVisit : " + this.SetVisit);
               console.log("this.SetBranch  ; " + this.SetBranch);
               console.log("this.fromdate : " + this.fromdate);

@@ -8,11 +8,11 @@
 
 
           <th width="20%">
-            <v-autocomplete clearable v-bind:items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
+            <v-autocomplete clearable v-bind:items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
 
           <v-spacer></v-spacer>
-          <v-select :items=bill_status v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -52,6 +52,17 @@
         <template>
           <v-card-title>
             <v-toolbar-title>DRT Approval</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark @click="doctorapproval()">
+              <v-badge>
+                <template v-slot:badge>
+                  <span>{{loaddr.count}}</span>
+                </template>
+
+                Doctor Approval
+              </v-badge>
+            </v-btn>
+
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
@@ -229,6 +240,7 @@
 
 
 <script>
+import admindoctorapproval from "@/components/admindoctorapproval";
 import moment from "moment";
 import {
   serverBus
@@ -248,7 +260,9 @@ var curday = function(sp) {
 
 export default {
 
-
+  components: {
+    admindoctorapproval
+  },
   data: () => ({
     pagination: {
       'sortBy': 'column2',
@@ -307,19 +321,23 @@ export default {
       "Reference": "Reference",
       "DRT Name": "DRTNAME",
       "Agreed %": "Aggreed_percentage_value",
-      "Comm %":"Drt_percentage_value",
-      "Comm Amt":"Drt_amount",
-      "Comments":"Comments",
-      "Net Amount":"Net_amount",
-      "Status":"drtApproval_status",
-      "Created by":"Created_by",
-      "Submitted time":"Drt_Created_on",
-      "SCH Approved by":"sch_Approved_by",
-      "SCH Approved Time":"Drt_Approved_time",
-      "Finance Approved by":"Admin_approved_by",
-      "Finance Approved Time":"Drt_Admin_Approved_time",
-      "Cancelled By":"Cancelled_by",
-      "Cancelled Time":"Drt_Cancelled_time"
+      "Comm %": "Drt_percentage_value",
+      "Comm Amt": "Drt_amount",
+      "Comments": "Comments",
+      "Net Amount": "Net_amount",
+      "Status": "drtApproval_status",
+      "Created by": "Created_by",
+      "Submitted time": "Drt_Created_on",
+      "SCH Approved by": "sch_Approved_by",
+      "SCH Approved Time": "Drt_Approved_time",
+      "Finance Approved by": "Admin_approved_by",
+      "Finance Approved Time": "Drt_Admin_Approved_time",
+      "Cancelled By": "Cancelled_by",
+      "Cancelled Time": "Drt_Cancelled_time",
+      "Ch name": "CH_Name",
+      "Ch Branch": "CH_branch",
+      "Sch Name": "SCH_Name",
+      "Sch Branch": "SCH_Branch"
     },
     fileName: null,
     headers: [{
@@ -466,16 +484,37 @@ export default {
     collection: null,
     billdata: null,
     billstatus: null,
+    loaddr:'',
+    loaddr:null,
+    drtbilldetail:null,
+    Financeapprovedby:null,
+    schapprovedby:null,
+    Createdby:null,
+    drtcat:null,
+    drtcusname:null,
+    discount:null,
   }),
   created() {
     this.getToday();
   },
   mounted() {
     this.loadbranch();
-    //  this.loaddrt();
+    this.loaddoctorlist();
   },
 
   methods: {
+    doctorapproval() {
+      serverBus.$emit('changeComponent', 'admindoctorapproval')
+    },
+    loaddoctorlist() {
+      this.axios
+        .get(`http://localhost:8888/api-loaddoc`).then(response => {
+          console.log(response.data);
+          this.loaddoctor = response.data;
+          this.loaddr = this.loaddoctor[0];
+          console.log(this.loaddr.count);
+        })
+    },
     rowClick(id) {
       // alert(id);
       this.billid = id;

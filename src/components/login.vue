@@ -185,11 +185,26 @@ export default {
               serverBus.$emit("changeComponent", "revenue");
 
             }
+            else if (
+              response.data.isAuthenticated === true &&
+              response.data.role === "fin_user" && response.data.role1 === "super_user"
+            ) {
+              console.log("1");
+              sessionStorage.setItem("fin_user", JSON.stringify({
+                name: this.name,
+                userName: response.data.userName,
+                role: response.data.role,
+                role1: response.data.role1
+              }));
 
+              serverBus.$emit("changeComponent", "revenue");
+
+            }
             else if (
               response.data.isAuthenticated === true &&
               response.data.role === "fin_user"
             ) {
+              console.log("12");
               sessionStorage.setItem("fin_user", JSON.stringify({
                 name: this.name,
                 userName: response.data.userName,
