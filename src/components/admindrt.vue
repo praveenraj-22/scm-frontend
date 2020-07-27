@@ -67,7 +67,7 @@
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="billdata" v-model="selected" :search="search" v-bind:pagination.sync="pagination" class="elevation-4">
+          <v-data-table :headers="headers" :items="billdata" v-model="selected" v-bind:pagination.sync="pagination" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <tr>
                 <td @click="rowClick(props.item.Bill_id)">{{ props.item.Bill_no }}</td>
@@ -75,7 +75,9 @@
                 <td class="text-xs-left">{{ props.item.Mrn }}</td>
                 <td class="text-xs-left">{{ props.item.Name }}</td>
                 <td class="text-xs-left">{{ props.item.Net_amount }}</td>
+                <td class="text-xs-left">{{props.item.REFERRALTYPENAME }}</td>
                 <td class="text-xs-left">{{props.item.Reference }}</td>
+                <!-- <td class="text-xs-left">{{props.item.REFERREDBYNAME }}</td> -->
                 <td class="text-xs-left">{{props.item.DRTNAME }}</td>
                 <td class="text-xs-left">{{props.item.Aggreed_percentage_value}}</td>
                 <td class="text-xs-left">{{props.item.Drt_percentage_value}}</td>
@@ -86,14 +88,134 @@
                   <v-btn slot="activator" small fab color="success" @click="rowApprove(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn>
-
                 </td>
+
+                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Approved'">
+                </td>
+
+                <!--
                 <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
                   <v-btn slot="activator" small fab color="red" @click="rowDecline(props.item)">
                     <v-icon>fas fa-times</v-icon>
                   </v-btn>
+                </td> -->
+                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
 
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, props.item.Bill_no, true)" color="red">
+                    <v-icon>fas fa-times</v-icon>
+                  </v-btn>
+
+                  <v-dialog v-model="dialogcancel[props.item.Bill_no]" persistent max-width="800px" lazy absolute :key="props.item.Bill_no">
+                    <v-card>
+                      <v-card-title>
+                        <span>{{ props.item.Mrn }}{{ " -- "}}{{ props.item.Bill_no  }} Cance Note</span>
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container grid-list-md>
+                          <v-layout wrap>
+
+                            <v-flex xs12 sm6>
+                              <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-text>
+
+
+                      <v-card-actions>
+
+
+                        <v-btn color="primary" flat @click.stop="$set(dialogcancel, props.item.Bill_no, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowDecline(props.item,schcomments)">Decline</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </td>
+
+                <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
+                </td>
+
+                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending' && props.item.Expense_date ==='' ">
+                  {{(fin_expense_date(props.item.bill_date))}}
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogexpensedate, props.item.Bill_no, true)" color="grey">
+                    <v-icon>fas fa-info</v-icon>
+                  </v-btn>
+
+                  <v-dialog v-model="dialogexpensedate[props.item.Bill_no]" persistent max-width="400px" lazy absolute :key="props.item.Bill_no">
+                    <v-card>
+                      <v-card-title>
+                        <span>{{ props.item.Mrn }}{{ " -- "}}{{ props.item.Bill_no  }}</span>
+                        <br>
+
+                        <span>Change expense date</span>
+
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container grid-list-md>
+                          <v-layout wrap>
+
+                            <v-flex xs12 sm6>
+                              <v-date-picker v-model="finexpensedate" type="month" :min="minExDate" :max="maxDate" color="green lighten-1" header-color="primary"></v-date-picker>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-text>
+
+
+                      <v-card-actions>
+
+
+                        <v-btn color="primary" flat @click.stop="$set(dialogexpensedate, props.item.Bill_no, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click.stop="rowupdatexpense(props.item,finexpensedate),$set(dialogexpensedate, props.item.Bill_no, false)">Update</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </td>
+                <td class="text-xs-right" v-else-if="props.item.drtApproval_status==='Pending' && props.item.Expense_date !=='' ">
+                  {{ props.item.Expense_date}}
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogexpensedate, props.item.Bill_no, true)" color="orange">
+                    <v-icon>fas fa-info</v-icon>
+                  </v-btn>
+
+                  <v-dialog v-model="dialogexpensedate[props.item.Bill_no]" persistent max-width="400px" lazy absolute :key="props.item.Bill_no">
+                    <v-card>
+                      <v-card-title>
+                        <span>{{ props.item.Mrn }}{{ " -- "}}{{ props.item.Bill_no  }}</span>
+                        <br>
+
+                        <span>Change expense date</span>
+
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container grid-list-md>
+                          <v-layout wrap>
+
+                            <v-flex xs12 sm6>
+                              <v-date-picker v-model="finexpensedate" type="month" :min="minExDate" :max="maxDate" color="green lighten-1" header-color="primary"></v-date-picker>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-text>
+
+
+                      <v-card-actions>
+
+
+                        <v-btn color="primary" flat @click.stop="$set(dialogexpensedate, props.item.Bill_no, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click.stop="rowupdatexpense(props.item,finexpensedate),$set(dialogexpensedate, props.item.Bill_no, false)">Update</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </td>
+                <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
+                </td>
+
 
                 <td class="text-xs-right">
                   <v-layout row justify-center>
@@ -111,11 +233,6 @@
                                 <div class="table-responsive">
                                   <table align="center" class="table table-hover table-bordered" v-if="show">
                                     <thead>
-                                      <!-- <tr>
-                                                        <th class="text-left">Service/Item</th>
-                                                        <th class="text-left">QTY</th>
-                                                        <th class="text-left">Amount</th>
-                                                      </tr> -->
                                     </thead>
                                     <tbody>
                                       <tr>
@@ -214,27 +331,28 @@
                   </v-layout>
                 </td>
               </tr>
-</template>
-</v-data-table>
+            </template>
 
-</template>
+          </v-data-table>
 
-
-
+        </template>
 
 
 
 
-<back-to-top bottom="90px" right="90px">
-  <v-btn class="red darken-4" dark absolute fab small>
-    <v-icon>expand_less</v-icon>
-  </v-btn>
-</back-to-top>
-<!-- end Data Tabel -->
 
-</v-flex>
-</v-layout>
-</v-slide-y-transition>
+
+
+        <back-to-top bottom="90px" right="90px">
+          <v-btn class="red darken-4" dark absolute fab small>
+            <v-icon>expand_less</v-icon>
+          </v-btn>
+        </back-to-top>
+        <!-- end Data Tabel -->
+
+      </v-flex>
+    </v-layout>
+  </v-slide-y-transition>
 </v-container>
 </template>
 
@@ -254,8 +372,25 @@ var curday = function(sp) {
 
   if (dd < 10) dd = '0' + dd;
   if (mm < 10) mm = '0' + mm;
+  console.log(yyyy + sp + mm + sp + dd);
+
   return (yyyy + sp + mm + sp + dd);
 };
+
+
+var expensecurmonth = function(sp) {
+  var today = new Date();
+
+  var dd = today.getDate();
+  var mm = (today.getMonth() + 1) - 2; //As January is 0.
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10 && mm >= 0) mm = '0' + mm;
+  else if (mm < 0) mm = '11';
+  return (yyyy + sp + mm + sp + dd);
+};
+
 
 
 export default {
@@ -264,11 +399,15 @@ export default {
     admindoctorapproval
   },
   data: () => ({
+    finexpensedate: new Date().toISOString().substr(0, 7),
+    dialogcancel: {},
+    dialogexpensedate: {},
     pagination: {
       'sortBy': 'column2',
       'descending': true,
-      'rowsPerPage': -1
+
     },
+
     approval: true,
     Mrn: '',
     search: '',
@@ -318,8 +457,15 @@ export default {
       "Mrn": "Mrn",
       "Name": "Name",
       "Total Net Amount": "Net_amount",
-      "Reference": "Reference",
+      "Reference": "REFERRALTYPENAME",
+      "Bill Ref": "Reference",
       "DRT Name": "DRTNAME",
+      "Payment type": "Payment_type",
+      "Infavour of": "Infavour_of",
+      "Pan no": "Pan_no",
+      "Bank name": "Bank_name",
+      "Bank ifsc": "Bank_ifsc",
+      "Account no": "Account_no",
       "Agreed %": "Aggreed_percentage_value",
       "Comm %": "Drt_percentage_value",
       "Comm Amt": "Drt_amount",
@@ -337,7 +483,8 @@ export default {
       "Ch name": "CH_Name",
       "Ch Branch": "CH_branch",
       "Sch Name": "SCH_Name",
-      "Sch Branch": "SCH_Branch"
+      "Sch Branch": "SCH_Branch",
+      "Expense date": "Expense_date"
     },
     fileName: null,
     headers: [{
@@ -369,9 +516,17 @@ export default {
         value: 'Reference'
       },
       {
+        text: 'Bill Ref',
+        value: 'Reference'
+      },
+      {
         text: 'DRT Name',
         value: 'DRT Name'
       },
+      // {
+      //   text: 'Bill DRT Name',
+      //   value: 'DRT Name'
+      // },
       {
         text: 'Agreed %',
         value: 'Aggreed_percentage_value'
@@ -399,6 +554,10 @@ export default {
       {
         text: 'Decline',
         value: ''
+      },
+      {
+        text: 'Expense date',
+        value: ''
       }
     ],
     category: [{
@@ -425,7 +584,7 @@ export default {
     message1: '',
     minDate: "2020-01-01",
     maxDate: curday('-'),
-
+    minExDate: expensecurmonth('-'),
     bill_status: [{
         shortCode: 'Select All',
         text: 'All'
@@ -484,15 +643,17 @@ export default {
     collection: null,
     billdata: null,
     billstatus: null,
-    loaddr:'',
-    loaddr:null,
-    drtbilldetail:null,
-    Financeapprovedby:null,
-    schapprovedby:null,
-    Createdby:null,
-    drtcat:null,
-    drtcusname:null,
-    discount:null,
+    loaddr: '',
+    loaddr: null,
+    drtbilldetail: null,
+    Financeapprovedby: null,
+    schapprovedby: null,
+    Createdby: null,
+    drtcat: null,
+    drtcusname: null,
+    discount: null,
+    schcomments: '',
+
   }),
   created() {
     this.getToday();
@@ -506,6 +667,18 @@ export default {
     doctorapproval() {
       serverBus.$emit('changeComponent', 'admindoctorapproval')
     },
+
+    fin_expense_date(date) {
+
+      var finemonth = new Date(date)
+      var finexpmonth = finemonth.getMonth() + 1;
+      var finexpyear = finemonth.getFullYear();
+      var expensedate = finexpyear + "-" + finexpmonth;
+      //  return expensedate;
+      console.log(expensedate);
+      return expensedate;
+    },
+
     loaddoctorlist() {
       this.axios
         .get(`http://localhost:8888/api-loaddoc`).then(response => {
@@ -552,9 +725,29 @@ export default {
 
 
     rowApprove(row) {
+      // console.log(row.Approval_status);
+      // let sch_id = '';
+      // console.log(row.bill_date);
+      let expensedate = '';
+      let expense_date = '';
+      console.log("roe");
+      if ((row.Expense_date == '') || (row.Expense_date == null)) {
+        console.log("hit in empty expense");
+        expense_date = new Date(row.bill_date);
+        const ye = new Intl.DateTimeFormat('en', {
+          year: 'numeric'
+        }).format(expense_date)
+        const mo = new Intl.DateTimeFormat('en', {
+          month: 'numeric'
+        }).format(expense_date)
+        expensedate = ye.concat("-", mo);
+      } else {
+        console.log("hit in expnese");
+        expensedate = row.Expense_date;
 
-      console.log(row.Approval_status);
-      let sch_id = '';
+      }
+
+
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
 
       this.isLoading = true;
@@ -562,6 +755,7 @@ export default {
         .post(`http://localhost:8888/api-finbillinsert`, {
           sch_bill_id: row.id,
           sch_id: normalusername.name,
+          sch_expensedate: expensedate,
         }).then(response => {
           this.isLoading = false;
           alert("Approved")
@@ -636,20 +830,125 @@ export default {
           }
         })
     },
-    rowDecline(row) {
+
+
+    rowDecline(row, schcomments) {
+      //  alert(row.Bill_no);
+      if ((schcomments == '') || (schcomments == null)) {
+        alert("Please enter Comments")
+        return false;
+      }
+
       let sch_id = '';
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
-
+      let sch_comments = '';
       this.isLoading = true;
       this.$http.post(`http://localhost:8888/api-finbillcancel`, {
         sch_bill_id: row.id,
         sch_id: normalusername.name,
+        sch_comments: this.schcomments,
       }).then(response => {
-        this.isLoading = false
+        this.isLoading = false;
 
         if (response.data.Dataschcancelled === 'cancelled') {
           alert("Cancelled")
 
+          let status = '';
+          let branch = '';
+          let fromdate = '';
+          let todate = '';
+          this.schcomments = '';
+          if ((this.SetStatus == '') && (this.SetBranch == '')) {
+            // alert("if");
+            status = 'All';
+            branch = 'All'
+            let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+            // alert(normalusername.name);
+
+            this.loading = true;
+            this.isLoading = true;
+            this.$http
+
+              //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
+              //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .then(response => {
+                this.processDatabillsch(response.data);
+                this.isLoading = false;
+
+                this.schcomments = '';
+              });
+
+          } else if ((this.SetStatus == '') || (this.SetBranch == '')) {
+            // alert('else if');
+
+            if (this.SetStatus == '') {
+              this.SetStatus = 'All'
+            } else if (this.SetBranch == '') {
+              this.SetBranch = 'All'
+            }
+
+            let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+            // alert(normalusername.name);
+            branch = this.SetBranch;
+            status = this.SetStatus;
+            this.loading = true;
+            this.isLoading = true;
+            this.$http
+              //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .then(response => {
+                this.processDatabillsch(response.data);
+                this.isLoading = false;
+                this.schcomments = '';
+
+              });
+
+
+          } else {
+            // alert("else");
+            let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+            // alert(normalusername.name);
+            branch = this.SetBranch;
+            status = this.SetStatus;
+            this.loading = true;
+            this.isLoading = true;
+            this.$http
+
+              //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .then(response => {
+                this.processDatabillsch(response.data);
+                this.isLoading = false;
+                this.schcomments = '';
+
+              });
+
+          }
+
+        } else {
+          alert("data not inserted")
+        }
+
+
+
+      })
+
+    },
+    rowupdatexpense(row, finexpensedate) {
+      let sch_expensedate = '';
+      let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+      this.isLoading = true;
+      this.$http
+        .post(`http://localhost:8888/api-finbillexpenseupdate`, {
+          sch_bill_id: row.id,
+          sch_id: normalusername.name,
+          sch_expensedate: finexpensedate,
+        }).then(response => {
+          this.isLoading = false;
+
+          console.log(this.dialogexpensedate);
+          alert("updated")
           let status = '';
           let branch = '';
           let fromdate = '';
@@ -719,17 +1018,10 @@ export default {
               });
 
           }
+        })
 
-        } else {
-          alert("data not inserted")
-        }
-
-
-
-      })
 
     },
-
     getDRTcategory(selectObj1) {
       this.drtcategory = selectObj1;
     },

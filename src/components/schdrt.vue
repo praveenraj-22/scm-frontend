@@ -78,11 +78,68 @@
 
                 </td>
                 <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
-                  <v-btn slot="activator" small fab color="red" @click="rowDecline(props.item)">
-                    <v-icon>fas fa-times</v-icon>
-                  </v-btn>
 
+                    <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, props.item.Bill_no, true)" color="red">
+                      <v-icon>fas fa-times</v-icon>
+                    </v-btn>
+
+                    <v-dialog v-model="dialogcancel[props.item.Bill_no]" persistent max-width="800px" lazy absolute :key="props.item.Bill_no">
+                    <v-card>
+                      <v-card-title>
+                        <span>{{ props.item.Mrn }} Cance Note</span>
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container grid-list-md>
+                          <v-layout wrap>
+
+                            <v-flex xs12 sm6>
+                              <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-text>
+
+
+                      <v-card-actions>
+
+                        <v-btn color="primary" flat @click.stop="$set(dialogcancel, props.item.Bill_no, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowDecline(props.item,schcomments)">Decline</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </td>
+
+                <!-- <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
+                  <v-layout row justify-center>
+                    <v-dialog v-model="dialogcancel" persistent max-width="800px" lazy absolute>
+                      <v-btn slot="activator" small fab color="red">
+                        <v-icon>fas fa-times</v-icon>
+                      </v-btn>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">edit</span>
+
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container grid-list-md>
+                            <v-layout wrap>
+
+                              <v-flex xs12 sm6>
+                                <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                              </v-flex>
+
+                              <v-btn color="blue darken-1" flat @click="dialogcancel = false">Close</v-btn>
+                              <v-btn color="blue darken-1" flat @click="rowDecline(props.item,schcomments)">Decline</v-btn>
+                            </v-layout>
+                          </v-container>
+                        </v-card-text>
+
+                      </v-card>
+                    </v-dialog>
+                  </v-layout>
+                </td> -->
 
                 <td class="text-xs-right">
                   <v-layout row justify-center>
@@ -254,6 +311,7 @@ export default {
 
 
   data: () => ({
+    dialogcancel:{},
     pagination: {
       'sortBy': 'column2',
       'descending': true,
@@ -277,9 +335,10 @@ export default {
     commissions: '',
     billid: '',
     drtid: '',
-    drtcomments: '',
+
     aggcommission: '',
     drtcomments: '',
+    schcomments:'',
     drtcommission: '',
     drttable: '',
     drtamount: '',
@@ -295,6 +354,7 @@ export default {
     commission: [],
     total: [],
     dialog: false,
+
     test: true,
     GSTIN: '',
     dialog: false,
@@ -312,21 +372,21 @@ export default {
       "Reference": "Reference",
       "DRT Name": "DRTNAME",
       "Agreed %": "Aggreed_percentage_value",
-      "Comm %":"Drt_percentage_value",
-      "Comm Amt":"Drt_amount",
-      "Comments":"Comments",
-      "Net Amount":"Net_amount",
-      "Status":"drtApproval_status",
-      "Created by":"Created_by",
-      "Submitted time":"Created_on",
-      "SCH Approved by":"sch_Approved_by",
-      "SCH Approved Time":"Approved_time",
-      "Finance Approved by":"Admin_approved_by",
-      "Finance Approved Time":"Admin_Approved_time",
-      "Cancelled By":"Cancelled_by",
-      "Cancelled Time":"Cancelled_time",
-      "Ch Name " : "CH_Name",
-      "Ch Branch":"CH_branch"
+      "Comm %": "Drt_percentage_value",
+      "Comm Amt": "Drt_amount",
+      "Comments": "Comments",
+      "Net Amount": "Net_amount",
+      "Status": "drtApproval_status",
+      "Created by": "Created_by",
+      "Submitted time": "Created_on",
+      "SCH Approved by": "sch_Approved_by",
+      "SCH Approved Time": "Approved_time",
+      "Finance Approved by": "Admin_approved_by",
+      "Finance Approved Time": "Admin_Approved_time",
+      "Cancelled By": "Cancelled_by",
+      "Cancelled Time": "Cancelled_time",
+      "Ch Name ": "CH_Name",
+      "Ch Branch": "CH_branch"
     },
     fileName: null,
 
@@ -474,6 +534,13 @@ export default {
     collection: null,
     billdata: null,
     billstatus: null,
+    discount: [],
+    drtbilldetail: [],
+    drtcusname: [],
+    drtcat: [],
+    Createdby: [],
+    schapprovedby: [],
+    Financeapprovedby: []
   }),
   created() {
     this.getToday();
@@ -604,16 +671,24 @@ export default {
           }
         })
     },
-    rowDecline(row) {
+
+    rowDecline(row,schcomments) {
+      this.dialogcancel=true;
+
       let sch_id = '';
+      let sch_comments='';
+
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+
 
       this.isLoading = true;
       this.$http.post(`http://localhost:8888/api-schbillcancel`, {
         sch_bill_id: row.id,
         sch_id: normalusername.name,
+        sch_comments:this.schcomments,
       }).then(response => {
         this.isLoading = false
+
 
         if (response.data.Dataschcancelled === 'cancelled') {
           alert("Cancelled")
@@ -622,6 +697,7 @@ export default {
           let branch = '';
           let fromdate = '';
           let todate = '';
+          this.schcomments='';
           if ((this.SetStatus == '') && (this.SetBranch == '')) {
             // alert("if");
             status = 'All';
@@ -639,6 +715,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
+                this.schcomments='';
               });
 
           } else if ((this.SetStatus == '') || (this.SetBranch == '')) {
@@ -662,6 +739,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
+                this.schcomments='';
 
 
               });
@@ -682,7 +760,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
-
+                this.schcomments='';
               });
 
           }
@@ -923,12 +1001,12 @@ export default {
 
         }
 
-                var str = "_"
-                this.fileDate = this.fromdate.concat(str, this.todate);
+        var str = "_"
+        this.fileDate = this.fromdate.concat(str, this.todate);
 
-                console.log(this.fileDate);
+        console.log(this.fileDate);
 
-                this.fileName = `Drt_Report_${this.fileDate}.csv`;
+        this.fileName = `Drt_Report_${this.fileDate}.csv`;
 
 
       }

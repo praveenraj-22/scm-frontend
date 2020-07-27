@@ -141,11 +141,14 @@
           </table>
         </div>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 md4>
         <v-autocomplete clearable autocomplete='off' default="" v-model="memberSelected" :items="drt" label="Select DRT" required item-text="Name" item-value="ID" v-on:change='getDRTdetail'></v-autocomplete>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 md4>
         <v-autocomplete clearable :items="category" label="Category" required item-text="shortCode" item-value="text" v-on:change='getDRTcategory'></v-autocomplete>
+      </v-flex>
+      <v-flex xs12 sm6 md4>
+        <v-text-field v-model="infavourof" clearable label="Infavour of" disabled></v-text-field>
       </v-flex>
       <v-flex xs12 sm6>
         <v-text-field v-model="drtcusname" v-if='drtcusid' clearable label="Selected DRT" disabled></v-text-field>
@@ -153,10 +156,13 @@
       <v-flex xs12 sm6>
         <v-text-field v-if='drtcusid' disabled v-model="drtcat" label="Selected Category" required></v-text-field>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 md4>
+        <v-text-field v-model="paymenttype" clearable label="Payment type" disabled></v-text-field>
+      </v-flex>
+      <v-flex xs12 sm6 md4>
         <v-text-field v-model="panno" clearable label="Pan No" disabled></v-text-field>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 md4>
         <v-text-field type='number' disabled v-model="aggcommission" label="Agreed %" required></v-text-field>
       </v-flex>
       <v-flex xs12 sm6>
@@ -168,7 +174,9 @@
       <v-flex xs12 sm6>
         <v-textarea clearable clear-icon="cancel" label="Comments" v-model='drtcomments'></v-textarea>
       </v-flex>
-
+      <v-flex xs12 sm6 >
+        <v-text-field v-model="detail" clearable label="Bank detail"  disabled></v-text-field>
+      </v-flex>
     </v-layout>
 </v-container>
 <small>*indicates required field</small>
@@ -288,6 +296,8 @@ export default {
     drtpertcent: [],
     aggcommission: [],
     commission: [],
+    infavourof: [],
+    paymenttype: [],
     total: [],
     dialog: false,
     test: true,
@@ -493,7 +503,14 @@ export default {
     refdocaccbank: '',
     agreementupload: '',
     panupload: '',
-    passbookupload: ''
+    passbookupload: '',
+    memberSelected: '',
+    drtbilldetail:'',
+    discount:'',
+    Accountno:'',
+    Bankifsc:'',
+    Bankname:'',
+    detail:''
   }),
   created() {
     this.getToday();
@@ -659,13 +676,24 @@ export default {
       this.axios
         .get(`http://localhost:8888/api-drtdetail/${selectObj}`).then(response => {
           this.drtdetail = response.data;
+          console.log(this.drtdetail);
           console.log(this.drtdetail[0]["GSTIN"]);
           this.gstin = this.drtdetail[0]["GSTIN"]
           this.panno = this.drtdetail[0]["Pan_no"]
           this.aggcommission = this.drtdetail[0]["Percentage"]
           this.commission = this.drtdetail[0]["Percentage"]
-          console.log(this.commissions = this.drtdetail[0]["Percentage"]);
+          this.infavourof = this.drtdetail[0]["Infavour_of"]
+          this.paymenttype = this.drtdetail[0]["Payment_type"]
+          this.Accountno=this.drtdetail[0]["Account_no"]
+          this.Bankifsc=this.drtdetail[0]["Bank_ifsc"]
+          this.Bankname=this.drtdetail[0]["Bank_name"]
+          // console.log(this.commissions = this.drtdetail[0]["Percentage"]);
           this.drtname = this.drtdetail[0]["Name"]
+          console.log(this.Accountno +" "+this.Bankifsc+" "+this.Bankname);
+        //  this.detail=this.Bankname.concat(" || ",this.Bankifsc," || ",this.Accountno)
+          //concat(this.Bankname,"||",this.Bankifsc,"||",this.Accountno)
+this.detail=this.Accountno +" || "+this.Bankifsc+" || "+this.Bankname;
+          console.log(this.detail);
         })
 
     },

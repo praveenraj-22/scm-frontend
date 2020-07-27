@@ -1,166 +1,88 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    class="grey lighten-3"
-  >
-    <v-slide-y-transition mode="out-in">
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs12
-          sm10
-          offset-sm1
-          md10
-          offest-md1
-          lg10
-          offset-lg1
-        >
-            <v-divider
-              class="mx-2 black"
-              inset
-              vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
-			<div class="table-responsive" width="100%">
-			<table width="100%">
-		 <thead width="100%">
-		 <tr width="100%">
-			<th width="20%">
-				<v-select
-				  :items=entities
-				  v-model="SetEntity"
-				  label="Entity:"
-				  id="SelEntity"
-				   item-text="shortCode"
-				   item-value="text"
-				  v-on:change='getRegion'
+<v-container fluid fill-height class="grey lighten-3">
+  <v-slide-y-transition mode="out-in">
+    <v-layout row wrap>
+      <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
+        <v-divider class="mx-2 black" inset vertical></v-divider>
+        <v-spacer></v-spacer>
+        <div class="table-responsive" width="100%">
+          <table width="100%">
+            <thead width="100%">
+              <tr width="100%">
+                <th width="20%">
+                  <v-select :items=entities v-model="SetEntity" label="Entity:" id="SelEntity" item-text="shortCode" item-value="text" v-on:change='getRegion'></v-select>
+                </th>
+                <th width="4%">
 
-				></v-select>
-			</th>
-			<th width="4%">
+                </th>
+                <th width="20%">
+                  <v-select :items=regions v-model="SetRegion" label="Region:" id="SelRegion" item-text="shortCode" item-value="text" v-on:change='getBranches'></v-select>
+                </th>
+                <th width="4%">
 
-			</th>
-			<th width="20%">
-				  <v-select
-				  :items=regions
-				  v-model="SetRegion"
-				  label="Region:"
-				  id="SelRegion"
-				   item-text="shortCode"
-				   item-value="text"
-				  v-on:change='getBranches'
+                </th>
+                <th width="20%">
+                  <v-select :items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+                </th>
+                <th width="4%">
 
-				></v-select>
-			</th>
-			<th width="4%">
+                </th>
+                <th width="20%">
+                  <v-menu absolute ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="date" lazy transition="scale-transition" offset-y full-width min-width="200px">
+                    <v-text-field slot="activator" v-model="date" placeholder="Select Date" prepend-inner-icon="event" readonly></v-text-field>
+                    <v-date-picker color="primary" v-model="date" no-title scrollable min="2018-04-01" type=month backgroundRevenue-color="grey" style="box-shadow:none">
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="menu = false" style="outline:none">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.menu.save(date)" style="outline:none">Ok</v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </th>
+                <th width="4%">
+                  <v-btn rounded color="primary" dark @click="apiRequestCogDashboard(date,SetEntity,SetRegion,SetBranch)">Generate</v-btn>
+                </th>
+              </tr>
+              <br><br>
+            </thead>
+          </table>
+          <table width="100%" v-if="show">
+            <thead width="100%">
+              <tr width="100%">
 
-			</th>
-			<th width="20%">
-				<v-select
-				  :items=branch
-				  v-model="SetBranch"
-				  label="Branch:"
-				  item-text="shortCode"
-				  item-value="text"
-				  id="SelBranch"
+                <th width="12%">
+                  <v-btn rounded color="primary" dark>{{monthlyrevenue| amountFormat}}</v-btn>(₹ Lacs)
+                </th>
+                <th width="12%">
+                  <v-btn rounded color="primary" dark>{{monthlycogs| amountFormat}}</v-btn> (₹ Lacs) </span>
+                </th>
 
-				></v-select>
-			</th>
-			<th width="4%">
+                <th width="12%" colsspan="8">
+                  <v-btn rounded color="primary" dark>{{cogsPercentageResult(monthlyrevenue| amountFormat,monthlycogs| amountFormat)}}%</v-btn>
+                </th>
 
-			</th>
-			<th width="20%">
-            <v-menu
-              absolute
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="date"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="200px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="date"
-                placeholder="Select Date"
-                prepend-inner-icon="event"
-                readonly
-              ></v-text-field>
-              <v-date-picker
-                color="primary"
-                v-model="date"
-                no-title
-                scrollable
-                min="2018-04-01"
+              </tr>
+            </thead>
+          </table><br><br>
+          <table v-if="show">
+            <tr width="100%">
 
-				type=month
-                backgroundRevenue-color="grey"
-                style="box-shadow:none"
-              >
-                <v-spacer></v-spacer>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="menu = false"
-                  style="outline:none"
-                >Cancel</v-btn>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="$refs.menu.save(date)"
-                  style="outline:none"
-                >Ok</v-btn>
-              </v-date-picker>
-            </v-menu>
-            </th>
-			<th width="4%">
-			 <v-btn rounded color="primary" dark @click="apiRequestCogDashboard(date,SetEntity,SetRegion,SetBranch)">Generate</v-btn>
-			</th>
-			</tr>
-			<br><br>
-		   </thead>
-		   </table>
-		   <table width="100%" v-if="show">
-		   <thead width="100%">
-		   <tr width="100%">
+              <td width="50%">
+                <highcharts :options="chartOptions"></highcharts>
+              </td>
+              <td width="50%" colsspan="8">
+                <highcharts :options="chartOptions1"></highcharts>
+              </td>
 
-				<th width="12%"><v-btn rounded color="primary" dark >{{monthlyrevenue| amountFormat}}</v-btn>(₹ Lacs)  	</th>
-				<th width="12%"><v-btn rounded color="primary" dark >{{monthlycogs| amountFormat}}</v-btn> (₹ Lacs)    </span></th>
+            </tr>
+          </table>
 
-				<th width="12%" colsspan="8"><v-btn rounded color="primary" dark >{{cogsPercentageResult(monthlyrevenue| amountFormat,monthlycogs| amountFormat)}}%</v-btn>  </th>
+          <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
+        </div>
+      </v-flex>
 
-			</tr>
-			</thead>
-			</table><br><br>
-            <table v-if="show">
-			<tr width="100%">
-
-							<td width="50%"><highcharts :options="chartOptions"></highcharts>  </td>
-							<td width="50%" colsspan="8"><highcharts :options="chartOptions1"></highcharts> 	</td>
-
-						</tr>
-			</table>
-
-          <loading
-            :active.sync="isLoading"
-            :is-full-page="fullPage"
-            color="#7f0000"
-            loader="bars"
-          ></loading>
-         </div>
-        </v-flex>
-
-        </v-dialog>
-      </v-layout>
-    </v-slide-y-transition>
-  </v-container>
+      </v-dialog>
+    </v-layout>
+  </v-slide-y-transition>
+</v-container>
 </template>
 
 
