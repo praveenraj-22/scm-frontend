@@ -86,7 +86,7 @@
                     <v-dialog v-model="dialogcancel[props.item.Bill_no]" persistent max-width="800px" lazy absolute :key="props.item.Bill_no">
                     <v-card>
                       <v-card-title>
-                        <span>{{ props.item.Mrn }} Cance Note</span>
+                        <span>{{ props.item.Mrn }}{{"--"}}{{props.item.Bill_no}} Cance Note</span>
                       </v-card-title>
 
                       <v-card-text>

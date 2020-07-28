@@ -67,7 +67,7 @@
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="billdata" v-model="selected" v-bind:pagination.sync="pagination" :search="search" class="elevation-4">
+          <v-data-table :headers="headers" :items="billdata" v-model="selected" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <tr>
                 <td @click="rowClick(props.item.Bill_id)">{{ props.item.Bill_no }}</td>
@@ -402,11 +402,7 @@ export default {
     finexpensedate: new Date().toISOString().substr(0, 7),
     dialogcancel: {},
     dialogexpensedate: {},
-    pagination: {
-      'sortBy': 'column2',
-      'descending': true,
 
-    },
 
     approval: true,
     Mrn: '',
