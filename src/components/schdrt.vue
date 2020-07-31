@@ -8,33 +8,28 @@
 
 
           <th width="20%">
-            <v-select :items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+            <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
           </th>
 
           <v-spacer></v-spacer>
-          <v-select :items=bill_status v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" @change='statuschange' id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+
+          <v-spacer></v-spacer>
+          <v-select :items="date_type" v-model="Setdatetype" label="Date type" id="Seldate" item-text="shortCode" item-value="text"></v-select>
+
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+            <v-date-picker color="primary" v-model="fromdate" type="month" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
           </v-menu>
 
-          <v-spacer></v-spacer>
-          <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu>
 
-          <v-btn rounded color="primary" dark @click="apiRequestschdrtbill(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestschdrtbill(fromdate,SetStatus,SetBranch,Setdatatype)">Generate</v-btn>
 
           <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelschDrt">
             <v-btn fab flat medium color="black">
@@ -79,11 +74,11 @@
                 </td>
                 <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
 
-                    <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, props.item.Bill_no, true)" color="red">
-                      <v-icon>fas fa-times</v-icon>
-                    </v-btn>
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, props.item.Bill_no, true)" color="red">
+                    <v-icon>fas fa-times</v-icon>
+                  </v-btn>
 
-                    <v-dialog v-model="dialogcancel[props.item.Bill_no]" persistent max-width="800px" lazy absolute :key="props.item.Bill_no">
+                  <v-dialog v-model="dialogcancel[props.item.Bill_no]" persistent max-width="800px" lazy absolute :key="props.item.Bill_no">
                     <v-card>
                       <v-card-title>
                         <span>{{ props.item.Mrn }}{{"--"}}{{props.item.Bill_no}} Cance Note</span>
@@ -111,36 +106,6 @@
                   </v-dialog>
                 </td>
 
-                <!-- <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
-                  <v-layout row justify-center>
-                    <v-dialog v-model="dialogcancel" persistent max-width="800px" lazy absolute>
-                      <v-btn slot="activator" small fab color="red">
-                        <v-icon>fas fa-times</v-icon>
-                      </v-btn>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">edit</span>
-
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container grid-list-md>
-                            <v-layout wrap>
-
-                              <v-flex xs12 sm6>
-                                <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
-                              </v-flex>
-
-                              <v-btn color="blue darken-1" flat @click="dialogcancel = false">Close</v-btn>
-                              <v-btn color="blue darken-1" flat @click="rowDecline(props.item,schcomments)">Decline</v-btn>
-                            </v-layout>
-                          </v-container>
-                        </v-card-text>
-
-                      </v-card>
-                    </v-dialog>
-                  </v-layout>
-                </td> -->
-
                 <td class="text-xs-right">
                   <v-layout row justify-center>
                     <v-dialog v-model="dialog" persistent max-width="800px" lazy absolute>
@@ -158,11 +123,6 @@
                                 <div class="table-responsive">
                                   <table align="center" class="table table-hover table-bordered" v-if="show">
                                     <thead>
-                                      <!-- <tr>
-                                        <th class="text-left">Service/Item</th>
-                                        <th class="text-left">QTY</th>
-                                        <th class="text-left">Amount</th>
-                                      </tr> -->
                                     </thead>
                                     <tbody>
                                       <tr>
@@ -311,12 +271,13 @@ export default {
 
 
   data: () => ({
-    dialogcancel:{},
+    dialogcancel: {},
     pagination: {
       'sortBy': 'column2',
       'descending': true,
       'rowsPerPage': -1
     },
+    date_type: '',
     approval: true,
     Mrn: '',
     search: '',
@@ -338,7 +299,7 @@ export default {
 
     aggcommission: '',
     drtcomments: '',
-    schcomments:'',
+    schcomments: '',
     drtcommission: '',
     drttable: '',
     drtamount: '',
@@ -386,7 +347,8 @@ export default {
       "Cancelled By": "Cancelled_by",
       "Cancelled Time": "Cancelled_time",
       "Ch Name ": "CH_Name",
-      "Ch Branch": "CH_branch"
+      "Ch Branch": "CH_branch",
+      "Expense date": "Expense_date"
     },
     fileName: null,
 
@@ -473,7 +435,7 @@ export default {
       }
     ],
     message1: '',
-    minDate: "2020-01-01",
+    minDate: "2020-04-01",
     maxDate: curday('-'),
 
     bill_status: [{
@@ -540,7 +502,8 @@ export default {
     drtcat: [],
     Createdby: [],
     schapprovedby: [],
-    Financeapprovedby: []
+    Financeapprovedby: [],
+    Setdatetype: ''
   }),
   created() {
     this.getToday();
@@ -672,11 +635,11 @@ export default {
         })
     },
 
-    rowDecline(row,schcomments) {
-      this.dialogcancel=true;
+    rowDecline(row, schcomments) {
+      this.dialogcancel = true;
 
       let sch_id = '';
-      let sch_comments='';
+      let sch_comments = '';
 
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
 
@@ -685,7 +648,7 @@ export default {
       this.$http.post(`http://localhost:8888/api-schbillcancel`, {
         sch_bill_id: row.id,
         sch_id: normalusername.name,
-        sch_comments:this.schcomments,
+        sch_comments: this.schcomments,
       }).then(response => {
         this.isLoading = false
 
@@ -697,7 +660,7 @@ export default {
           let branch = '';
           let fromdate = '';
           let todate = '';
-          this.schcomments='';
+          this.schcomments = '';
           if ((this.SetStatus == '') && (this.SetBranch == '')) {
             // alert("if");
             status = 'All';
@@ -715,7 +678,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
-                this.schcomments='';
+                this.schcomments = '';
               });
 
           } else if ((this.SetStatus == '') || (this.SetBranch == '')) {
@@ -739,7 +702,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
-                this.schcomments='';
+                this.schcomments = '';
 
 
               });
@@ -760,7 +723,7 @@ export default {
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
-                this.schcomments='';
+                this.schcomments = '';
               });
 
           }
@@ -825,128 +788,48 @@ export default {
       var sNumber = parseFloat(fNumber.toFixed(2)).toLocaleString('en-IN');
       return sNumber;
     },
-    apiinsertbill(billid, netamount, aggcommission, drtcommission, drtamount, drtid, drtcategory, drtcomments, buttonstatus) {
-      let bill_id = '';
-      let net_amount = '';
-      let drt_commission = '';
-      let drt_amount = '';
-      let drt_id = '';
-      let drt_category = '';
-      let drt_user = null;
-      let drt_comments = '';
-      let drt_aggcommission = '';
-      let drt_billstatus = '';
-      console.log("billid : " + this.billid);
-      console.log(" netamount : " + this.netamount);
-      console.log("commission : " + this.drtcommission);
-      console.log("drtamount : " + this.drtamount);
-      console.log("drtid : " + this.drtid);
-      console.log("drtcategory : " + this.drtcategory);
-      console.log("comments : " + this.drtcomments);
-      console.log("agg comments : " + this.aggcommission);
-      console.log("status ; " + this.buttonstatus);
-
-      if (this.billid == '') {
-        alert("please select DRT name");
-        return false;
-      } else if (this.drtcategory == '') {
-        alert("please select Category")
-        return false;
-      } else if (this.drtcommission > 100) {
-        alert("please enter valid drt percentage")
-        return false;
-      } else if (!(this.drtamount <= this.netamount)) {
-        alert("Enter amount is greater than Net amount")
-        return false;
-      } else {
-        let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-
-        this.loading = true;
-        this.isLoading = true;
-        this.$http
-          .post(`http://localhost:8888/api-drtbills`, {
-            bill_id: billid,
-            net_amount: netamount,
-            drt_aggcommission: aggcommission,
-            drt_commission: drtcommission,
-            drt_amount: drtamount,
-            drt_id: drtid,
-            drt_category: drtcategory,
-            drt_user: normalusername.name,
-            drt_comments: drtcomments
-
-
-          }).then(response => {
-            console.log("response : " + response);
-            this.isLoading = false;
-            if (response.data.Datainserted === true) {
-              alert("Drt amount sent for approval")
-              this.approval = false;
-              this.gstin = '',
-                this.panno = '';
-              this.aggcommission = '',
-                this.commission = '';
-              this.drtdetail = '';
-              this.drtid = '';
-              this.drt = null;
-              this.drtcomments = '';
-              this.aggcommission = '';
-              this.drtamount = '';
-              this.datatable = 'inserted';
-
-              return true;
-            } else if (response.data.Datainserted === "Updated") {
-              alert("the bill is updated successfully")
-              this.approval = false;
-              return true;
-            } else {
-              alert("please verify the entered data")
-              return false
-            }
-          })
-      }
-
-    },
-    apiRequestschdrtbill(fromdate, todate, SetStatus, SetBranch) {
+    apiRequestschdrtbill(fromdate, SetStatus, SetBranch, Setdatatype) {
       var date3 = new Date();
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
-
-      if (fromdate > todate) {
-        alert("From date should be less than todate");
+      let datetype = '';
+      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
+      if ((this.fromdate == '') || (this.fromdate == null)){
+        alert("Please select Month");
         return false;
-      } else if (fromdate > currentDate) {
-        alert("From Date should be less than current date");
-        return false;
-      } else if (todate > currentDate) {
-        alert("To Date should be less than current date");
+      }
+      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+        alert("Please select status");
         return false;
       }
 
+       else {
+         if (this.Setdatetype.text == 1) {
+           datetype = this.Setdatetype.text;
 
-      if ((!this.fromdate) || (!this.todate)) {
-        alert("Please Select Date");
-        return false;
-      } else {
+         } else if (this.Setdatetype.text == 2) {
+           datetype = this.Setdatetype.text;
+
+         } else {
+           datetype = this.Setdatetype;
+
+         }
 
         let status = '';
         let branch = '';
         let fromdate = '';
         let todate = '';
         if ((this.SetStatus == '') && (this.SetBranch == '')) {
-          // alert("if");
           status = 'All';
           branch = 'All'
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-          // alert(normalusername.name);
+
 
           this.loading = true;
           this.isLoading = true;
           this.$http
 
-            //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
-            //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -954,7 +837,6 @@ export default {
             });
 
         } else if ((this.SetStatus == '') || (this.SetBranch == '')) {
-          // alert('else if');
 
           if (this.SetStatus == '') {
             this.SetStatus = 'All'
@@ -963,14 +845,12 @@ export default {
           }
 
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-          // alert(normalusername.name);
           branch = this.SetBranch;
           status = this.SetStatus;
           this.loading = true;
           this.isLoading = true;
           this.$http
-            //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -980,17 +860,14 @@ export default {
 
 
         } else {
-          // alert("else");
-          let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-          // alert(normalusername.name);
+            let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           branch = this.SetBranch;
           status = this.SetStatus;
           this.loading = true;
           this.isLoading = true;
           this.$http
 
-            //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1002,7 +879,7 @@ export default {
         }
 
         var str = "_"
-        this.fileDate = this.fromdate.concat(str, this.todate);
+        this.fileDate = this.fromdate.concat(str);
 
         console.log(this.fileDate);
 
@@ -1041,6 +918,37 @@ export default {
         return null;
       }
     },
+    statuschange(a) {
+
+      if (a == 2) {
+        this.datevalue = {
+          shortCode: 'Expense Date',
+          text: '2'
+        }, {
+          shortCode: 'Bill Date',
+          text: '1'
+        };
+        this.date_type = [{
+          shortCode: 'Expense Date',
+          text: '2'
+        }, {
+          shortCode: 'Bill Date',
+          text: '1'
+        }];
+        console.log(this.date_type);
+        this.Setdatetype = this.datevalue;
+      } else {
+        this.datevalue = {
+          shortCode: 'Bill Date',
+          text: '1'
+        }
+        this.date_type = [this.datevalue];
+        console.log(this.date_type);
+        this.Setdatetype = this.datevalue;
+      }
+
+    }
+
 
   }
 

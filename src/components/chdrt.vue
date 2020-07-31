@@ -692,7 +692,7 @@ export default {
           console.log(this.Accountno +" "+this.Bankifsc+" "+this.Bankname);
         //  this.detail=this.Bankname.concat(" || ",this.Bankifsc," || ",this.Accountno)
           //concat(this.Bankname,"||",this.Bankifsc,"||",this.Accountno)
-this.detail=this.Accountno +" || "+this.Bankifsc+" || "+this.Bankname;
+          this.detail=this.Accountno +" || "+this.Bankifsc+" || "+this.Bankname;
           console.log(this.detail);
         })
 

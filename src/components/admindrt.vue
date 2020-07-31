@@ -12,29 +12,23 @@
           </th>
 
           <v-spacer></v-spacer>
-          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" @change='statuschange' id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+
+          <v-spacer></v-spacer>
+          <v-select :items="date_type" v-model="Setdatetype" label="Date type" id="Seldate" item-text="shortCode" item-value="text"></v-select>
+
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+            <v-date-picker color="primary" v-model="fromdate" type="month" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
           </v-menu>
 
-          <v-spacer></v-spacer>
-          <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu>
-
-          <v-btn rounded color="primary" dark @click="apiRequestfindrtbill(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestfindrtbill(fromdate,SetStatus,SetBranch,Setdatatype)">Generate</v-btn>
 
           <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelDrt">
             <v-btn fab flat medium color="black">
@@ -137,7 +131,7 @@
                 <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
                 </td>
 
-                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending' && props.item.Expense_date ==='' ">
+                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending' && (props.item.Expense_date ==='')||(props.item.Expense_date ===null) ">
                   {{(fin_expense_date(props.item.bill_date))}}
                   <v-btn slot="activator" small fab @click.stop="$set(dialogexpensedate, props.item.Bill_no, true)" color="grey">
                     <v-icon>fas fa-info</v-icon>
@@ -214,6 +208,7 @@
                   </v-dialog>
                 </td>
                 <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
+                  {{props.item.Expense_date}}
                 </td>
 
 
@@ -402,8 +397,8 @@ export default {
     finexpensedate: new Date().toISOString().substr(0, 7),
     dialogcancel: {},
     dialogexpensedate: {},
-
-
+    Setdatetype: '',
+    date_type: '',
     approval: true,
     Mrn: '',
     search: '',
@@ -578,7 +573,7 @@ export default {
       }
     ],
     message1: '',
-    minDate: "2020-01-01",
+    minDate: "2020-04-01",
     maxDate: curday('-'),
     minExDate: expensecurmonth('-'),
     bill_status: [{
@@ -667,12 +662,18 @@ export default {
     fin_expense_date(date) {
 
       var finemonth = new Date(date)
+      var month='';
       var finexpmonth = finemonth.getMonth() + 1;
+        if(finexpmonth<10){
+        month=("0" + (finemonth.getMonth() + 1)).slice(-2);
+      }
       var finexpyear = finemonth.getFullYear();
-      var expensedate = finexpyear + "-" + finexpmonth;
-      //  return expensedate;
+
+      var expensedate = finexpyear + "-" + month;
+
+    console.log(month);
       console.log(expensedate);
-      return expensedate;
+      return  finexpyear + "-" + month;
     },
 
     loaddoctorlist() {
@@ -721,9 +722,7 @@ export default {
 
 
     rowApprove(row) {
-      // console.log(row.Approval_status);
-      // let sch_id = '';
-      // console.log(row.bill_date);
+
       let expensedate = '';
       let expense_date = '';
       console.log("roe");
@@ -736,7 +735,12 @@ export default {
         const mo = new Intl.DateTimeFormat('en', {
           month: 'numeric'
         }).format(expense_date)
-        expensedate = ye.concat("-", mo);
+        if(mo <10)
+        {
+        var  mon='0'.concat(mo)
+        }
+        expensedate = ye.concat("-", mon);
+
       } else {
         console.log("hit in expnese");
         expensedate = row.Expense_date;
@@ -1150,32 +1154,40 @@ export default {
       }
 
     },
-    apiRequestfindrtbill(fromdate, todate, SetStatus, SetBranch) {
+
+    apiRequestfindrtbill(fromdate, SetStatus, SetBranch, Setdatatype) {
       var date3 = new Date();
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
+      let datetype = '';
+      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
 
-      if (fromdate > todate) {
-        alert("From date should be less than todate");
+      if ((this.fromdate == '') || (this.fromdate == null)){
+        alert("Please select Month");
         return false;
-      } else if (fromdate > currentDate) {
-        alert("From Date should be less than current date");
-        return false;
-      } else if (todate > currentDate) {
-        alert("To Date should be less than current date");
+      }
+      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+        alert("Please select status");
         return false;
       }
 
+      else {
 
-      if ((!this.fromdate) || (!this.todate)) {
-        alert("Please Select Date");
-        return false;
-      } else {
+        if (this.Setdatetype.text == 1) {
+          datetype = this.Setdatetype.text;
+
+        } else if (this.Setdatetype.text == 2) {
+          datetype = this.Setdatetype.text;
+
+        } else {
+          datetype = this.Setdatetype;
+
+        }
 
         let status = '';
         let branch = '';
         let fromdate = '';
-        let todate = '';
+
         if ((this.SetStatus == '') && (this.SetBranch == '')) {
           // alert("if");
           status = 'All';
@@ -1189,7 +1201,7 @@ export default {
 
             //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1197,7 +1209,7 @@ export default {
             });
 
         } else if ((this.SetStatus == '') || (this.SetBranch == '')) {
-          // alert('else if');
+
 
           if (this.SetStatus == '') {
             this.SetStatus = 'All'
@@ -1213,7 +1225,7 @@ export default {
           this.isLoading = true;
           this.$http
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1233,7 +1245,7 @@ export default {
           this.$http
 
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1246,7 +1258,7 @@ export default {
 
 
         var str = "_"
-        this.fileDate = this.fromdate.concat(str, this.todate);
+        this.fileDate = this.fromdate.concat(str);
 
         console.log(this.fileDate);
 
@@ -1287,6 +1299,37 @@ export default {
         return null;
       }
     },
+
+    statuschange(a) {
+
+      if (a == 2) {
+        this.datevalue = {
+          shortCode: 'Expense Date',
+          text: '2'
+        }, {
+          shortCode: 'Bill Date',
+          text: '1'
+        };
+        this.date_type = [{
+          shortCode: 'Expense Date',
+          text: '2'
+        }, {
+          shortCode: 'Bill Date',
+          text: '1'
+        }];
+        console.log(this.date_type);
+        this.Setdatetype = this.datevalue;
+      } else {
+        this.datevalue = {
+          shortCode: 'Bill Date',
+          text: '1'
+        }
+        this.date_type = [this.datevalue];
+        console.log(this.date_type);
+        this.Setdatetype = this.datevalue;
+      }
+
+    }
 
   }
 
