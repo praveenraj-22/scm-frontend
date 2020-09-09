@@ -380,9 +380,7 @@ export default {
         this.isLoading = true;
         this.$http
 
-          //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
-          //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-          .get(`http://localhost:8888/api-totaldrtbills/${this.fromdate}/${this.todate}/${normalusername.name}`)
+          .get(`https://mis.dragarwal.com/api-totaldrtbills/${this.fromdate}/${this.todate}/${normalusername.name}`)
           .then(response => {
             console.log(response.data);
             this.processDatatotal(response.data);

@@ -248,7 +248,7 @@ export default {
       }];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
 
         })
@@ -300,7 +300,7 @@ export default {
       console.log(normalusername);
       this.isLoading = true;
       this.axios
-        .get(`http://localhost:8888/api-submittedbills/${this.fromdate}/${datetype}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+        .get(`https://mis.dragarwal.com/api-submittedbills/${this.fromdate}/${datetype}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
         .then(response => {
 
           console.log(response.data);

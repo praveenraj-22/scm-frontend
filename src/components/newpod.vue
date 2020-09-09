@@ -73,11 +73,11 @@
                   style="outline:none"
                 >Generate</v-btn>
               </v-date-picker>
-
-
-
-
-
+			  
+			  
+			  
+			  
+			  
             </v-menu>
             <download-excel
               :data="json_data"
@@ -119,33 +119,33 @@
                   <th
                     class="text-xs-left"
                     width="15%"
-                    scope="col"
+                    scope="col"                  
                   >Branch</th>
                   <th
                     class="text-xs-center"
                     scope="col"
-
+                   
                   >FTD</th>
                   <th
                     class="text-xs-center"
                     scope="col"
-
+                    
                   >MTD</th>
 				  <th
                     class="text-xs-center"
                     scope="col"
-
+                    
                   >LMTD</th>
 				  <th
                     class="text-xs-center"
                     scope="col"
-
+                    
                   >MTD%</th>
                 </tr>
-
+               
               </thead>
               <tbody v-if="user_role=='super_user'">
-
+			  
 			  <tr
                   scope="row"
                   v-for="(item,index) in group"
@@ -161,7 +161,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.ftdopdrev}}</td>
-
+                  
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -174,7 +174,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -191,7 +191,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.ftdopdrev}}</td>
-
+                  
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -204,7 +204,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -233,7 +233,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
 				<tr
                   scope="row"
@@ -262,10 +262,10 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
+				
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in ohc"
@@ -293,9 +293,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                  class="font-weight-black branchesgrp"
@@ -303,7 +303,7 @@
                   <td
                     scope="row"
                     :class="text-xs-left"
-
+                   
                   >AEH:</td>
                   <td
                     scope="row"
@@ -321,7 +321,7 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -333,7 +333,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -351,7 +351,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -380,7 +380,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -391,7 +391,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -410,7 +410,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -439,7 +439,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -450,7 +450,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -469,7 +469,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -498,7 +498,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -509,7 +509,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -528,7 +528,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -557,7 +557,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -568,7 +568,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -587,7 +587,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -616,7 +616,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -627,7 +627,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -646,7 +646,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -658,7 +658,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -676,7 +676,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -703,7 +703,7 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -732,7 +732,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -743,7 +743,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -762,7 +762,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                   <!-- <tr
                   scope="row"
@@ -773,7 +773,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -792,10 +792,10 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr> -->
-
-
+				
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in pondycherry"
@@ -806,7 +806,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -824,10 +824,10 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
-
-
+				
+				
                 <tr
                   scope="row"
                   v-for="(item,index) in tirunelveli"
@@ -838,7 +838,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -856,9 +856,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in coimbatore"
@@ -869,7 +869,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -887,12 +887,12 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
-
-
-
-
+				
+				
+				
+				
                 <tr
                   scope="row"
                   v-for="(item,index) in tuti_madurai"
@@ -920,7 +920,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -931,7 +931,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                   
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -950,7 +950,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -962,7 +962,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                   
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -980,7 +980,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -992,7 +992,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1010,10 +1010,10 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
+				
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in tiruppur"
@@ -1024,7 +1024,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1042,9 +1042,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
-
+                
                 <tr
                   scope="row"
                   v-for="(item,index) in karnataka"
@@ -1072,7 +1072,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1101,7 +1101,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1112,7 +1112,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1131,7 +1131,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -1160,7 +1160,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1171,7 +1171,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1190,9 +1190,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in maharashtra"
@@ -1220,7 +1220,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1231,7 +1231,7 @@
                   <td
                     scope="row"
                     :class="'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1250,17 +1250,17 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
-
-
-
-
-
-
-
+				
+				
+				
+				
+				
+				
+				
+				
+				
                 <tr
                   scope="row"
                   v-for="(item,index) in telangana"
@@ -1288,7 +1288,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1317,7 +1317,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1328,7 +1328,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1347,7 +1347,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1376,7 +1376,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1387,7 +1387,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1406,7 +1406,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1436,7 +1436,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                  <tr
                   scope="row"
@@ -1465,7 +1465,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1476,7 +1476,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1495,7 +1495,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1524,7 +1524,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1535,7 +1535,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1554,12 +1554,12 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
 
-
-
-
+               
+				
+				
                 <tr
                   scope="row"
                   v-for="(item,index) in ahmedabad"
@@ -1570,7 +1570,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1588,7 +1588,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                <tr
                   scope="row"
@@ -1617,7 +1617,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1628,7 +1628,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1647,7 +1647,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1676,7 +1676,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1687,7 +1687,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1706,7 +1706,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <!-- <tr
                   scope="row"
@@ -1717,7 +1717,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1736,15 +1736,15 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+          
                 </tr> -->
-
-
-
+				
+				
+				
 				<tr
                   scope="row"
                   class="font-weight-black ochfont"
-
+                  
                 >
                   <td
                     scope="row"
@@ -1767,10 +1767,10 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-
+                  
                 </tr>
-
-
+				
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in madagascar"
@@ -1781,7 +1781,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1799,9 +1799,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in mozambique"
@@ -1829,7 +1829,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1840,7 +1840,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1870,7 +1870,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1888,9 +1888,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>-->
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in rwanda"
@@ -1901,7 +1901,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -1919,8 +1919,8 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
-                </tr>
+                  
+                </tr>				
 				 <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -1948,7 +1948,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -1959,7 +1959,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -1989,7 +1989,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2007,9 +2007,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in ghana"
@@ -2020,7 +2020,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2038,9 +2038,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in nairobi"
@@ -2051,7 +2051,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2069,9 +2069,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in uganda"
@@ -2082,7 +2082,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2100,9 +2100,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in tanzania"
@@ -2113,7 +2113,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2131,15 +2131,15 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
+				
+				
               </tbody>
-
+			  
 			   <tbody v-if="user_role=='indian_user'">
-
-
+			  
+			  
                 <tr
                   scope="row"
                   v-for="(item,index) in alin"
@@ -2155,7 +2155,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.ftdopdrev}}</td>
-
+                  
                   <td
                     scope="row"
                     class="text-xs-center"
@@ -2168,7 +2168,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2197,7 +2197,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
 				<tr
                   scope="row"
@@ -2226,9 +2226,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
-                </tr>
-
+                  
+                </tr>			
+				
 				<tr
                   scope="row"
                  class="font-weight-black branchesgrp"
@@ -2236,7 +2236,7 @@
                   <td
                     scope="row"
                     :class="text-xs-left"
-
+                   
                   >AEH:</td>
                   <td
                     scope="row"
@@ -2254,7 +2254,7 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2266,7 +2266,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2284,7 +2284,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2313,7 +2313,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2324,7 +2324,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2343,7 +2343,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2372,7 +2372,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2383,7 +2383,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2402,7 +2402,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2431,7 +2431,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2442,7 +2442,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2461,7 +2461,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2490,7 +2490,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2501,7 +2501,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2520,7 +2520,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2549,7 +2549,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2560,7 +2560,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2579,7 +2579,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2591,7 +2591,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2609,7 +2609,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2636,7 +2636,7 @@
                     scope="row"
                     class="text-xs-center"
                   ></td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2665,7 +2665,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2676,7 +2676,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2695,7 +2695,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                   <!-- <tr
                   scope="row"
@@ -2706,7 +2706,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2725,9 +2725,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr> -->
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in pondycherry"
@@ -2738,7 +2738,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2756,7 +2756,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2768,7 +2768,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2786,7 +2786,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
 				<tr
                   scope="row"
@@ -2798,7 +2798,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2816,7 +2816,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2845,7 +2845,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2856,7 +2856,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                   
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -2875,7 +2875,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -2887,7 +2887,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                   
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2905,7 +2905,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -2917,7 +2917,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2935,11 +2935,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
-
+				
+				
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in tiruppur"
@@ -2950,7 +2950,7 @@
                     scope="row"
                     :class="'text-xs-left'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -2968,9 +2968,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
-
+                
                 <tr
                   scope="row"
                   v-for="(item,index) in karnataka"
@@ -2998,7 +2998,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3027,7 +3027,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3038,7 +3038,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3057,7 +3057,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                 
                 </tr>
                 <tr
                   scope="row"
@@ -3086,7 +3086,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3097,7 +3097,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3116,9 +3116,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in maharashtra"
@@ -3146,7 +3146,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3157,7 +3157,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3176,19 +3176,19 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
-
-
-
-
-
-
-
-
-
-
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
                 <tr
                   scope="row"
                   v-for="(item,index) in telangana"
@@ -3216,7 +3216,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3245,7 +3245,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3256,7 +3256,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3275,7 +3275,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3304,7 +3304,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3315,7 +3315,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3334,7 +3334,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3364,19 +3364,18 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
-                  v-for="(item,index) in triv"
+                  v-for="(item,index) in kerla"
                   :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
+                  class="font-weight-black rotgrp"
                 >
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3394,7 +3393,37 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in kerla_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdrev}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrev}}</td>
+				   <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrevlastyear}}</td>
+				  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdpercentage}}</td>
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3423,7 +3452,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3434,7 +3463,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3453,10 +3482,10 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
 
-
+              
                 <tr
                   scope="row"
                   v-for="(item,index) in ahmedabad"
@@ -3467,7 +3496,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3485,19 +3514,18 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-                <tr
+                 <tr
                   scope="row"
-                  v-for="(item,index) in indore"
+                  v-for="(item,index) in madhyapradesh"
                   :key="index+item.branch"
-                  class="font-weight-black"
+                  class="font-weight-black rotgrp"
                 >
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3515,7 +3543,37 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
+                </tr>
+                <tr
+                  scope="row"
+                  v-for="(item,index) in madhyapradesh_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdrev}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrev}}</td>
+				   <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrevlastyear}}</td>
+				  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdpercentage}}</td>
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3544,7 +3602,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3555,7 +3613,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3574,14 +3632,14 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
               </tbody>
-
-
+			  
+			  
 			   <tbody v-if="user_role=='overseas_user'">
-
-
+			  
+			  			
 				<tr
                   scope="row"
                   v-for="(item,index) in ohc"
@@ -3609,7 +3667,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
 				<tr
                   scope="row"
@@ -3621,7 +3679,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3639,9 +3697,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in mozambique"
@@ -3669,7 +3727,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3680,7 +3738,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3710,7 +3768,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3728,9 +3786,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>-->
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in rwanda"
@@ -3741,7 +3799,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3759,8 +3817,8 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
-                </tr>
+                  
+                </tr>				
 				 <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -3788,7 +3846,7 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
                 <tr
                   scope="row"
@@ -3799,7 +3857,7 @@
                   <td
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
+                    
                     style="cursor:pointer"
                   >{{item.branch}}</td>
                   <td
@@ -3829,7 +3887,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3847,9 +3905,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in ghana"
@@ -3860,7 +3918,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3878,9 +3936,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in nairobi"
@@ -3891,7 +3949,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3909,9 +3967,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in uganda"
@@ -3922,7 +3980,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3940,9 +3998,9 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
-
+				
 				<tr
                   scope="row"
                   v-for="(item,index) in tanzania"
@@ -3953,7 +4011,7 @@
                     scope="row"
                     :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
                     style="cursor:pointer"
-
+                    
                   >{{item.branch}}</td>
                   <td
                     scope="row"
@@ -3971,15 +4029,15 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
-
+                  
                 </tr>
               </tbody>
-
-
-
+			  
+			  
+			  
             </table>
           </div>
-
+		  
           <back-to-top
             bottom="90px"
             right="90px"
@@ -4007,8 +4065,8 @@ import moment from "moment";
 import { serverBus } from "../main";
 export default {
   data: () => ({
-
-
+    
+ 
     // ftdotcount: null,
     // mtdotcount: null,
     // cogsftdotcount: null,
@@ -4016,10 +4074,10 @@ export default {
     userName: null,
     isLoading: false,
     fullPage: true,
-
+    
     title: null,
 	user_role : null,
-
+    
     rowColor: null,
     isActive: false,
     save: "save",
@@ -4072,11 +4130,11 @@ export default {
     kerla: null,
     kerla_branches: null,
     kolk: null,
-    kolk_branches: null,
+    kolk_branches: null,   
     ahmedabad: null,
     madhyapradesh :null,
 	madhyapradesh_branches :null,
-    odisha: null,
+    odisha: null,	
     odisha_branches: null,
 	maharashtra :null,
 	maharashtra_branches :null,
@@ -4107,8 +4165,8 @@ export default {
       "MTD": "mtdopdrev",
 	  "LMTD": "mtdopdrevlastyear",
 	  "MTD%": "mtdopdpercentage",
-
-
+	  
+      
     },
     fileName: null
   }),
@@ -4129,8 +4187,8 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          //.get(`https://scm.dragarwal.com/api-newpod-super/${date}`)
-          .get(`http://localhost:8888/api-newpod-super/${date}`)
+          .get(`https://mis.dragarwal.com/api-newpod-super/${date}`)
+          //.get(`http://localhost:8888/api-newpod-super/${date}`)
                     .then(response => {
             this.processDataOPDSuper(response.data);
             this.isLoading = false;
@@ -4139,20 +4197,20 @@ export default {
         return null;
       }
     },
-    processDataOPDSuper (data) {
-	  if (sessionStorage.getItem('super_user')){
+    processDataOPDSuper (data) {	 
+	  if ((sessionStorage.getItem('group_user')) || (sessionStorage.getItem('admin_user'))){
 	     this.user_role = 'super_user';
-	  }else if(sessionStorage.getItem('overseas_user')){
+	  }else if(sessionStorage.getItem('overseas_user')){		
 	    this.user_role = 'overseas_user';
-	  }else if(sessionStorage.getItem('indian_user')){
+	  }else if(sessionStorage.getItem('domestic_user')){	  
 		this.user_role = 'indian_user';
 	  }
-
+	  
 	  this.group = [data.group];
       this.alin = [data.alin];
       this.aeh = [data.aeh];
       this.ahc = [data.ahc];
-	  this.ohc = [data.ohc];
+	  this.ohc = [data.ohc];  
       // this.cmh = [data.aehgroup["Chennai Main Hospital"]];
       this.cmh = data.branchwise["Chennai Main Hospital"];
       this.aeh_chennai = [data.aehgroup["Chennai Branches"]];
@@ -4173,7 +4231,7 @@ export default {
       // this.tirunelveli = [data.ahcgroup["Tirunelveli"]];
       this.tirunelveli = data.branchwise["Tirunelveli"];
 	  this.coimbatore = data.branchwise["Coimbatore"];
-
+	  
       this.tuti_madurai = [data.ahcgroup["Tuticorin + Madurai"]];
       this.tuti_madurai_branches = data.branchwise[
         "Tuticorin + Madurai"
@@ -4182,7 +4240,7 @@ export default {
       this.trichy = data.branchwise["Trichy"];
       // this.thanjavur = [data.ahcgroup["Thanjavur"]];
       this.thanjavur = data.branchwise["Thanjavur"];
-      this.andaman = [data.ahcgroup["Andaman"]];
+      this.andaman = [data.ahcgroup["Port Blair"]];
       this.karnataka = [data.ahcgroup["Karnataka"]];
       this.banglore = [data.ahcgroup["Banglore"]];
       this.banglore_branches = data.branchwise["Banglore"];
@@ -4199,16 +4257,16 @@ export default {
       this.kerla_branches = data.branchwise["Kerala"];
       this.kolk = [data.ahcgroup["Kolkata"]];
       this.kolk_branches = data.branchwise["Kolkata"];
-      this.ahmedabad = data.branchwise["Ahmedabad"];
+      this.ahmedabad = data.branchwise["Ahmedabad"];     
 	  this.madhyapradesh = [data.ahcgroup["Madhya Pradesh"]];
       this.madhyapradesh_branches = data.branchwise["Madhya Pradesh"];
       this.odisha = [data.ahcgroup["Odisha"]];
       this.odisha_branches = data.branchwise["Odisha"];
 	  this.maharashtra = [data.ahcgroup["Maharashtra"]];
-      this.maharashtra_branches = data.branchwise["Maharashtra"];
+      this.maharashtra_branches = data.branchwise["Maharashtra"];	  
 	  this.pondycherry = data.branchwise["Pondycherry"];
 	  this.tiruppur = data.branchwise["Tiruppur"];
-
+	  
 	  this.madagascar = data.branchwise["Madagascar"];
 	  this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
@@ -4221,16 +4279,16 @@ export default {
 	  this.nairobi = data.branchwise["Nairobi"];
 	  this.uganda = data.branchwise["Uganda"];
 	  this.tanzania = data.branchwise["Tanzania"];
-
-
-
-
-
+	   
+	  
+	  
+	  
+	  
       // this.amb = [data.ahcgroup["Ambattur"]];
       this.show = true;
     },
     downloadExcelRevenueSuper () {
-
+	
 		if(this.user_role=='super_user'){
 		  let tempDataArr = [];
 		  if (this.fileDate !== null) {
@@ -4249,7 +4307,7 @@ export default {
 			  this.dha_salem_krish_branches,
 			  this.erod_hosure,
 			  this.erod_hosure_branches,
-			  this.jaipur,
+			  this.jaipur,			  
 			  this.ahc_chennai,
 			  this.ahc_chennai_branches,
 			  this.pondycherry,
@@ -4275,7 +4333,7 @@ export default {
 			  this.kerla,
 			  this.kerla_branches,
 			  this.kolk,
-			  this.kolk_branches,
+			  this.kolk_branches,			 
 			  this.ahmedabad,
 			  this.madhyapradesh,
 			  this.madhyapradesh_branches,
@@ -4283,7 +4341,7 @@ export default {
 			  this.odisha_branches,
 			  this.madagascar,
 			  this.mozambique,
-			  this.mozambique_branches,
+			  this.mozambique_branches,			 
 			  this.rwanda,
 			  this.mauritius,
 			  this.mauritius_branches,
@@ -4299,13 +4357,13 @@ export default {
 			return null;
 		  }
 		}else if(this.user_role=='overseas_user'){
-
+		
 			let tempDataArr = [];
 		  if (this.fileDate !== null) {
 			tempDataArr = this.ohc.concat(
 			  this.madagascar,
 			  this.mozambique,
-			  this.mozambique_branches,
+			  this.mozambique_branches,			 
 			  this.rwanda,
 			  this.mauritius,
 			  this.mauritius_branches,
@@ -4321,7 +4379,7 @@ export default {
 			return null;
 		  }
 		}else{
-
+		
 			let tempDataArr = [];
 		  if (this.fileDate !== null) {
 			tempDataArr = this.alin.concat(
@@ -4338,7 +4396,7 @@ export default {
 			  this.dha_salem_krish_branches,
 			  this.erod_hosure,
 			  this.erod_hosure_branches,
-			  this.jaipur,
+			  this.jaipur,			  
 			  this.ahc_chennai,
 			  this.ahc_chennai_branches,
 			  this.pondycherry,
@@ -4361,9 +4419,10 @@ export default {
 			  this.andhra,
 			  this.andhra_branches,
 			  this.roi,
-			  this.triv,
+			  this.kerla,
+			  this.kerla_branches,
 			  this.kolk,
-			  this.kolk_branches,
+			  this.kolk_branches,			 
 			  this.ahmedabad,
 			  this.madhyapradesh,
 			  this.madhyapradesh_branches,
@@ -4377,7 +4436,7 @@ export default {
 		  }
 		}
     },
-
+    
     changeColorOPDSuper (data) {
       if (data.code === undefined) {
         this.rowColor = "text-xs-center";
@@ -4389,9 +4448,9 @@ export default {
             "JPR",
             "TVL",
             "TRI",
-            "TNJ",
+            "TNJ",           
             "PUN",
-            "AHM"
+            "AHM"           
           ].includes(data.code)
         ) {
           this.rowColor = "text-xs-center";

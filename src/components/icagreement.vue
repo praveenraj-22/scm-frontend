@@ -55,7 +55,7 @@ console.log(this.file);
         /*
           Make the request to the POST /single-file URL
         */
-            this.axios.post( 'http://localhost:8888/api-upi',
+            this.axios.post( 'https://mis.dragarwal.com/api-upi',
                 formData,
                 {
                   

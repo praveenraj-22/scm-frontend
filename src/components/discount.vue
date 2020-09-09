@@ -424,8 +424,8 @@ return false;
    this.loading = true;
    this.isLoading = true;
    this.$http
-    .get(`https://scm.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
-    // .get(`http://localhost:7777/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+    .get(`https://mis.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+    //.get(`http://localhost:8888/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
                .then(response => {
        this.processDatadiscount(response.data);
        this.isLoading = false;
@@ -440,8 +440,8 @@ return false;
   this.loading = true;
   this.isLoading = true;
   this.$http
-    .get(`https://scm.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
-    //.get(`http://localhost:7777/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+    .get(`https://mis.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+    //.get(`http://localhost:8888/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
               .then(response => {
       this.processDatadiscount(response.data);
       this.isLoading = false;
@@ -457,8 +457,8 @@ return false;
     this.loading = true;
     this.isLoading = true;
     this.$http
-      .get(`https://scm.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
-      //.get(`http://localhost:7777/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+      .get(`https://mis.dragarwal.com/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
+      //.get(`http://localhost:8888/api-discount-super/${this.fdate}/${this.tdate}/${department}`)
                 .then(response => {
         this.processDatadiscount(response.data);
         this.isLoading = false;

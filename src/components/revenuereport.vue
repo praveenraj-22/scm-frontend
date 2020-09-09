@@ -74,7 +74,7 @@
                 >Generate</v-btn>
               </v-date-picker>
             </v-menu>
-
+           
           </v-toolbar>
           <loading
             :active.sync="isLoading"
@@ -89,63 +89,63 @@
               v-if="show"
             >
               <thead>
-
+				
                 <tr class="grey lighten-2">
                   <th
                     scope="col"
-
+                    
                   >Date</th>
                   <th
                     scope="col"
-
+                    
                   >Branch</th>
                   <th
                     scope="col"
-
+                    
                   >CONSULTATION</th>
                   <th
                     scope="col"
-
+                    
                   >CONTACT LENS</th>
                   <th
                     scope="col"
-
+                    
                   >INVESTIGATION</th>
                   <th
                     scope="col"
-
+                    
                   ><th
                     scope="col"
-
+                    
                   >LAB</th>
                   <th
                     scope="col"
-
+                    
                   >OPTICALS</th>
                   <th
                     scope="col"
-
+                    
                   >OTHERS</th>
                   <th
                     scope="col"
-
+                    
                   >PHARMACY</th>
                   <th
                     scope="col"
-
+                    
                   >SURGERY</th>
                   <th
                     scope="col"
-
+                    
                   >TREATMENT</th>
                   <th
                     scope="col"
-
+                    
                   >Grand Total</th>
                 </tr>
               </thead>
               <tbody>
-
+                
                 <tr
                   scope="row"
                   v-for="(item,index) in revenue_report_details.FTD"
@@ -155,126 +155,126 @@
                   <td
                     scope="row"
                     :class="text-xs-center"
-
+                    
                     style="cursor:pointer"
                   >{{item.DATE}}</td>
 				  <td
                     scope="row"
                     :class="text-xs-center"
-
+                    
                     style="cursor:pointer"
                   >CMH</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.CONSULTATION}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.CONTACTLENS}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.INVESTIGATION}}</td>
 				  <td
                     scope="row"
-
+                    
                   >{{item.LAB}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.LABORATORY}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.OPTICALS}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.OTHERS}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.PHARMACY}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.SURGERY}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.TREATMENT}}</td>
                   <td
                     scope="row"
-
+                    
                   >{{item.TOTAL}}</td>
-
-                </tr>
+				  
+                </tr>       
               </tbody>
-
-
+			  
+			  
 			   <thead>
-
+				
                 <tr class="grey lighten-2">
                   <th
                     scope="col"
-
+                    
                   >Grand Total</th>
                   <th
                     scope="col"
-
+                    
                   >CMH</th>
                   <th
                     scope="col"
-
+					                  
                   >{{consuMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{lensMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{investMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{labMtdAmount}}</th>
 				  <th
                     scope="col"
-
+                    
                   >{{laboratoryMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{optiMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{othersMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{phrMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{surgMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{treatmentMtdAmount}}</th>
                   <th
                     scope="col"
-
+                    
                   >{{totalMtdAmt}}</th>
                 </tr>
               </thead>
-
-
+			  
+			  
             </table>
           </div>
-
+          
           <back-to-top
             bottom="90px"
             right="90px"
@@ -319,7 +319,7 @@ export default {
     menu: false,
     modal: false,
     menu2: false,
-    today: "",
+    today: "",    
     json_data: null,
 	revenue_report_details : null,
     phrMtdAmount : null,
@@ -333,8 +333,8 @@ export default {
 	laboratoryMtdAmount: null,
 	lensMtdAmount: null,
     labMtdAmount: null
-
-
+    
+    
   }),
   created () {
     this.getToday();
@@ -348,12 +348,12 @@ export default {
     apiRequestRevenueReportSuper (date) {
       // let superUserName = sessionStorage.getItem("super_user");
       if (date !== null) {
-
+       
         this.loading = true;
         this.isLoading = true;
         this.$http
-        //  .get(`https://scm.dragarwal.com/api-super-ideamed-revenue/${date}`)
-           .get(`http://localhost:8888/api-super-ideamed-revenue/${date}`)
+          .get(`https://mis.dragarwal.com/api-super-ideamed-revenue/${date}`)
+           //.get(`http://localhost:8888/api-super-ideamed-revenue/${date}`)
                     .then(response => {
 					
 					console.log(response.data);
@@ -378,13 +378,13 @@ export default {
 		this.laboratoryMtdAmount=data.MTD.LABORATORYMTD;
 		this.lensMtdAmount=data.MTD.CONTACTLENSMTD;
 		this.labMtdAmount=data.MTD.LABMTD;
-
-
-
+		
+	  
+	  
     },
 	downloadExcelOTSuper () {
 
-
+      
     }
 
 

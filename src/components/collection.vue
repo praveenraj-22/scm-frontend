@@ -511,7 +511,7 @@ Collectionlist:null,
       "PATIENT NAME": "PATIENT_NAME",
       "PAYMENT OR REFUND_DATE": "PAYMENT_OR_REFUND_DATE",
 	    "BILL NO": "BILL_NO",
-	    "RECEIPT NO": "RECEIPT_NO",
+	    "RECEIPT NO": "RECEIPT_NO",     
       "CASH AMOUNT":"CASH_AMOUNT",
       "CARD AMOUNT":"CARD_AMOUNT",
       "CARD SERVICE CHARGE_AMOUNT":"CARD_SERVICE_CHARGE_AMOUNT",
@@ -532,7 +532,8 @@ Collectionlist:null,
       "PAID AMOUNT":"PAID_AMOUNT",
       "CREATEDBY":"CREATEDBY",
       "PAYMENT REFERENCE":"PAYMENT_REFERENCE",
-      "PAYMENT DETAIL":"PAYMENT_DETAIL"
+      "PAYMENT DETAIL":"PAYMENT_DETAIL",
+	  "ONLINE AMOUNT":"ONLINE_AMOUNT"
 
 
     },
@@ -548,8 +549,8 @@ this.SetBranch = [];
   var arr1=[{shortCode: 'Select All', text: ''}];
 //if(this.SetEntity!='' && selectObj!='')
   this.axios
-//  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-  .get(`http://localhost:8888/api-branch/${selectObj}`).then(response =>{
+  .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response =>{
+  //.get(`http://localhost:8888/api-branch/${selectObj}`).then(response =>{
     this.branch = arr1.concat(response.data);
   console.log(arr1);
 
@@ -619,9 +620,8 @@ let entity='';
    this.loading = true;
    this.isLoading = true;
    this.$http
- //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
-     //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
-.get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+	//.get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+     .get(`https://mis.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
                .then(response => {
        this.processDatacollection(response.data);
        this.isLoading = false;
@@ -650,8 +650,8 @@ entity=this.SetEntity;
 this.loading = true;
 this.isLoading = true;
  this.$http
-//.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
-  .get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+ //.get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+.get(`https://mis.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
   .then(response => {
 this.processDatacollection(response.data);
 this.isLoading = false;
@@ -672,8 +672,8 @@ console.log('else');
   this.loading = true;
   this.isLoading = true;
    this.$http
-  //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
-      .get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+   //.get(`http://localhost:8888/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
+  .get(`https://mis.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${entity}/${branch}`)
     .then(response => {
   this.processDatacollection(response.data);
   this.isLoading = false;

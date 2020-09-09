@@ -519,7 +519,7 @@ export default {
       // alert(id);
       this.billid = id;
       this.dialog = true;
-      this.axios.get(`http://localhost:8888/api-approvalbills/${this.billid}`).then(response => {
+      this.axios.get(`https://mis.dragarwal.com/api-approvalbills/${this.billid}`).then(response => {
         this.drtbilldetail = response.data;
         console.log(this.drtbilldetail);
         this.Name = this.drtbilldetail[0]["PATIENT_NAME"]
@@ -557,7 +557,7 @@ export default {
 
       this.isLoading = true;
       this.$http
-        .post(`http://localhost:8888/api-schbillinsert`, {
+        .post(`https://mis.dragarwal.com/api-schbillinsert`, {
           sch_bill_id: row.id,
           sch_id: normalusername.name,
         }).then(response => {
@@ -580,7 +580,7 @@ export default {
 
               //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -604,7 +604,7 @@ export default {
             this.isLoading = true;
             this.$http
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -624,7 +624,7 @@ export default {
             this.$http
 
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -645,7 +645,7 @@ export default {
 
 
       this.isLoading = true;
-      this.$http.post(`http://localhost:8888/api-schbillcancel`, {
+      this.$http.post(`https://mis.dragarwal.com/api-schbillcancel`, {
         sch_bill_id: row.id,
         sch_id: normalusername.name,
         sch_comments: this.schcomments,
@@ -674,7 +674,7 @@ export default {
 
               //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -698,7 +698,7 @@ export default {
             this.isLoading = true;
             this.$http
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -719,7 +719,7 @@ export default {
             this.$http
 
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`http://localhost:8888/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -745,7 +745,7 @@ export default {
       this.drtdetail = [];
       this.drtid = selectObj;
       this.axios
-        .get(`http://localhost:8888/api-drtdetail/${selectObj}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-drtdetail/${selectObj}`).then(response => {
           this.drtdetail = response.data;
           console.log(this.drtdetail[0]["GSTIN"]);
           this.gstin = this.drtdetail[0]["GSTIN"]
@@ -768,7 +768,7 @@ export default {
       }];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`http://localhost:8888/api-schbranch/${userid.userName}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-schbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -793,27 +793,24 @@ export default {
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
       let datetype = '';
-      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
-      if ((this.fromdate == '') || (this.fromdate == null)){
+      console.log(fromdate + " " + SetStatus + " " + SetBranch + " " + Setdatatype);
+      if ((this.fromdate == '') || (this.fromdate == null)) {
         alert("Please select Month");
         return false;
-      }
-      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
         alert("Please select status");
         return false;
-      }
+      } else {
+        if (this.Setdatetype.text == 1) {
+          datetype = this.Setdatetype.text;
 
-       else {
-         if (this.Setdatetype.text == 1) {
-           datetype = this.Setdatetype.text;
+        } else if (this.Setdatetype.text == 2) {
+          datetype = this.Setdatetype.text;
 
-         } else if (this.Setdatetype.text == 2) {
-           datetype = this.Setdatetype.text;
+        } else {
+          datetype = this.Setdatetype;
 
-         } else {
-           datetype = this.Setdatetype;
-
-         }
+        }
 
         let status = '';
         let branch = '';
@@ -829,7 +826,7 @@ export default {
           this.isLoading = true;
           this.$http
 
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -850,7 +847,7 @@ export default {
           this.loading = true;
           this.isLoading = true;
           this.$http
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -860,14 +857,14 @@ export default {
 
 
         } else {
-            let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+          let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           branch = this.SetBranch;
           status = this.SetStatus;
           this.loading = true;
           this.isLoading = true;
           this.$http
 
-            .get(`http://localhost:8888/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`https://mis.dragarwal.com/api-schbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
