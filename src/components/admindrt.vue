@@ -668,18 +668,18 @@ export default {
     fin_expense_date(date) {
 
       var finemonth = new Date(date)
-      var month = '';
+      var month='';
       var finexpmonth = finemonth.getMonth() + 1;
-      if (finexpmonth < 10) {
-        month = ("0" + (finemonth.getMonth() + 1)).slice(-2);
+        if(finexpmonth<10){
+        month=("0" + (finemonth.getMonth() + 1)).slice(-2);
       }
       var finexpyear = finemonth.getFullYear();
 
       var expensedate = finexpyear + "-" + month;
 
-      console.log(month);
+    console.log(month);
       console.log(expensedate);
-      return finexpyear + "-" + month;
+      return  finexpyear + "-" + month;
     },
 
     loaddoctorlist() {
@@ -741,8 +741,9 @@ export default {
         const mo = new Intl.DateTimeFormat('en', {
           month: 'numeric'
         }).format(expense_date)
-        if (mo < 10) {
-          var mon = '0'.concat(mo)
+        if(mo <10)
+        {
+        var  mon='0'.concat(mo)
         }
         expensedate = ye.concat("-", mon);
 
@@ -1165,15 +1166,18 @@ export default {
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
       let datetype = '';
-      console.log(fromdate + " " + SetStatus + " " + SetBranch + " " + Setdatatype);
+      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
 
-      if ((this.fromdate == '') || (this.fromdate == null)) {
+      if ((this.fromdate == '') || (this.fromdate == null)){
         alert("Please select Month");
         return false;
-      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      }
+      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
         alert("Please select status");
         return false;
-      } else {
+      }
+
+      else {
 
         if (this.Setdatetype.text == 1) {
           datetype = this.Setdatetype.text;

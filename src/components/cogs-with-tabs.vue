@@ -1731,7 +1731,7 @@ export default {
                 _.filter(data.group, { branch: element.heading })[0]
               );
               splitbranches.forEach(branchele => {
-                if (!["HUB", "MCC", "MYS"].includes(branchele)) {
+                if (!["HUB", "MCC", "MYS","DWD"].includes(branchele)) {
                   tempdata.push(_.filter(data.branch, { code: branchele })[0]);
                   count++;
                 }

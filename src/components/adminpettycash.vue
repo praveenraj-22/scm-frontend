@@ -4,13 +4,13 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
-
+  <v-spacer></v-spacer>
           <th width="20%">
             <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
 
-          <v-spacer></v-spacer>
-          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+          <!-- <v-spacer></v-spacer>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select> -->
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -22,7 +22,7 @@
             </v-date-picker>
           </v-menu>
 
-          <v-spacer></v-spacer>
+
           <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
             <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
@@ -54,24 +54,25 @@
           <v-data-table :headers="headers" :items="strch" v-model="selected" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <tr>
-                <td @click="rowClick(props.item.STATUS)">{{ props.item.STATUS }}</td>
+                <!-- <td @click="rowClick(props.item.STATUS)">{{ props.item.STATUS }}</td> -->
                 <td class="text-xs-left">{{ props.item.branch }}</td>
                 <td class="text-xs-right">{{ props.item.credit }}</td>
-                <td class="text-xs-right">{{ props.item.totalamount }}</td>
+                <td class="text-xs-right">{{ props.item.approved }}</td>
 
-                <td class="text-xs-right">{{ props.item.balance }}</td>
-                <td class="text-xs-right">{{ props.item.Cancelled_amount }}</td>
-                <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
+                <td class="text-xs-right" style="color:red">{{ props.item.cancelled }}</td>
+                <td class="text-xs-right" style="color:blue" >{{ props.item.pending }}</td>
+                  <td class="text-xs-right" style="color:green" >{{ props.item.balance }}</td>
+                  <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
                 <td class="text-xs-left">
                   <v-btn slot="activator" small color="primary" @click="rowClick(props.item)">
                     View
                   </v-btn>
                 </td>
-                <td class="text-xs-left" v-if="props.item.STATUS==='Pending'">
+                <td class="text-xs-left" v-if="props.item.STATUS==='pending'">
                   <!-- <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn> -->
-                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.branch, true)" @click="declineamount(props.item)"color="green">
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.branch, true)" @click="declineamount(props.item)" color="green">
                     <v-icon>check</v-icon>
                   </v-btn>
 
@@ -85,23 +86,23 @@
 
                       <v-card-title>
 
-                        <span>Total amount: {{props.item.credit}}{{"------"}} Used amount : {{props.item.totalamount}} {{"------"}} Balance : {{props.item.balance}}</span>
+                        <span>Total amount: {{props.item.credit}}{{"------"}} Used amount : {{props.item.pending}} {{"------"}} Balance : {{props.item.balance}}</span>
 
                       </v-card-title>
 
                       <v-card-title>
 
-                        <span>Approving amount: {{props.item.totalamount}}</span>
+                        <span>Approving amount: {{props.item.pending}}</span>
 
                         <!-- <span>Cancelled amount :{{props.item.Cancelled_amount}}</span> -->
 
                       </v-card-title>
 
                       <v-card-title>
-<!--
+                        <!--
                         <span>Approving amount: {{props.item.totalamount}}</span> -->
 
-                        <span style="color:red">Cancelled amount :{{props.item.Cancelled_amount}}</span>
+                        <span style="color:red">Cancelled amount :{{props.item.cancelled}}</span>
 
                       </v-card-title>
 
@@ -227,22 +228,22 @@
                             {{item.Active_status}}
                           </td>
                           <td class="text-xs-right" v-if="!(item.voucher_attach==='NA')">
-                            <v-btn slot="activator" small fab color="primary" @click="downloadagreement(item.voucher_attach)">
+                            <v-btn slot="activator" small fab color="primary" @click="downloadvouchher(item.voucher_attach)">
                               <v-icon>cloud_download</v-icon>
                             </v-btn>
 
                           </td>
                           <td class="text-xs-right" v-else="(item.voucher_attach==='NA')">
-                              {{item.Active_status}}
+                            {{item.Active_status}}
                           </td>
                           <td class="text-xs-right" v-if="!(item.bill_attach==='NA')">
-                            <v-btn slot="activator" small fab color="primary" @click="downloadagreement(item.bill_attach)">
+                            <v-btn slot="activator" small fab color="primary" @click="downloadbill(item.bill_attach)">
                               <v-icon>cloud_download</v-icon>
                             </v-btn>
 
                           </td>
                           <td class="text-xs-right" v-else="(item.bill_attach==='NA')">
-                              {{item.Active_status}}
+                            {{item.Active_status}}
                           </td>
 
                         </tr>
@@ -348,46 +349,62 @@ export default {
     menu2: false,
     isLoading: false,
     fullPage: true,
-    headers: [{
-        text: 'Status',
-        align: 'left',
-        sortable: false,
-        value: 'Status'
-      }, {
+    headers: [
+      // {
+      //   text: 'Status',
+      //   align: 'left',
+      //   sortable: false,
+      //   value: 'Status'
+      // },
+      {
         text: 'Branch',
         value: 'branch',
-        sortable: false,
+        sortable: false
       },
       {
-        text: 'Allocated amount',
-        value: 'Allocated_amount'
-      },
-
-      {
-        text: 'used amount',
-        value: 'used amount'
-      },
-      {
-        text: 'Balance amount',
-        value: 'Balance_amount'
+        text: 'Allocated',
+        value: 'Allocated',
+        sortable: false
       },
 
       {
-        text: 'Cancelled amount',
-        value: 'Cancelled_amount'
+        text: 'Approved',
+        value: 'Approved',
+        sortable: false
       },
       {
-        text: 'Submitted_date',
-        value: 'Submitted_date'
+        text: 'Cancelled',
+        value: 'Cancelled',
+        sortable: false
+      },
+      {
+        text: 'Pending',
+        value: 'Pending'
+
+
+      },
+
+      {
+        text: 'Balance',
+        value: 'Balance',
+        sortable: false
+      },
+      {
+        text: 'Submitted',
+        value: 'Submitted',
+        sortable: false
       },
 
       {
         text: 'View',
-        value: 'View'
+        value: 'View',
+        sortable: false
       },
       {
         text: 'Approve',
-        value: 'Approve'
+        value: 'Approve',
+        sortable: false
+
       },
 
       // {
@@ -435,10 +452,8 @@ export default {
       if ((this.fromdate == '') || (this.fromdate == '')) {
         alert("Please select Month");
         return false;
-      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
-        alert("Please select status");
-        return false;
-      } else if ((this.SetBranch == '') || (this.SetBranch == null)) {
+      }
+      else if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
       }
@@ -448,7 +463,7 @@ export default {
       //    let userid = JSON.parse(sessionStorage.getItem("fin_user"));
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -484,7 +499,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -498,7 +513,7 @@ export default {
 
       console.log(item);
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_name}/${this.fromdate}/${this.todate}`).
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${this.fromdate}/${this.todate}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
@@ -510,16 +525,16 @@ export default {
     },
     rowApproveAll(item, refillamount) {
       if (item.totalamount < refillamount) {
-        if(confirm("Entering amount is greater than refilled amount")){
+        console.log(item);
+        if (confirm("Entering amount is greater than refilled amount")) {
 
-        }else{
+        } else {
           alert('Cancel')
           return false
         }
-  //      alert("Entering amount is greater than refilled amount")
+        //      alert("Entering amount is greater than refilled amount")
 
       }
-
       console.log(item);
       console.log(refillamount);
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
@@ -539,7 +554,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
           console.log(normalusername);
-          this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
             .then(response => {
               this.isLoading = false;
               console.log(response.data);
@@ -599,22 +614,39 @@ export default {
 
       })
     },
-    downloadagreement(download) {
-      console.log();
+    downloadvouchher(filename) {
       this.axios({
-        //url: `http://localhost:8888/api-download/${Agreement_d}`,
-        url: `http://localhost:8888/api-download/${download}`,
+        url: `http://localhost:8888/api-voucher-download/${filename}`,
+        //url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
-        console.log(response);
+
+
         var fileURL = window.URL.createObjectURL(new Blob([response.data]));
         var fileLink = document.createElement('a');
 
         fileLink.href = fileURL;
-        fileLink.setAttribute('download', download);
+        fileLink.setAttribute('download', filename);
         document.body.appendChild(fileLink);
+        //con
+        fileLink.click();
+      })
 
+    },
+    downloadbill(filename) {
+      this.axios({
+        url: `http://localhost:8888/api-bill-download/${filename}`,
+        //url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        method: 'GET',
+        responseType: 'blob',
+      }).then(response => {
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement('a');
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', filename);
+        document.body.appendChild(fileLink);
+        //con
         fileLink.click();
       })
 
@@ -671,14 +703,14 @@ export default {
       })
 
     },
-    declineamount(item){
+    declineamount(item) {
       console.log(item);
       this.isLoading = true;
       this.$http.get(`http://localhost:8888/api-declineamount/${item.branch}/${this.fromdate}/${this.todate}`)
-        .then(response=>{
+        .then(response => {
           console.log(response);
           this.isLoading = false;
-          this.declineamount=response.data;
+          this.declineamount = response.data;
 
         })
     }

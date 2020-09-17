@@ -793,24 +793,27 @@ export default {
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
       let datetype = '';
-      console.log(fromdate + " " + SetStatus + " " + SetBranch + " " + Setdatatype);
-      if ((this.fromdate == '') || (this.fromdate == null)) {
+      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
+      if ((this.fromdate == '') || (this.fromdate == null)){
         alert("Please select Month");
         return false;
-      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      }
+      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
         alert("Please select status");
         return false;
-      } else {
-        if (this.Setdatetype.text == 1) {
-          datetype = this.Setdatetype.text;
+      }
 
-        } else if (this.Setdatetype.text == 2) {
-          datetype = this.Setdatetype.text;
+       else {
+         if (this.Setdatetype.text == 1) {
+           datetype = this.Setdatetype.text;
 
-        } else {
-          datetype = this.Setdatetype;
+         } else if (this.Setdatetype.text == 2) {
+           datetype = this.Setdatetype.text;
 
-        }
+         } else {
+           datetype = this.Setdatetype;
+
+         }
 
         let status = '';
         let branch = '';
@@ -857,7 +860,7 @@ export default {
 
 
         } else {
-          let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+            let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           branch = this.SetBranch;
           status = this.SetStatus;
           this.loading = true;

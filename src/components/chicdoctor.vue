@@ -343,7 +343,7 @@ export default {
       this.show = true;
     },
     downloadagreement(Agreement_d) {
-  
+      alert("hit : " + Agreement_d);
       this.axios({
         url: `https://mis.dragarwal.com/api-download/${Agreement_d}`,
         method: 'GET',
@@ -361,7 +361,7 @@ export default {
 
     },
     downloadpan(Pan_d) {
-
+      alert("hit : " + Pan_d);
       this.axios({
         url: `https://mis.dragarwal.com/api-download/${Pan_d}`,
         method: 'GET',
@@ -379,7 +379,7 @@ export default {
 
     },
     downloadpassbook(Passbook_d) {
-
+      alert("hit : " + Passbook_d);
       this.axios({
         url: `https://mis.dragarwal.com/api-download/${Passbook_d}`,
         method: 'GET',
@@ -559,8 +559,8 @@ export default {
           this.Setpayment = null;
           formData = null;
           this.newdoctor = false;
-          this.$refs.agreementupload.files[0] = null;
-          this.$refs.agreementupload.files[0] = '';
+          this.$refs.agreementupload.files[0]=null;
+          this.$refs.agreementupload.files[0]='';
           console.log(formData);
         } else if (res.data.doctordatainserted === 'Available') {
           alert("the mentioned Pan number is already Exist")
@@ -579,7 +579,7 @@ export default {
         text: ''
       }];
       this.axios
-
+       
         .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);

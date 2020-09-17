@@ -4,13 +4,13 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
-
+<v-spacer></v-spacer>
           <th width="20%">
             <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
           </th>
 
-          <v-spacer></v-spacer>
-          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+          <!-- <v-spacer></v-spacer>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select> -->
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -22,7 +22,7 @@
             </v-date-picker>
           </v-menu>
 
-          <v-spacer></v-spacer>
+
           <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
             <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
@@ -54,20 +54,21 @@
           <v-data-table :headers="headers" :items="strch" v-model="selected" :search="search" class="elevation-1">
             <template slot="items" slot-scope="props">
               <tr>
-                <td @click="rowClick(props.item.status)">{{ props.item.status }}</td>
+                <!-- <td>{{ props.item.STATUS }}</td> -->
                 <td class="text-xs-left">{{ props.item.branch }}</td>
                 <!-- <td class="text-xs-left">{{ props.item.Bill_date }}</td> -->
                 <td class="text-xs-right">{{ props.item.credit }}</td>
-                <td class="text-xs-right">{{ props.item.totalamount }}</td>
-                <td class="text-xs-right">{{ props.item.balance }}</td>
-                <td class="text-xs-right">{{ props.item.Cancelled_amount }}</td>
+                <td class="text-xs-right">{{ props.item.approved }}</td>
+                <td class="text-xs-right" style="color:red">{{ props.item.cancelled }}</td>
+                <td class="text-xs-right" style="color:blue" >{{ props.item.pending }}</td>
+                  <td class="text-xs-right" style="color:green" >{{ props.item.balance }}</td>
                 <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
                 <td class="text-xs-left">
                   <v-btn slot="activator" small color="primary" @click="rowClick(props.item)">
                     View
                   </v-btn>
                 </td>
-                <td class="text-xs-left" v-if="props.item.status==='Pending'">
+                <td class="text-xs-left" v-if="props.item.pending !=0">
                   <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn>
@@ -166,7 +167,7 @@
                             {{item.Active_status}}
                           </td>
                           <td class="text-xs-right" v-if="!(item.voucher_attach==='NA')">
-                            <v-btn slot="activator" small fab color="primary" @click="downloadagreement(item.voucher_attach)">
+                            <v-btn slot="activator" small fab color="primary" @click="downloadvouchher(item.voucher_attach)">
                               <v-icon>cloud_download</v-icon>
                             </v-btn>
 
@@ -174,7 +175,7 @@
                           <td class="text-xs-right" v-else="(item.voucher_attach==='NA')">
                           </td>
                           <td class="text-xs-right" v-if="!(item.bill_attach==='NA')">
-                            <v-btn slot="activator" small fab color="primary" @click="downloadagreement(item.bill_attach)">
+                            <v-btn slot="activator" small fab color="primary" @click="downloadbill(item.bill_attach)">
                               <v-icon>cloud_download</v-icon>
                             </v-btn>
 
@@ -283,43 +284,57 @@ export default {
     menu2: false,
     isLoading: false,
     fullPage: true,
-    headers: [{
-        text: 'Status',
-        align: 'left',
-        value: 'status',
-          sortable: false,
-      }, {
+    headers: [
+      // {
+      //   text: 'Status',
+      //   align: 'left',
+      //   value: 'status',
+      //     sortable: false,
+      // },
+       {
         text: 'Branch',
         value: 'branch',
           sortable: false,
       }, , {
-        text: 'Total Amount',
-        value: 'total_amount'
+        text: 'Allocated',
+        value: 'total',
+          sortable: false,
       },
       {
-        text: 'Used Amount',
-        value: 'Used amount'
+        text: 'Approved',
+        value: 'Used',
+          sortable: false,
       },
       {
-        text: 'Balance Amount',
-        value: 'Balance amount'
+        text: ' Cancelled',
+        value: 'Cancelled',
+          sortable: false,
       },
       {
-        text: 'Cancelled Amount',
-        value: 'Cancelled amount'
+        text: 'Pending',
+        value: 'Pending',
+          sortable: false,
       },
       {
-        text: 'Submitted_date',
-        value: 'Submitted_date'
+        text: 'Balance',
+        value: 'Balance',
+          sortable: false,
+      },
+      {
+        text: 'Submitted',
+        value: 'Submitted',
+          sortable: false,
       },
 
       {
         text: 'View',
-        value: 'View'
+        value: 'View',
+          sortable: false,
       },
       {
         text: 'Approve',
-        value: 'Approve'
+        value: 'Approve',
+          sortable: false,
       },
 
       // {
@@ -367,19 +382,21 @@ export default {
       if ((this.fromdate == '') || (this.fromdate == '')) {
         alert("Please select Month");
         return false;
-      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
-        alert("Please select status");
-        return false;
-      } else if ((this.SetBranch == '') || (this.SetBranch == null)) {
+       }
+
+      // else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      //   alert("Please select status");
+      //   return false;
+      // }
+       else if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
       }
 
-
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -414,7 +431,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -428,7 +445,7 @@ export default {
 
       console.log(item);
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_name}/${this.fromdate}/${this.todate}`).
+     this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${this.fromdate}/${this.todate}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
@@ -455,7 +472,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           console.log(normalusername);
-          this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetStatus}/${this.SetBranch}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
             .then(response => {
               this.isLoading = false;
               console.log(response.data);
@@ -515,22 +532,39 @@ export default {
 
       })
     },
-    downloadagreement(download) {
-      console.log();
+    downloadvouchher(filename) {
       this.axios({
-        //url: `http://localhost:8888/api-download/${Agreement_d}`,
-        url: `http://localhost:8888/api-download/${download}`,
+        url: `http://localhost:8888/api-voucher-download/${filename}`,
+		//url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
-        console.log(response);
+
+
         var fileURL = window.URL.createObjectURL(new Blob([response.data]));
         var fileLink = document.createElement('a');
 
         fileLink.href = fileURL;
-        fileLink.setAttribute('download', download);
+        fileLink.setAttribute('download', filename);
         document.body.appendChild(fileLink);
+         //con
+        fileLink.click();
+      })
 
+    },
+	downloadbill(filename) {
+      this.axios({
+        url: `http://localhost:8888/api-bill-download/${filename}`,
+		//url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        method: 'GET',
+        responseType: 'blob',
+      }).then(response => {
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement('a');
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', filename);
+        document.body.appendChild(fileLink);
+         //con
         fileLink.click();
       })
 
