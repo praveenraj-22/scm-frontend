@@ -9,10 +9,10 @@
             <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
 
-          <!-- <v-spacer></v-spacer>
-          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select> -->
-
           <v-spacer></v-spacer>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+
+          <!-- <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
             <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
@@ -30,9 +30,9 @@
               <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
-          </v-menu>
+          </v-menu> -->
 
-          <v-btn rounded color="primary" dark @click="apiRequestfinpc(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestfinpc(SetStatus,SetBranch)">Generate</v-btn>
 
 
         </v-toolbar>
@@ -54,7 +54,7 @@
           <v-data-table :headers="headers" :items="strch" v-model="selected" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <tr>
-                <!-- <td @click="rowClick(props.item.STATUS)">{{ props.item.STATUS }}</td> -->
+                <td @click="rowClick(props.item.STATUS)">{{ props.item.STATUS }}</td>
                 <td class="text-xs-left">{{ props.item.branch }}</td>
                 <td class="text-xs-right">{{ props.item.credit }}</td>
                 <td class="text-xs-right">{{ props.item.approved }}</td>
@@ -68,16 +68,16 @@
                     View
                   </v-btn>
                 </td>
-                <td class="text-xs-left" v-if="props.item.STATUS==='pending'">
+                <td class="text-xs-left" v-if="props.item.STATUS==='Pending'">
                   <!-- <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn> -->
-                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.branch, true)" @click="declineamount(props.item)" color="green">
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.test, true)"  color="green">
                     <v-icon>check</v-icon>
                   </v-btn>
 
 
-                  <v-dialog v-model="dialogapprove[props.item.branch]" persistent max-width="800px" lazy absolute :key="props.item.branch">
+                  <v-dialog v-model="dialogapprove[props.item.test]" persistent max-width="800px" lazy absolute :key="props.item.test">
                     <v-card>
 
                       <v-card-title class="headline">Branch : {{props.item.branch }}</v-card-title>
@@ -121,8 +121,8 @@
 
                       <v-card-actions>
 
-                        <v-btn color="primary" flat @click.stop="$set(dialogapprove, props.item.branch, false)">Close</v-btn>
-                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount)" @click.stop="$set(dialogapprove, props.item.branch, false)">Refill&Approve</v-btn>
+                        <v-btn color="primary" flat @click.stop="$set(dialogapprove, props.item.test, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
 
                       </v-card-actions>
                     </v-card>
@@ -224,7 +224,7 @@
 
 
                           </td>
-                          <td class="text-xs-right" v-else="!(item.Active_status==='pending')">
+                          <td class="text-xs-right" v-else="!(item.Active_status==='Pending')">
                             {{item.Active_status}}
                           </td>
                           <td class="text-xs-right" v-if="!(item.voucher_attach==='NA')">
@@ -234,7 +234,7 @@
 
                           </td>
                           <td class="text-xs-right" v-else="(item.voucher_attach==='NA')">
-                            {{item.Active_status}}
+                            {{ NA }}
                           </td>
                           <td class="text-xs-right" v-if="!(item.bill_attach==='NA')">
                             <v-btn slot="activator" small fab color="primary" @click="downloadbill(item.bill_attach)">
@@ -243,7 +243,7 @@
 
                           </td>
                           <td class="text-xs-right" v-else="(item.bill_attach==='NA')">
-                            {{item.Active_status}}
+                            {{NA }}
                           </td>
 
                         </tr>
@@ -350,12 +350,12 @@ export default {
     isLoading: false,
     fullPage: true,
     headers: [
-      // {
-      //   text: 'Status',
-      //   align: 'left',
-      //   sortable: false,
-      //   value: 'Status'
-      // },
+      {
+        text: 'Status',
+        align: 'left',
+        sortable: false,
+        value: 'Status'
+      },
       {
         text: 'Branch',
         value: 'branch',
@@ -448,22 +448,26 @@ export default {
 
     },
 
-    apiRequestfinpc(fromdate, todate, SetStatus, SetBranch) {
-      if ((this.fromdate == '') || (this.fromdate == '')) {
-        alert("Please select Month");
-        return false;
-      }
-      else if ((this.SetBranch == '') || (this.SetBranch == null)) {
+    apiRequestfinpc( SetStatus, SetBranch) {
+      // if ((this.fromdate == '') || (this.fromdate == '')) {
+      //   alert("Please select Month");
+      //   return false;
+      // }
+     if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
       }
+      else  if ((this.SetStatus === null) || (this.SetStatus == '')) {
+       alert("Please select status");
+       return false;
+     }
 
 
       this.isLoading = true;
       //    let userid = JSON.parse(sessionStorage.getItem("fin_user"));
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -479,11 +483,12 @@ export default {
     },
     rowClick(id) {
       console.log(id);
+      //return false;
       this.dialog = true;
       this.showgroup = true;
       this.isLoading = true;
       this.showgroupdetail = false;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}`)
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${id.branch}/${id.statusno}/${id.bill_submission}`)
         .then(response => {
           this.isLoading = false;
           this.groupdata = response.data;
@@ -499,7 +504,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+    this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -512,8 +517,9 @@ export default {
     groupclick(item) {
 
       console.log(item);
+    //  return false;
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${this.fromdate}/${this.todate}`).
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
@@ -524,8 +530,11 @@ export default {
 
     },
     rowApproveAll(item, refillamount) {
-      if (item.totalamount < refillamount) {
-        console.log(item);
+
+
+
+      if (item.pending < refillamount) {
+
         if (confirm("Entering amount is greater than refilled amount")) {
 
         } else {
@@ -535,6 +544,7 @@ export default {
         //      alert("Entering amount is greater than refilled amount")
 
       }
+        //  return false;
       console.log(item);
       console.log(refillamount);
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
@@ -543,9 +553,8 @@ export default {
       this.$http.post(`http://localhost:8888/api-finptycshbillgroupapproveall`, {
         strch_id: normalusername.name,
         strch_branch: item.branch,
-        strch_fdate: this.fromdate,
-        strch_tdate: this.todate,
-        status: item.status1,
+      strch_date:item.bill_submission,
+        status: item.statusno,
         finrefilledamount: refillamount
       }).then(response => {
         this.isLoading = false;
@@ -554,8 +563,9 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
           console.log(normalusername);
-          this.$http.get(`http://localhost:8888/api-finpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
+              this.refillamount='';
               this.isLoading = false;
               console.log(response.data);
               this.processliststrchdata(response.data);
@@ -567,53 +577,54 @@ export default {
       })
 
     },
-    rowApprove(item) {
-      console.log(item);
-      let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-      console.log(normalusername);
-      console.log(this.fromdate + " " + this.todate);
-      this.isLoading = true;
-      this.$http.post(`http://localhost:8888/api-strchbillgroupapprove`, {
-        strch_id: normalusername.name,
-        strch_groupcategory: item.category_name,
-        strch_branch: item.branch,
-        strch_fdate: this.fromdate,
-        strch_tdate: this.todate,
-      }).then(response => {
-        this.isLoading = false;
-        if (response.data.dataupdated == true) {
-          alert("approved")
+    // rowApprove(item) {
+    //   console.log(item);
+    //   let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+    //   console.log(normalusername);
+    //   console.log(this.fromdate + " " + this.todate);
+    //   this.isLoading = true;
+    //   this.$http.post(`http://localhost:8888/api-strchbillgroupapprove`, {
+    //     strch_id: normalusername.name,
+    //     strch_groupcategory: item.category_name,
+    //     strch_branch: item.branch,
+    //     strch_fdate: this.fromdate,
+    //     strch_tdate: this.todate,
+    //   }).then(response => {
+    //     this.isLoading = false;
+    //     if (response.data.dataupdated == true) {
+    //       alert("approved")
+    //
+    //       this.dialog = true;
+    //       this.showgroup = true;
+    //       this.isLoading = true;
+    //       this.showgroupdetail = false;
+    //       //http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}
+    //       this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
+    //         .then(response => {
+    //           this.groupdata = response.data;
+    //           console.log(response.data);
+    //           this.isLoading = false;
+    //         })
+    //
+    //
+    //     } else {
+    //       alert("Error in updating data ");
+    //       this.dialog = true;
+    //       this.showgroup = true;
+    //       this.isLoading = true;
+    //       this.showgroupdetail = false;
+    //       this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
+    //         .then(response => {
+    //           this.isLoading = false;
+    //           this.groupdata = response.data;
+    //           console.log(response.data);
+    //         });
+    //
+    //     }
+    //
+    //   })
+    // },
 
-          this.dialog = true;
-          this.showgroup = true;
-          this.isLoading = true;
-          this.showgroupdetail = false;
-          //http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
-            .then(response => {
-              this.groupdata = response.data;
-              console.log(response.data);
-              this.isLoading = false;
-            })
-
-
-        } else {
-          alert("Error in updating data ");
-          this.dialog = true;
-          this.showgroup = true;
-          this.isLoading = true;
-          this.showgroupdetail = false;
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
-            .then(response => {
-              this.isLoading = false;
-              this.groupdata = response.data;
-              console.log(response.data);
-            });
-
-        }
-
-      })
-    },
     downloadvouchher(filename) {
       this.axios({
         url: `http://localhost:8888/api-voucher-download/${filename}`,
@@ -681,14 +692,14 @@ export default {
           this.schcomments = '';
           console.log(item);
           this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_name}/${this.fromdate}/${this.todate}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
           });
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
             .then(response => {
               this.isLoading = false;
               this.groupdata = response.data;
@@ -705,6 +716,7 @@ export default {
     },
     declineamount(item) {
       console.log(item);
+      return false;
       this.isLoading = true;
       this.$http.get(`http://localhost:8888/api-declineamount/${item.branch}/${this.fromdate}/${this.todate}`)
         .then(response => {

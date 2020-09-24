@@ -93,12 +93,12 @@ export default {
         this.loading = true;
         this.axios
           .post(`https://mis.dragarwal.com/mis-login`, {
-           //.post(`http://localhost:7777/mis-login`, {
+           //.post(`http://localhost:8888/mis-login`, {
             user: this.name.trim(),
             pass: this.password.trim()
           })
           .then(response => {
-		     sessionStorage.clear()		    
+		     sessionStorage.clear()
             this.loading = false;
             if (
               response.data.isAuthenticated === true &&
@@ -106,42 +106,42 @@ export default {
             ) {
               sessionStorage.setItem("domestic_user", JSON.stringify({ name: this.name, userName: response.data.userName,role : response.data.role }));
               serverBus.$emit("changeComponent", "domesticrevenue");
-             
+
             } else if (
               response.data.isAuthenticated === true &&
               response.data.role === "group_user"
             ) {
               sessionStorage.setItem("group_user", JSON.stringify({ name: this.name, userName: response.data.userName,role : response.data.role }));
-			  
+
 			  if(this.name=="103390"){
 				serverBus.$emit("changeComponent", "newpod");
 			  }else if(this.name=="102055"){
 				serverBus.$emit("changeComponent", "avamagic");
-			  }else{			  
+			  }else{
 				serverBus.$emit("changeComponent", "domesticrevenue");
 			  }
-              
+
             } else if (
               response.data.isAuthenticated === true &&
               response.data.role === "overseas_user"
             ) {
               sessionStorage.setItem("overseas_user", JSON.stringify({ name: this.name, userName: response.data.userName,role : response.data.role }));
               serverBus.$emit("changeComponent", "group");
-             
+
             }else if (
               response.data.isAuthenticated === true &&
               response.data.role === "normal_user"
             ) {
               sessionStorage.setItem("normal_user", JSON.stringify({ name: this.name, userName: response.data.userName,role : response.data.role }));
               serverBus.$emit("changeComponent", "normalrevenue");
-             
+
             }else if (
               response.data.isAuthenticated === true &&
               response.data.role === "admin_user"
             ) {
               sessionStorage.setItem("admin_user", JSON.stringify({ name: this.name, userName: response.data.userName,role : response.data.role }));
               serverBus.$emit("changeComponent", "domesticrevenue");
-             
+
             }else if(
               response.data.isAuthenticated === true &&
               response.data.role === "optical_user"
@@ -158,8 +158,8 @@ export default {
               serverBus.$emit("changeComponent", "Collection");
               // serverBus.$emit("changeComponent", "chart");
             }
-			
-			
+
+
 			// drt ch approval
             else if (
               response.data.isAuthenticated === true &&

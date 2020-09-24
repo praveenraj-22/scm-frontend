@@ -6,13 +6,13 @@
         <v-toolbar flat color="grey lighten-2">
 <v-spacer></v-spacer>
           <th width="20%">
-            <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+            <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
 
-          <!-- <v-spacer></v-spacer>
-          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select> -->
-
           <v-spacer></v-spacer>
+          <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
+
+          <!-- <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
             <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
@@ -30,9 +30,9 @@
               <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
-          </v-menu>
+          </v-menu> -->
 
-          <v-btn rounded color="primary" dark @click="apiRequestschpc(fromdate,todate,SetStatus,SetBranch)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestschpc(SetStatus,SetBranch)">Generate</v-btn>
 
 
         </v-toolbar>
@@ -54,7 +54,7 @@
           <v-data-table :headers="headers" :items="strch" v-model="selected" :search="search" class="elevation-1">
             <template slot="items" slot-scope="props">
               <tr>
-                <!-- <td>{{ props.item.STATUS }}</td> -->
+                <td>{{ props.item.STATUS }}</td>
                 <td class="text-xs-left">{{ props.item.branch }}</td>
                 <!-- <td class="text-xs-left">{{ props.item.Bill_date }}</td> -->
                 <td class="text-xs-right">{{ props.item.credit }}</td>
@@ -285,12 +285,12 @@ export default {
     isLoading: false,
     fullPage: true,
     headers: [
-      // {
-      //   text: 'Status',
-      //   align: 'left',
-      //   value: 'status',
-      //     sortable: false,
-      // },
+      {
+        text: 'Status',
+        align: 'left',
+        value: 'status',
+          sortable: false,
+      },
        {
         text: 'Branch',
         value: 'branch',
@@ -378,16 +378,16 @@ export default {
 
     },
 
-    apiRequestschpc(fromdate, todate, SetStatus, SetBranch) {
-      if ((this.fromdate == '') || (this.fromdate == '')) {
-        alert("Please select Month");
-        return false;
-       }
-
-      // else if ((this.SetStatus === null) || (this.SetStatus == '')) {
-      //   alert("Please select status");
+    apiRequestschpc( SetStatus, SetBranch) {
+      // if ((this.fromdate == '') || (this.fromdate == '')) {
+      //   alert("Please select Month");
       //   return false;
-      // }
+      //  }
+
+       if ((this.SetStatus === null) || (this.SetStatus == '')) {
+        alert("Please select status");
+        return false;
+      }
        else if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
@@ -396,7 +396,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -411,12 +411,13 @@ export default {
       this.show = true
     },
     rowClick(id) {
+      console.log("rowclick");
       console.log(id);
       this.dialog = true;
       this.showgroup = true;
       this.isLoading = true;
       this.showgroupdetail = false;
-      this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}`)
+      this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${id.statusno}/${id.bill_submission}`)
         .then(response => {
           this.isLoading = false;
           this.groupdata = response.data;
@@ -431,7 +432,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -442,10 +443,10 @@ export default {
 
     },
     groupclick(item) {
-
+      console.log(" grpclick");
       console.log(item);
       this.isLoading = true;
-     this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${this.fromdate}/${this.todate}`).
+     this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.created_date}/${item.status1}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
@@ -456,6 +457,7 @@ export default {
 
     },
     rowApproveAll(item) {
+      console.log("rowapproveall");
       console.log(item);
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
@@ -463,8 +465,8 @@ export default {
       this.$http.post(`http://localhost:8888/api-strchbillgroupapproveall`, {
         strch_id: normalusername.name,
         strch_branch: item.branch,
-        strch_fdate: this.fromdate,
-        strch_tdate: this.todate
+        strch_date: item.bill_submission
+
       }).then(response => {
         this.isLoading = false;
         if (response.data.dataupdated == true) {
@@ -472,7 +474,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           console.log(normalusername);
-          this.$http.get(`http://localhost:8888/api-schpc/${this.fromdate}/${this.todate}/${this.SetBranch}/${normalusername.name}`)
+        this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.isLoading = false;
               console.log(response.data);
@@ -486,17 +488,17 @@ export default {
 
     },
     rowApprove(item) {
+      console.log("rowapprove");
       console.log(item);
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      console.log(this.fromdate + " " + this.todate);
+
       this.isLoading = true;
       this.$http.post(`http://localhost:8888/api-strchbillgroupapprove`, {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
         strch_branch: item.branch,
-        strch_fdate: this.fromdate,
-        strch_tdate: this.todate,
+        strch_date:item.created_date
       }).then(response => {
         this.isLoading = false;
         if (response.data.dataupdated == true) {
@@ -506,8 +508,8 @@ export default {
           this.showgroup = true;
           this.isLoading = true;
           this.showgroupdetail = false;
-          //http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
+
             .then(response => {
               this.groupdata = response.data;
               console.log(response.data);
@@ -521,7 +523,7 @@ export default {
           this.showgroup = true;
           this.isLoading = true;
           this.showgroupdetail = false;
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
             .then(response => {
               this.isLoading = false;
               this.groupdata = response.data;
@@ -599,14 +601,15 @@ export default {
           this.schcomments = '';
           console.log(item);
           this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_name}/${this.fromdate}/${this.todate}`).
+             this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
           });
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status}`)
+
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
             .then(response => {
               this.isLoading = false;
               this.groupdata = response.data;
