@@ -131,7 +131,7 @@
                 <td class="text-xs-left">{{ props.item.Account_no }}</td>
                 <td class="text-xs-left">{{ props.item.Bank_ifsc }}</td>
                 <td class="text-xs-left">{{ props.item.Payment_type }}</td>
-                <td class="text-xs-left">{{props.item.Agreement}}</td>
+                <!-- <td class="text-xs-left">{{props.item.Agreement}}</td> -->
 
                 <td class="text-xs-right" v-if="!(props.item.Agreement_d==='NA')">
                   <v-btn slot="activator" small fab color="primary" @click="downloadagreement(props.item.Agreement_d)">
@@ -330,7 +330,8 @@ export default {
       statustype = this.Setstatus
       console.log("statustype : :" + statustype);
       this.isLoading = true;
-      this.$http.get(`https://mis.dragarwal.com/api-chdoctorlist/${statustype}/${userid.name}`).then(response => {
+    //  this.$http.get(`https://mis.dragarwal.com/api-chdoctorlist/${statustype}/${userid.name}`).then(response => {
+        this.axios.get(`http://localhost:8888/api-chdoctorlist/${statustype}/${userid.name}`).then(response => {
         console.log(response.data);
         this.processdatalist(response.data)
         this.isLoading = false;
@@ -345,7 +346,7 @@ export default {
     downloadagreement(Agreement_d) {
       alert("hit : " + Agreement_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Agreement_d}`,
+        url: `http://localhost:8888/api-download/${Agreement_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -363,7 +364,7 @@ export default {
     downloadpan(Pan_d) {
       alert("hit : " + Pan_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Pan_d}`,
+        url: `http://localhost:8888/api-download/${Pan_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -381,7 +382,7 @@ export default {
     downloadpassbook(Passbook_d) {
       alert("hit : " + Passbook_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Passbook_d}`,
+        url: `http://localhost:8888/api-download/${Passbook_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -400,8 +401,8 @@ export default {
       this.fileagreementupload = this.$refs.agreementupload.files[0];
       console.log(this.fileagreementupload);
       console.log((this.fileagreementupload.size / 1024 / 1024).toFixed(2));
-      if ((this.fileagreementupload.size / 1024 / 1024).toFixed(2) > 2) {
-        alert("Agreement file is greater than 2MB")
+      if ((this.fileagreementupload.size / 1024 / 1024).toFixed(2) > 1.5) {
+        alert("Agreement file is greater than 1MB")
 
 
         this.fileagreementupload = '';
@@ -415,8 +416,8 @@ export default {
       this.filepanupload = this.$refs.panupload.files[0];
       console.log(this.filepanupload);
       console.log((this.filepanupload.size / 1024 / 1024).toFixed(2));
-      if ((this.filepanupload.size / 1024 / 1024).toFixed(2) > 2) {
-        alert("Pan file is greater than 2MB")
+      if ((this.filepanupload.size / 1024 / 1024).toFixed(2) > 1.5) {
+        alert("Pan file is greater than 1MB")
 
         this.filepanupload = '';
         console.log(this.filepanupload);
@@ -426,8 +427,8 @@ export default {
       this.filepassbookupload = this.$refs.passbookupload.files[0];
       console.log(this.filepassbookupload);
       console.log((this.filepassbookupload.size / 1024 / 1024).toFixed(2));
-      if ((this.filepassbookupload.size / 1024 / 1024).toFixed(2) > 2) {
-        alert("Passbook file is greater than 2MB")
+      if ((this.filepassbookupload.size / 1024 / 1024).toFixed(2) > 1.5) {
+        alert("Passbook file is greater than 1MB")
 
         this.filepassbookupload = null;
         console.log(this.filepassbookupload);
@@ -539,7 +540,7 @@ export default {
       this.loading = true;
       this.isLoading = true;
 
-      this.$http.post('https://mis.dragarwal.com/api-uploaddoctor', formData, {}).then(res => {
+      this.axios.post('http://localhost:8888/api-uploaddoctor', formData, {}).then(res => {
         this.isLoading = false;
 
 
@@ -562,8 +563,10 @@ export default {
           this.$refs.agreementupload.files[0]=null;
           this.$refs.agreementupload.files[0]='';
           console.log(formData);
-        } else if (res.data.doctordatainserted === 'Available') {
-          alert("the mentioned Pan number is already Exist")
+        } else {
+
+          alert(res.data.ResponseMsg);
+          this.isLoading = false;
           return false;
         }
 
@@ -579,8 +582,8 @@ export default {
         text: ''
       }];
       this.axios
-       
-        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+
+        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })

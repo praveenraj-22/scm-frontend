@@ -14,6 +14,9 @@
           <th width="20%">
             <v-select :items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
           </th>
+          <v-spacer></v-spacer>
+
+          <v-select :items="department" v-model="Setdepartment" label="Department type" item-text="shortCode" item-value="text"></v-select>
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -26,7 +29,7 @@
           </v-menu>
 
 
-          <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,SetEntity,SetBranch)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment)">Generate</v-btn>
 
 
 
@@ -151,7 +154,7 @@ var curday = function(sp) {
 
 export default{
   data:()=>({
-    minDate: "2020-01-01",
+    minDate: "2020-04-01",
     maxDate: curday('-'),
     entities: [{
         shortCode: 'Select All',
@@ -174,6 +177,31 @@ export default{
         shortCode: 'Select All',
         text: 'All'
       }],
+      department: [{
+          shortCode: "Select All",
+          text: "All"
+        },
+        {
+          shortCode: "Pharmacy",
+          text: "PHARMACY",
+        },
+        {
+          shortCode: "Optical",
+          text: "OPTICALS",
+        },
+        {
+          shortCode: "OT",
+          text: "OPERATION THEATRE",
+        },
+        {
+          shortCode: "Lab",
+          text: "LABORATORY",
+        },
+      ],
+      Setdepartment:{
+        shortCode: 'All',
+        text: 'All'
+      },
       SetBranch: [],
       SetEntity: [],
       userName: null,
@@ -205,31 +233,31 @@ export default{
       json_fields: {
         "Item code": "item_code",
         "Item Name": "item_name",
-        "Batch no":"BATCH_NO",
+        "Batch no":"batch_no",
         "uom": "uom",
         "Trans type": "trans_type",
         "Trans date": "trans_date",
         "Item type": "item_type",
-        "Top": "TOP",
+        "Top": "top",
         "Second": "second",
         "Group": "group",
         "Sub group": "sub_group",
         "Bill No": "bill_no",
-        "Sales No": "Salesno",
+        "Sales No": "sales_no",
         "Quantity": "quantity",
-        "Unit Price": "Unit_price",
+        "Unit Price": "unit_price",
         "Cost Price": "cost_price",
-        "Actual Price": "actual_price",
+        "Actual Price": "actual_value",
         "Tax": "tax",
         "Tax percentage": "tax_percent",
         "Branch": "branch",
         "Entity": "entity",
-        "Region": "Region",
+        "Region": "region",
         "Unit": "unit",
         "work order status": "wo_status",
         "Manufacturer": "MANUFACTURER",
         "mrp": "MRP",
-  
+
 
 
       },
@@ -264,9 +292,11 @@ export default{
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-apiRequestCogsdata(fromdate,SetEntity,SetBranch){
+apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment){
   let entity = '';
   let branch = '';
+    let type = '';
+
 if((fromdate==null)||fromdate==''){
   alert("please select date")
   return false;
@@ -282,10 +312,16 @@ else if((SetBranch==null)||(SetBranch=='')){
 
 else {
 
-  console.log(fromdate+SetEntity+SetBranch);
+  if (!this.Setdepartment.text == '') {
+    type = this.Setdepartment.text
+  } else {
+    type = this.Setdepartment
+  }
+
+  console.log(fromdate+SetEntity+SetBranch+type);
   this.isLoading = true;
   this.axios
-  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}`)
+  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
     .then(response =>{
 
       console.log(response.data);
