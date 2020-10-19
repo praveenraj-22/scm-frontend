@@ -4,7 +4,7 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
-          <v-toolbar-title>Cogs </v-toolbar-title>
+          <v-toolbar-title>Stock ledger </v-toolbar-title>
           <v-divider class="mx-2 black" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-select :items=entities v-model="SetEntity" label="Entity:" id="SelEntity" item-text="shortCode" item-value="text" v-on:change='getBranches'></v-select>
@@ -29,7 +29,7 @@
           </v-menu>
 
 
-          <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequeststockdata(fromdate,SetEntity,SetBranch,Setdepartment)">Generate</v-btn>
 
 
 
@@ -139,7 +139,9 @@
 </template>
 <script>
 import moment from "moment";
-import { serverBus } from "../main";
+import {
+  serverBus
+} from "../main";
 
 var curday = function(sp) {
   var today = new Date();
@@ -152,8 +154,8 @@ var curday = function(sp) {
   return (yyyy + sp + mm + sp + dd);
 };
 
-export default{
-  data:()=>({
+export default {
+  data: () => ({
     minDate: "2020-04-01",
     maxDate: curday('-'),
     entities: [{
@@ -174,100 +176,100 @@ export default{
       },
     ],
     branch: [{
-        shortCode: 'Select All',
-        text: 'All'
-      }],
-      department: [{
-          shortCode: "Select All",
-          text: "All"
-        },
-        {
-          shortCode: "Pharmacy",
-          text: "PHARMACY",
-        },
-        {
-          shortCode: "Optical",
-          text: "OPTICALS",
-        },
-        {
-          shortCode: "OT",
-          text: "OPERATION THEATRE",
-        },
-        {
-          shortCode: "Lab",
-          text: "LABORATORY",
-        },
-      ],
-      Setdepartment:{
-        shortCode: 'All',
-        text: 'All'
+      shortCode: 'Select All',
+      text: 'All'
+    }],
+    department: [{
+        shortCode: "Select All",
+        text: "All"
       },
-      SetBranch: [],
-      SetEntity: [],
-      userName: null,
-      isLoading: false,
-      fullPage: true,
-
-      title: null,
-      user_role: null,
-
-      rowColor: null,
-      isActive: false,
-      save: "save",
-      show: false,
-      fileDate: null,
-
-      fromdate: null,
-      todate: null,
-      menu: false,
-      menu1: false,
-
-      Cogs: null,
-      Cogslist: null,
-
-      json_data: null,
-      json_meta: [{
-        key: "charset",
-        value: "utf-8"
-      }],
-      json_fields: {
-        "Item code": "item_code",
-        "Item Name": "item_name",
-        "Batch no":"batch_no",
-        "uom": "uom",
-        "Trans type": "trans_type",
-        "Trans date": "trans_date",
-        "Item type": "item_type",
-        "Top": "top",
-        "Second": "second",
-        "Group": "group",
-        "Sub group": "sub_group",
-        "Bill No": "bill_no",
-        "Sales No": "sales_no",
-        "Quantity": "quantity",
-        "Unit Price": "unit_price",
-        "Cost Price": "cost_price",
-        "Actual Price": "actual_value",
-        "Tax": "tax",
-        "Tax percentage": "tax_percent",
-        "Branch": "branch",
-        "Entity": "entity",
-        "Region": "region",
-        "Unit": "unit",
-        "work order status": "wo_status",
-        "Manufacturer": "MANUFACTURER",
-        "mrp": "MRP",
-
-
-
+      {
+        shortCode: "Pharmacy",
+        text: "PHARMACY",
       },
-      fileName: null
+      {
+        shortCode: "Optical",
+        text: "OPTICALS",
+      },
+      {
+        shortCode: "OT",
+        text: "OPERATION THEATRE",
+      },
+      {
+        shortCode: "Lab",
+        text: "LABORATORY",
+      },
+    ],
+    Setdepartment: {
+      shortCode: 'All',
+      text: 'All'
+    },
+    SetBranch: [],
+    SetEntity: [],
+    userName: null,
+    isLoading: false,
+    fullPage: true,
+
+    title: null,
+    user_role: null,
+
+    rowColor: null,
+    isActive: false,
+    save: "save",
+    show: false,
+    fileDate: null,
+
+    fromdate: null,
+    todate: null,
+    menu: false,
+    menu1: false,
+
+    Cogs: null,
+    Cogslist: null,
+
+    json_data: null,
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
+    json_fields: {
+      "Item code": "item_code",
+      "Item Name": "item_name",
+      "Batch no": "batch_no",
+      "uom": "uom",
+      "Trans type": "trans_type",
+      "Trans date": "trans_date",
+      "Item type": "item_type",
+      "Top": "top",
+      "Second": "second",
+      "Group": "group",
+      "Sub group": "sub_group",
+      "Bill No": "bill_no",
+      "Sales No": "sales_no",
+      "Quantity": "quantity",
+      "Unit Price": "unit_price",
+      "Cost Price": "cost_price",
+      "Actual Price": "actual_value",
+      "Tax": "tax",
+      "Tax percentage": "tax_percent",
+      "Branch": "branch",
+      "Entity": "entity",
+      "Region": "region",
+      "Unit": "unit",
+      "work order status": "wo_status",
+      "Manufacturer": "MANUFACTURER",
+      "mrp": "MRP",
+
+
+
+    },
+    fileName: null
 
   }),
   created() {
     this.getToday();
   },
-  methods:{
+  methods: {
     getBranches(selectObj) {
       this.SetBranch = [];
       this.branch = [];
@@ -292,80 +294,75 @@ export default{
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment){
-  let entity = '';
-  let branch = '';
-    let type = '';
+    apiRequeststockdata(fromdate, SetEntity, SetBranch, Setdepartment) {
+      let entity = '';
+      let branch = '';
+      let type = '';
 
-if((fromdate==null)||fromdate==''){
-  alert("please select date")
-  return false;
-}
-else if((SetEntity==null)||(SetEntity=='')){
-  alert("please select any entity")
-  return false;
-}
-else if((SetBranch==null)||(SetBranch=='')){
-  alert("Please select any branch")
-  return false;
-}
+      if ((fromdate == null) || fromdate == '') {
+        alert("please select date")
+        return false;
+      } else if ((SetEntity == null) || (SetEntity == '')) {
+        alert("please select any entity")
+        return false;
+      } else if ((SetBranch == null) || (SetBranch == '')) {
+        alert("Please select any branch")
+        return false;
+      } else {
 
-else {
+        if (!this.Setdepartment.text == '') {
+          type = this.Setdepartment.text
+        } else {
+          type = this.Setdepartment
+        }
 
-  if (!this.Setdepartment.text == '') {
-    type = this.Setdepartment.text
-  } else {
-    type = this.Setdepartment
-  }
+        console.log(fromdate + SetEntity + SetBranch + type);
+        this.isLoading = true;
+        this.axios
+          .get(`http://localhost:8888/api-stockledger/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
+          .then(response => {
 
-  console.log(fromdate+SetEntity+SetBranch+type);
-  this.isLoading = true;
-  this.axios
-  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
-    .then(response =>{
+            console.log(response.data);
+            this.processDatacogs(response.data);
+            this.isLoading = false;
+            if (response.data != '') {
+              alert("Data loaded... please download in excel");
+              branch = this.SetBranch;
+              entity = this.SetEntity;
 
-      console.log(response.data);
-      this.processDatacogs(response.data);
-    this.isLoading = false;
-      if(response.data!=''){
-        alert("Data loaded... please download in excel");
-        branch=this.SetBranch;
-        entity=this.SetEntity;
+              var str = "_"
+              this.fileDate = this.fromdate.concat(str);
+              this.file = entity.concat(str, branch, str, this.fileDate)
+              console.log(this.fileDate);
 
-          var str="_"
-          this.fileDate = this.fromdate.concat(str);
-          this.file=entity.concat(str,branch,str,this.fileDate)
-          console.log(this.fileDate);
+              this.fileName = `Cogs_Report_${this.file}.csv`;
 
-          this.fileName = `Cogs_Report_${this.file}.csv`;
+            }
+          })
+
 
       }
-    })
 
 
-}
+    },
+    downloadExcelCogsdata() {
+      let tempDataArr = [];
+      if (this.fileDate !== null) {
+        tempDataArr = this.Cogslist
 
+        return tempDataArr;
+      } else {
+        return null;
+      }
+    },
+    processDatacogs(data) {
 
-},
-downloadExcelCogsdata(){
-  let tempDataArr = [];
-  if (this.fileDate !== null) {
-  tempDataArr =this.Cogslist
-  console.log(tempDataArr);
-  return tempDataArr;
+      console.log("hit");
+      console.log(data);
+      this.Cogslist = data.result['cogs'];
+    }
 
-  } else {
-  return null;
-  }
-},
-processDatacogs(data){
-
-  console.log("hit");
-  console.log(data);
- this.Cogslist=data.result['cogs'];
-}
-
-},
+  },
 
 
 

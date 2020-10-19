@@ -224,6 +224,7 @@
                   </v-layout>
                 </td>
               </tr>
+
 </template>
 </v-data-table>
 
@@ -413,6 +414,7 @@ export default {
         value: ''
       }
     ],
+
     category: [{
         shortCode: 'GPC',
         text: 'GPC'

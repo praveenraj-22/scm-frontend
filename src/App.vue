@@ -81,6 +81,12 @@ import Cashapproval from "./components/adminpettycash.vue";
 // praveen
 import Cogsdata from "./components/cogsdata.vue"
 
+import stockledger from "./components/stockledger.vue"
+
+//praveen
+import Tpa from "./components/tpabillch.vue"
+import Tpa_Approve from "./components/tpabillapprove.vue"
+
 import {
   serverBus
 } from "./main";
@@ -146,7 +152,10 @@ export default {
     pettycashApproval,
     Cashapproval,
 
-    Cogsdata
+    Cogsdata,
+    stockledger,
+    Tpa,
+    Tpa_Approve
 
   },
   created() {
@@ -248,13 +257,13 @@ export default {
       } else if (this.userType == 'optical') {
         this.tabItems = ['Optical']
       } else if (this.userType == 'collection') {
-        this.tabItems = ['Collection','Cogsdata']
+        this.tabItems = ['Collection', 'Cogsdata','stockledger']
       } else if (this.userType == 'centerhead') {
-        this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash']
+        this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash','Tpa']
       } else if (this.userType == 'strcenterhead') {
         this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRTApproval', 'pettycashApproval']
       } else if (this.userType == 'financeuser') {
-        this.tabItems = ['AdminApproval', 'Cashapproval']
+        this.tabItems = ['AdminApproval', 'Cashapproval',"Tpa_Approve"]
       } else {
         if (this.userId == 103390) {
           this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD'];
@@ -402,6 +411,17 @@ export default {
       if (item === 'Cogsdata') {
         serverBus.$emit('changeComponent', 'Cogsdata')
       }
+
+      if(item ==='stockledger'){
+        serverBus.$emit('changeComponent','stockledger')
+      }
+      if(item ==='Tpa'){
+        serverBus.$emit('changeComponent','Tpa')
+      }
+      if(item ==='Tpa_Approve'){
+        serverBus.$emit('changeComponent','Tpa_Approve')
+      }
+
 
     }
     // ,
