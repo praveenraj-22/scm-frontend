@@ -1895,7 +1895,7 @@
                   scope="row"
                   v-for="(item,index) in rwanda"
                   :key="index+item.branch"
-                  class="font-weight-black ochfont"
+                  class="font-weight-black rotgrp"
                 >
                   <td
                     scope="row"
@@ -1920,7 +1920,40 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
                   
-                </tr>				
+                </tr>
+				
+				
+				
+				<tr
+                  scope="row"
+                  v-for="(item,index) in rwanda_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4 "
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdrev}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrev}}</td>
+				   <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrevlastyear}}</td>
+				  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdpercentage}}</td>
+				</tr>
+				
 				 <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -3793,7 +3826,7 @@
                   scope="row"
                   v-for="(item,index) in rwanda"
                   :key="index+item.branch"
-                  class="font-weight-black ochfont"
+                  class="font-weight-black rotgrp"
                 >
                   <td
                     scope="row"
@@ -3818,7 +3851,38 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
                   
-                </tr>				
+                </tr>
+
+
+                  <tr
+                  scope="row"
+                  v-for="(item,index) in rwanda_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopdrev}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrev}}</td>
+				   <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdrevlastyear}}</td>
+				  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopdpercentage}}</td>
+				</tr>				
 				 <tr
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -4145,6 +4209,7 @@ export default {
     mozambique_branches: null,
 	nigeria: null,
 	rwanda: null,
+	rwanda_branches: null,
 	mauritius: null,
     mauritius_branches: null,
 	zambia: null,
@@ -4271,7 +4336,8 @@ export default {
 	  this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
 	  this.nigeria = data.branchwise["Nigeria"];
-	  this.rwanda = data.branchwise["Rwanda"];
+	  this.rwanda = [data.ohcgroup["Rwanda"]];
+	  this.rwanda_branches = data.branchwise["Rwanda"];
 	  this.mauritius = [data.ohcgroup["Mauritius"]];
       this.mauritius_branches = data.branchwise["Mauritius"];
 	  this.zambia = data.branchwise["Zambia"];
@@ -4343,6 +4409,7 @@ export default {
 			  this.mozambique,
 			  this.mozambique_branches,			 
 			  this.rwanda,
+			  this.rwanda_branches,
 			  this.mauritius,
 			  this.mauritius_branches,
 			  this.zambia,
@@ -4365,6 +4432,7 @@ export default {
 			  this.mozambique,
 			  this.mozambique_branches,			 
 			  this.rwanda,
+			  this.rwanda_branches,
 			  this.mauritius,
 			  this.mauritius_branches,
 			  this.zambia,

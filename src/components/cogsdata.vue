@@ -321,7 +321,7 @@ else {
   console.log(fromdate+SetEntity+SetBranch+type);
   this.isLoading = true;
   this.axios
-  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
+  .get(`https://mis.dragarwal.com/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
     .then(response =>{
 
       console.log(response.data);
@@ -351,9 +351,8 @@ downloadExcelCogsdata(){
   let tempDataArr = [];
   if (this.fileDate !== null) {
   tempDataArr =this.Cogslist
-  console.log(tempDataArr);
-  return tempDataArr;
 
+  return tempDataArr;
   } else {
   return null;
   }

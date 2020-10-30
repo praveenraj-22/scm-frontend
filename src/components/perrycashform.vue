@@ -201,6 +201,7 @@
 
 							 <v-btn class="mr-4" @click="submit">submit</v-btn>
 							 <v-btn @click="clear">clear</v-btn>
+							 <v-btn @click="back()">back</v-btn>
 
                       </v-layout>
                     </v-container>
@@ -228,6 +229,7 @@ var curday = function(sp) {
 };
 export default {
     data: () => ({
+	  loading: false,
 	  isLoading: false,
       fullPage: true,
 	  selbranch:[],
@@ -322,8 +324,10 @@ export default {
 		formData.append("fileBill", this.fileBill);
 		formData.append("chid", normalusername.name);
 
+	//	this.$http.post('https://mis.dragarwal.com/api-petty-cash-bill-submit', formData, {}).then(res => {
 		this.$http.post('http://localhost:8888/api-petty-cash-bill-submit', formData, {}).then(res => {
-				this.isLoading = true;
+    		this.isLoading = true;
+				this.loading = true;
 				alert(res.data.ResponseMsg);
 				this.isLoading = false;
 				this.clear();
@@ -372,24 +376,32 @@ export default {
 		  let userid = JSON.parse(sessionStorage.getItem("normal_user"));
 
           var arr1 = [{TEXT: '',shortCode: 'Select All', }];
+		  this.isLoading = true;
+		  this.loading = true;
 		  this.axios
-			.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
-			  console.log(response.data);
+		//	.get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+	.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
+        console.log(response.data);
 			  this.branch = arr1.concat(response.data);
 			  //alert(JSON.stringify(this.branch));
+			  this.isLoading = false;
 			  console.log(this.branch);
 			})
 	},
 
 	branchamount(selectObj) {
+	      this.isLoading = true;
+		  this.loading = true;
 		  this.axios
-			.get(`http://localhost:8888/api-bramch-allocated-amount/${selectObj}`).then(response => {
+		//	.get(`https://mis.dragarwal.com/api-bramch-allocated-amount/${selectObj}`).then(response => {
+    	.get(`http://localhost:8888/api-bramch-allocated-amount/${selectObj}`).then(response => {
 				//alert(response.data[0]['credit']);
 				this.show = true;
 				this.pettycash_branch=response.data[0]['branch'];
 				this.pettycash_credit=response.data[0]['credit'];
 				this.pettycash_debit=response.data[0]['debit'];
 				this.pettycash_balance=response.data[0]['balance'];
+				this.isLoading = false;
 
 			})
 	},
@@ -397,11 +409,15 @@ export default {
 	loadcategoty() {
           var arr2 = [{text: '',shortCode: 'Select All', }];
 		  this.axios
-			.get(`http://localhost:8888/api-pettycashcategory`).then(response => {
+		//	.get(`https://mis.dragarwal.com/api-pettycashcategory`).then(response => {
+      	.get(`http://localhost:8888/api-pettycashcategory`).then(response => {  			  
 			  this.items = arr2.concat(response.data);
 
 			})
 	},
+	back() {
+		serverBus.$emit('changeComponent', 'pettycash_ch_list')
+	}
 
     },
   }

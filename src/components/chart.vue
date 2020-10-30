@@ -359,8 +359,8 @@ export default {
 	 var arr1 = [{shortCode: 'Select All', text: ''}];
     if(this.SetEntity!='' && selectObj!='')	 
 	this.axios
-         .get(`http://localhost:8888/api-branches/${this.SetEntity}/${selectObj}`).then(response => {	
-         //.get(`https://mis.dragarwal.com/api-branches/${this.SetEntity}/${selectObj}`).then(response => {
+         //.get(`http://localhost:8888/api-branches/${this.SetEntity}/${selectObj}`).then(response => {	
+         .get(`https://mis.dragarwal.com/api-branches/${this.SetEntity}/${selectObj}`).then(response => {
 				//console.log(response.data);	
                 this.branch = arr1.concat(response.data);				
 				
@@ -393,8 +393,8 @@ export default {
 		var arr2 = [{shortCode: 'Select All', text: ''}];
 		if(selectObj){
 			this.axios
-			  .get(`http://localhost:8888/api-region/${selectObj}`).then(response => {	
-			 //.get(`https://mis.dragarwal.com/api-region/${selectObj}`).then(response => {
+			  //.get(`http://localhost:8888/api-region/${selectObj}`).then(response => {	
+			 .get(`https://mis.dragarwal.com/api-region/${selectObj}`).then(response => {
 					//console.log(response.data);
 					console.log(response.data.url);
 					console.log(response.data.explanation);
@@ -603,8 +603,8 @@ export default {
 		  }
 		  
 		  this.axios
-          .get(`http://localhost:8888/api-cogs-dashboard/${date}/${entityvalue}/${regionvalue}/${branchvalue}`).then(response => {	
-         //.get(`https://mis.dragarwal.com/api-cogs-dashboard/${date}/${entityvalue}/${regionvalue}/${branchvalue}`).then(response => {	
+          //.get(`http://localhost:8888/api-cogs-dashboard/${date}/${entityvalue}/${regionvalue}/${branchvalue}`).then(response => {	
+         .get(`https://mis.dragarwal.com/api-cogs-dashboard/${date}/${entityvalue}/${regionvalue}/${branchvalue}`).then(response => {	
 				this.GrapgData(response.data);
 				
 				

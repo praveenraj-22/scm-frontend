@@ -307,7 +307,7 @@ export default {
       }];
       //if(this.SetEntity!='' && selectObj!='')
       this.axios
-        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
+        .get(`http://localhost:8888/api-branch/${selectObj}`).then(response => {
           this.branch = arr1.concat(response.data);
         })
 
@@ -315,12 +315,12 @@ export default {
 
 
     loadbranch() {
-      let userid = JSON.parse(sessionStorage.getItem("fin_user"));
+      let userid = JSON.parse(sessionStorage.getItem("tpa_user"));
       this.SetBranch = [];
       this.branch = [];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+        .get(`http://localhost:8888/api-finbranch`).then(response => {
           this.branch = (response.data);
           console.log(this.branch);
         })
@@ -404,7 +404,7 @@ export default {
 
     rowacknowledge(data) {
       console.log(data);
-      let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+      let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
       this.axios.post(`http://localhost:8888/api-tpabillack`, {
@@ -476,7 +476,7 @@ export default {
 
     rowsubmitted(data) {
       console.log(data);
-      let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+      let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
       this.axios.post(`http://localhost:8888/api-tpabillsub`, {

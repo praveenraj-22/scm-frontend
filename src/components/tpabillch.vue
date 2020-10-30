@@ -221,7 +221,7 @@ export default {
 
 
       this.isLoading = true;
-      this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+      this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
         .then(response => {
           this.processDatatpabill(response.data)
           this.isLoading = false;
@@ -241,7 +241,7 @@ export default {
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
 
       this.isLoading=true;
-      this.axios.post(`http://localhost:8888/api-tpabillsubmit`,{
+      this.axios.post(`https://mis.dragarwal.com/api-tpabillsubmit`,{
         tpabillid:data.bill_id,
         tpaid:data.id,
         submitted_id:userid.name
@@ -249,7 +249,7 @@ export default {
         if(response.data.dataupdated==true){
           alert("TPA bill sumbitted")
           this.isLoading = true;
-          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -260,7 +260,7 @@ export default {
         else{
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;

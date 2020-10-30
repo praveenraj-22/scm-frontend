@@ -12,25 +12,6 @@
           <v-spacer></v-spacer>
           <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
 
-          <!-- <v-spacer></v-spacer>
-          <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu>
-
-
-          <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu> -->
 
           <v-btn rounded color="primary" dark @click="apiRequestfinpc(SetStatus,SetBranch)">Generate</v-btn>
 
@@ -189,17 +170,23 @@
                           <td class="text-right">{{ item.totalamount }}</td>
                           <td class="text-left"> {{item.Comments}}</td>
                           <td class="text-xs-right" v-if="item.Active_status==='Pending'">
-                            <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, item.bill_no, true)" color="red">
+                            <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, item.voucher_no, true)" color="red">
                               <v-icon>fas fa-times</v-icon>
                             </v-btn>
 
 
-                            <v-dialog v-model="dialogcancel[item.bill_no]" persistent max-width="800px" lazy absolute :key="props.item.bill_no">
+                            <v-dialog v-model="dialogcancel[item.voucher_no]" persistent max-width="800px" lazy absolute :key="props.item">
                               <v-card>
                                 <v-card-title>
-                                  <span>{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} {{'-- Vendorname : '}}{{item.vendorname}}{{' -- Amount : '}}{{item.Debit}}</span><br />
-                                  <span>Cancel Remark</span>
+                                  <span >{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
+                                  <span >{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br/>
                                 </v-card-title>
+                                  <v-card-title>
+                                  <span>{{' -- Amount : '}}{{item.debit}} </span>
+                                    </v-card-title>
+                                    <v-card-title>
+                                      <span>Cancel Remark</span>
+                                      </v-card-title>
 
                                 <v-card-text>
                                   <v-container grid-list-md>
@@ -215,8 +202,8 @@
 
                                 <v-card-actions>
 
-                                  <v-btn color="primary" flat @click.stop="$set(dialogcancel, item.bill_no, false)">Close</v-btn>
-                                  <v-btn color="blue darken-1" flat @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.bill_no, false)">Decline</v-btn>
+                                  <v-btn color="primary" flat @click.stop="$set(dialogcancel, item.voucher_no, false)">Close</v-btn>
+                                  <v-btn color="blue darken-1" flat @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.voucher_no, false)">Decline</v-btn>
 
                                 </v-card-actions>
                               </v-card>
@@ -525,6 +512,8 @@ export default {
         this.isLoading = false;
         this.showgroupdetail = true;
         this.groupdatadetail = response.data;
+        console.log("---------------------");
+        console.log(this.groupdatadetail);
       })
 
 
@@ -628,7 +617,7 @@ export default {
     downloadvouchher(filename) {
       this.axios({
         url: `http://localhost:8888/api-voucher-download/${filename}`,
-        //url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
+        //url: `http://localhost:8888/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -648,7 +637,7 @@ export default {
     downloadbill(filename) {
       this.axios({
         url: `http://localhost:8888/api-bill-download/${filename}`,
-        //url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        //url: `http://localhost:8888/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -696,7 +685,7 @@ export default {
           then(response => {
             console.log(response);
 
-            this.showgroupdetail = true;
+            this.showgroupdetail = false;
             this.groupdatadetail = response.data;
           });
             this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
@@ -705,6 +694,7 @@ export default {
               this.groupdata = response.data;
               console.log(response.data);
               this.showgroup = true;
+                    this.showgroupdetail = true;
             });
 
 

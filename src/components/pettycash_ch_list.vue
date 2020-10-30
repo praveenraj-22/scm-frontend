@@ -29,23 +29,23 @@
               vertical
             ></v-divider>
             <v-spacer></v-spacer>
-
+			
 			<v-select
 				v-model="selbranch"
-				:items="branch"
-				label="Branch"
+				:items="branch"				
+				label="Branch"				
 				 item-text="shortCode"
 				item-value="TEXT"
-
+				
 			></v-select>
 				<v-spacer></v-spacer>
 			<v-select
 				  :items="status"
-				  v-model="Selstatus"
-				  label="Status:"
+				  v-model="Selstatus"    
+				  label="Status:"				 
 				   item-text="shortCode"
-				   item-value="text"
-
+				   item-value="text" 
+				  
 				></v-select>
 				<v-spacer></v-spacer>
             <v-menu
@@ -125,21 +125,21 @@
             loader="bars"
           ></loading>
 		  <br><br><br>
-
+		  
 		  <v-card-title>
             <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn rounded color="primary" dark @click="newBill()"  >New Bill</v-btn></td>
 
-
+            
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
-
-
-
-
-
+		  
+		  
+		  
+		     
+		  
           <!-- Vuetify Data table -->
              <v-data-table :headers="headers" :items="billdata" v-model="selected" :search="search" class="elevation-1">
             <template slot="items" slot-scope="props">
@@ -155,9 +155,9 @@
 					<v-btn slot="activator" small fab color="primary" @click="downloadvouchher(props.item.voucher_attach)">
                     <v-icon>cloud_download</v-icon>
                   </v-btn>
-
-				<td class="text-xs-left" v-if="!(props.item.bill_attch==='NA')">
-
+				
+				<td class="text-xs-left" v-if="!(props.item.bill_attch==='NA')">	
+				
 				  <v-btn slot="activator" small fab color="primary" @click="downloadbill(props.item.bill_attch)">
                     <v-icon>cloud_download</v-icon>
                   </v-btn>
@@ -165,14 +165,14 @@
 				<td class="text-xs-left" v-else="(props.item.bill_attch==='NA')">
 					NA
 				</td>
-
-
-
+				
+				
+                
 			</tr>
 			</template>
 			</v-data-table>
 
-
+        
           <back-to-top
             bottom="90px"
             right="90px"
@@ -210,7 +210,7 @@ var curday = function(sp) {
 };
 export default {
   data: () => ({
-
+    
     branch :[],
 	status: [
         { shortCode: 'Select All', text: ''},
@@ -220,12 +220,12 @@ export default {
 		{ shortCode: 'FinancePending', text: 'FinancePending' },
 		{ shortCode: 'FinanceApproved', text: 'FinanceApproved' },
 		{ shortCode: 'FinanceReject', text: 'FinanceReject' }
-
+       
       ],
 	headers: [{
         text: 'Branch',
         align: 'left',
-        sortable: false,
+        //sortable: false,
         value: 'branch'
 
       },
@@ -269,11 +269,11 @@ export default {
     fullPage: true,
     dialog: false,
     dialogdata: null,
-    title: null,
-    show: false,
-    loading: false,
-    menu: false,
-    today: "",
+    title: null,    
+    show: false,    
+    loading: false,    
+    menu: false,   
+    today: "",   
     fileName: null,
   maxDate: curday('-'),
   }),
@@ -282,7 +282,7 @@ export default {
 	this.loadbranch();
   },
   computed: {
-
+    
   },
   methods: {
     getToday () {
@@ -291,10 +291,11 @@ export default {
         .format("YYYY-MM-DD");
     },
 	loadbranch() {
-		  let userid = JSON.parse(sessionStorage.getItem("normal_user"));
-          var arr1 = [{TEXT: '',shortCode: 'Select All', }];
-		  this.axios
-			.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
+		  let userid = JSON.parse(sessionStorage.getItem("normal_user"));           
+          var arr1 = [{TEXT: '',shortCode: 'Select All', }];		  
+		  this.axios		   
+			//.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
+			.get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {				
 			  console.log(response.data);
 			  this.branch = arr1.concat(response.data);
 			  //alert(JSON.stringify(this.branch));
@@ -302,41 +303,41 @@ export default {
 			})
 	},
     apiGetPettyCashDetails (date,selbranch,Selstatus) {
-      let userid = JSON.parse(sessionStorage.getItem("normal_user"));
+      let userid = JSON.parse(sessionStorage.getItem("normal_user"));	  
 		  if (!this.date) {
 			alert("Please Select Date");
 			return false;
-		  }
-		  var statusvalue='';
+		  }		 
+		  var statusvalue='';		
 		  var branchvalue='';
-		  if (this.Selstatus=='') {
+		  if (this.Selstatus=='') {			
 			statusvalue = 'undefined';
 		  }else{
 			statusvalue = this.Selstatus;
-		  }
-		  if (this.selbranch=='') {
+		  }	  
+		  if (this.selbranch=='') {			
 			branchvalue = 'undefined';
 		  }else{
-
+		   
 			branchvalue = this.selbranch;
 		  }
-
-
+		  
+		  
 		  /*alert(selbranch);
 		  alert(Selstatus);
 		  alert(userid.name);*/
-
+		  
 		  //alert(branchvalue);
 		  //alert(statusvalue);
-
+      
         //this.loading = true;
         //this.isLoading = true;
         this.$http
-          .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`) // https need for server
-          //.get(`https://mis.dragarwal.com/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`)
-          .then(response => {
+          //.get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`) // https need for server
+          .get(`https://mis.dragarwal.com/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`)
+          .then(response => {            
             this.isLoading = false;
-
+			
 			//alert("ZZZZZZZZZZZz");
 			//alert(response.data.ResponseMsg);
 			this.billdata = response.data.ResponseMsg;
@@ -344,13 +345,13 @@ export default {
     },
 	downloadvouchher(filename) {
       this.axios({
-        url: `http://localhost:8888/api-voucher-download/${filename}`,
-		//url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
+        //url: `http://localhost:8888/api-voucher-download/${filename}`,
+		url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
-
-
+	  
+	     
         var fileURL = window.URL.createObjectURL(new Blob([response.data]));
         var fileLink = document.createElement('a');
 
@@ -364,11 +365,11 @@ export default {
     },
 	downloadbill(filename) {
       this.axios({
-        url: `http://localhost:8888/api-bill-download/${filename}`,
-		//url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        //url: `http://localhost:8888/api-bill-download/${filename}`,
+		url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
-      }).then(response => {
+      }).then(response => {	     
         var fileURL = window.URL.createObjectURL(new Blob([response.data]));
         var fileLink = document.createElement('a');
         fileLink.href = fileURL;
@@ -398,7 +399,7 @@ export default {
 	  }
     }
   }
-
+ 
 };
 </script>
 
