@@ -240,6 +240,17 @@ var curday = function(sp) {
   return (yyyy + sp + mm + sp + dd);
 };
 
+var lastmonth = function(sp) {
+  var today = new Date();
+  let dd = 1;
+  var mm = today.getMonth(); //As January is 0.
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  return (yyyy + sp + mm + sp + dd);
+};
+
 
 export default {
 
@@ -360,7 +371,7 @@ export default {
       }
     ],
     message1: '',
-    minDate: "2020-01-01",
+    minDate: lastmonth("-"),
     maxDate: curday('-'),
     entities: [{
         shortCode: 'Select All',
