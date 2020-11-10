@@ -913,7 +913,12 @@ export default {
       } else if (!(this.drtamount <= this.netamount)) {
         alert("Enter amount is greater than Net amount")
         return false;
-      } else {
+	  }
+	      else if ((this.drtcommission=='')||(this.drtcommission==null)||(this.drtamount=='')||(this.drtamount==null)){
+	               alert("Please enter Drt Commission amount Or Drt Percentage")
+		                 return false;
+				        }
+					else {
         let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
 
         this.loading = true;

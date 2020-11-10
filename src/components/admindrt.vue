@@ -85,7 +85,7 @@
                   </v-btn>
                 </td>
 
-                <td class="text-xs-right" v-if="props.item.drtApproval_status==='Approved'">
+                <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
                 </td>
 
                 <!--
@@ -129,6 +129,7 @@
                   </v-dialog>
                 </td>
 
+
                 <td class="text-xs-right" v-else="props.item.drtApproval_status==='Approved'">
                 </td>
 
@@ -170,6 +171,8 @@
                     </v-card>
                   </v-dialog>
                 </td>
+
+
                 <td class="text-xs-right" v-else-if="props.item.drtApproval_status==='Pending' && props.item.Expense_date !=='' ">
                   {{ props.item.Expense_date}}
                   <v-btn slot="activator" small fab @click.stop="$set(dialogexpensedate, props.item.Bill_no, true)" color="orange">
@@ -673,6 +676,10 @@ export default {
         if(finexpmonth<10){
         month=("0" + (finemonth.getMonth() + 1)).slice(-2);
       }
+  else {
+        month=finexpmonth;
+
+      }
       var finexpyear = finemonth.getFullYear();
 
       var expensedate = finexpyear + "-" + month;
@@ -684,7 +691,7 @@ export default {
 
     loaddoctorlist() {
       this.axios
-        .get(`https://mis.dragarwal.com/api-loaddoc`).then(response => {
+        .get(`http://localhost:8888/api-loaddoc`).then(response => {
           console.log(response.data);
           this.loaddoctor = response.data;
           this.loaddr = this.loaddoctor[0];
@@ -695,7 +702,7 @@ export default {
       // alert(id);
       this.billid = id;
       this.dialog = true;
-      this.axios.get(`https://mis.dragarwal.com/api-approvalbills/${this.billid}`).then(response => {
+      this.axios.get(`http://localhost:8888/api-approvalbills/${this.billid}`).then(response => {
         this.drtbilldetail = response.data;
         console.log(this.drtbilldetail);
         this.Name = this.drtbilldetail[0]["PATIENT_NAME"]
@@ -758,7 +765,7 @@ export default {
 
       this.isLoading = true;
       this.$http
-        .post(`https://mis.dragarwal.com/api-finbillinsert`, {
+        .post(`http://localhost:8888/api-finbillinsert`, {
           sch_bill_id: row.id,
           sch_id: normalusername.name,
           sch_expensedate: expensedate,
@@ -782,7 +789,7 @@ export default {
 
               //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -806,7 +813,7 @@ export default {
             this.isLoading = true;
             this.$http
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -826,7 +833,7 @@ export default {
             this.$http
 
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -849,7 +856,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       let sch_comments = '';
       this.isLoading = true;
-      this.$http.post(`https://mis.dragarwal.com/api-finbillcancel`, {
+      this.$http.post(`http://localhost:8888/api-finbillcancel`, {
         sch_bill_id: row.id,
         sch_id: normalusername.name,
         sch_comments: this.schcomments,
@@ -877,7 +884,7 @@ export default {
 
               //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -902,7 +909,7 @@ export default {
             this.isLoading = true;
             this.$http
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -922,7 +929,7 @@ export default {
             this.$http
 
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -946,7 +953,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       this.isLoading = true;
       this.$http
-        .post(`https://mis.dragarwal.com/api-finbillexpenseupdate`, {
+        .post(`http://localhost:8888/api-finbillexpenseupdate`, {
           sch_bill_id: row.id,
           sch_id: normalusername.name,
           sch_expensedate: finexpensedate,
@@ -972,7 +979,7 @@ export default {
 
               //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -996,7 +1003,7 @@ export default {
             this.isLoading = true;
             this.$http
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -1016,7 +1023,7 @@ export default {
             this.$http
 
               //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-              .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
+              .get(`http://localhost:8888/api-finbills/${this.fromdate}/${this.todate}/${status}/${branch}/${normalusername.name}`)
               .then(response => {
                 this.processDatabillsch(response.data);
                 this.isLoading = false;
@@ -1035,7 +1042,7 @@ export default {
       this.drtdetail = [];
       this.drtid = selectObj;
       this.axios
-        .get(`https://mis.dragarwal.com/api-drtdetail/${selectObj}`).then(response => {
+        .get(`http://localhost:8888/api-drtdetail/${selectObj}`).then(response => {
           this.drtdetail = response.data;
           console.log(this.drtdetail[0]["GSTIN"]);
           this.gstin = this.drtdetail[0]["GSTIN"]
@@ -1058,7 +1065,7 @@ export default {
       }];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+        .get(`http://localhost:8888/api-finbranch`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -1117,7 +1124,7 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .post(`https://mis.dragarwal.com/api-drtbills`, {
+          .post(`http://localhost:8888/api-drtbills`, {
             bill_id: billid,
             net_amount: netamount,
             drt_aggcommission: aggcommission,
@@ -1207,7 +1214,7 @@ export default {
 
             //    .get(`https://scm.dragarwal.com/api-opticals-super/${date}`)
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1231,7 +1238,7 @@ export default {
           this.isLoading = true;
           this.$http
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;
@@ -1251,7 +1258,7 @@ export default {
           this.$http
 
             //.get(`https://scm.dragarwal.com/api-collection-super/${this.fromdate}/${this.todate}/${status}/${branch}`)
-            .get(`https://mis.dragarwal.com/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
+            .get(`http://localhost:8888/api-finbills/${this.fromdate}/${datetype}/${status}/${branch}/${normalusername.name}`)
             .then(response => {
               this.processDatabillsch(response.data);
               this.isLoading = false;

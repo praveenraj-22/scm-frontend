@@ -330,7 +330,7 @@ export default {
       statustype = this.Setstatus
       console.log("statustype : :" + statustype);
       this.isLoading = true;
-      this.$http.get(`https://mis.dragarwal.com/api-chdoctorlist/${statustype}/${userid.name}`).then(response => {
+      this.$http.get(`http://localhost:8888/api-chdoctorlist/${statustype}/${userid.name}`).then(response => {
         console.log(response.data);
         this.processdatalist(response.data)
         this.isLoading = false;
@@ -345,7 +345,7 @@ export default {
     downloadagreement(Agreement_d) {
       //alert("hit : " + Agreement_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Agreement_d}`,
+        url: `http://localhost:8888/api-download/${Agreement_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -363,7 +363,7 @@ export default {
     downloadpan(Pan_d) {
       //alert("hit : " + Pan_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Pan_d}`,
+        url: `http://localhost:8888/api-download/${Pan_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -381,7 +381,7 @@ export default {
     downloadpassbook(Passbook_d) {
       //alert("hit : " + Passbook_d);
       this.axios({
-        url: `https://mis.dragarwal.com/api-download/${Passbook_d}`,
+        url: `http://localhost:8888/api-download/${Passbook_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -539,7 +539,7 @@ export default {
       this.loading = true;
       this.isLoading = true;
 
-      this.$http.post('https://mis.dragarwal.com/api-uploaddoctor', formData, {}).then(res => {
+      this.$http.post('http://localhost:8888/api-uploaddoctor', formData, {}).then(res => {
         this.isLoading = false;
 
 
@@ -564,7 +564,7 @@ export default {
           console.log(formData);
         } else {
 
-          alert(res.data.ResponseMsg);
+          alert(res.data.doctordatainserted);
           this.isLoading = false;
           return false;
         }
@@ -581,8 +581,8 @@ export default {
         text: ''
       }];
       this.axios
-       
-        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+
+        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })

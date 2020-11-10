@@ -50,6 +50,8 @@
               <td class="text-xs-left">{{ props.item.BILLNO}}</td>
               <td class="text-xs-left">{{ props.item.AGENCY_NAME}}</td>
               <td class="text-xs-left">{{ props.item.tpa_claim}}</td>
+              <td class="text-xs-left">{{ props.item.totalamount}}</td>
+              <td class="text-xs-left">{{ props.item.discount}}</td>
               <td class="text-xs-left">{{ props.item.netamount}}</td>
               <td class="text-xs-left">{{ props.item.patamount}}</td>
               <td class="text-xs-left">{{ props.item.tpaamount}}</td>
@@ -136,6 +138,14 @@ export default {
         value: 'tpa_claim'
       },
       {
+        text: 'Total Amount',
+        value: 'totalamount'
+      },
+      {
+        text: 'Discount Amount',
+        value: 'discountamount'
+      },
+      {
         text: 'Net amount',
         value: 'netamount'
       },
@@ -172,7 +182,7 @@ export default {
       value: "utf-8"
     }],
     json_fields: {
-  
+
       "branch":"BILLED",
       "Date": "BILLEDDATE",
       "MRN": "MRN",
@@ -180,6 +190,8 @@ export default {
       "Bill no": "bill_no",
       "Payor name": "AGENCY_NAME",
       "Claim id": "tpa_claim",
+      "Total amount":"totalamount",
+      "Discount amount":"discount",
       "Net amount": "netamount",
       "Patient amount": "patamount",
       "Payor amount": "tpaamount",
