@@ -371,7 +371,7 @@ export default {
       }
     ],
     message1: '',
-    minDate: lastmonth("-"),
+    minDate: '2020-04-01',
     maxDate: curday('-'),
     entities: [{
         shortCode: 'Select All',
