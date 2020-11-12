@@ -174,8 +174,8 @@
       <v-flex xs12 sm6>
         <v-textarea clearable clear-icon="cancel" label="Comments" v-model='drtcomments'></v-textarea>
       </v-flex>
-      <v-flex xs12 sm6 >
-        <v-text-field v-model="detail" clearable label="Bank detail"  disabled></v-text-field>
+      <v-flex xs12 sm6>
+        <v-text-field v-model="detail" clearable label="Bank detail" disabled></v-text-field>
       </v-flex>
     </v-layout>
 </v-container>
@@ -250,6 +250,7 @@ var lastmonth = function(sp) {
   if (mm < 10) mm = '0' + mm;
   return (yyyy + sp + mm + sp + dd);
 };
+
 
 
 export default {
@@ -371,7 +372,7 @@ export default {
       }
     ],
     message1: '',
-    minDate: '2020-04-01',
+    minDate: '',
     maxDate: curday('-'),
     entities: [{
         shortCode: 'Select All',
@@ -516,12 +517,14 @@ export default {
     panupload: '',
     passbookupload: '',
     memberSelected: '',
-    drtbilldetail:'',
-    discount:'',
-    Accountno:'',
-    Bankifsc:'',
-    Bankname:'',
-    detail:''
+    drtbilldetail: '',
+    discount: '',
+    Accountno: '',
+    Bankifsc: '',
+    Bankname: '',
+    detail: '',
+    fix_dte: '',
+    ff_date: '',
   }),
   created() {
     this.getToday();
@@ -530,6 +533,7 @@ export default {
 
   mounted() {
     this.loadbranch();
+    this.loadfixdate();
 
   },
   watch: {
@@ -695,15 +699,15 @@ export default {
           this.commission = this.drtdetail[0]["Percentage"]
           this.infavourof = this.drtdetail[0]["Infavour_of"]
           this.paymenttype = this.drtdetail[0]["Payment_type"]
-          this.Accountno=this.drtdetail[0]["Account_no"]
-          this.Bankifsc=this.drtdetail[0]["Bank_ifsc"]
-          this.Bankname=this.drtdetail[0]["Bank_name"]
+          this.Accountno = this.drtdetail[0]["Account_no"]
+          this.Bankifsc = this.drtdetail[0]["Bank_ifsc"]
+          this.Bankname = this.drtdetail[0]["Bank_name"]
           // console.log(this.commissions = this.drtdetail[0]["Percentage"]);
           this.drtname = this.drtdetail[0]["Name"]
-          console.log(this.Accountno +" "+this.Bankifsc+" "+this.Bankname);
-        //  this.detail=this.Bankname.concat(" || ",this.Bankifsc," || ",this.Accountno)
+          console.log(this.Accountno + " " + this.Bankifsc + " " + this.Bankname);
+          //  this.detail=this.Bankname.concat(" || ",this.Bankifsc," || ",this.Accountno)
           //concat(this.Bankname,"||",this.Bankifsc,"||",this.Accountno)
-          this.detail=this.Accountno +" || "+this.Bankifsc+" || "+this.Bankname;
+          this.detail = this.Accountno + " || " + this.Bankifsc + " || " + this.Bankname;
           console.log(this.detail);
         })
 
@@ -724,6 +728,14 @@ export default {
         })
 
 
+    },
+    loadfixdate() {
+      this.axios.get(`http://localhost:8888/api-getfixdate`).then(response => {
+
+        this.fix_dte = response.data.fixeddate[0].fix_date;
+        console.log(this.fix_dte);
+        this.minDate = this.fix_dte;
+      })
     },
     getToday() {
       this.today = moment()
@@ -924,12 +936,10 @@ export default {
       } else if (!(this.drtamount <= this.netamount)) {
         alert("Enter amount is greater than Net amount")
         return false;
-	  }
-	      else if ((this.drtcommission=='')||(this.drtcommission==null)||(this.drtamount=='')||(this.drtamount==null)){
-	               alert("Please enter Drt Commission amount Or Drt Percentage")
-		                 return false;
-				        }
-					else {
+      } else if ((this.drtcommission == '') || (this.drtcommission == null) || (this.drtamount == '') || (this.drtamount == null)) {
+        alert("Please enter Drt Commission amount Or Drt Percentage")
+        return false;
+      } else {
         let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
 
         this.loading = true;

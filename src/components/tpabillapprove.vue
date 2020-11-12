@@ -88,15 +88,6 @@
 
   <v-dialog v-model="dialogexpensedate[props.item.bill_no]" persistent max-width="400px" lazy absolute :key="props.item.bill_no">
 <v-card>
-<!-- <v-card-title>
-  <span>Bill submission date</span>
-</v-card-title>
-  <v-card-title>
-
-    <span>{{ props.item.MRN }}{{ " -- "}}{{ props.item.bill_no  }}</span>
-    <br>
-
-  </v-card-title> -->
 
 <v-card-text>
   <v-container grid-list-md>

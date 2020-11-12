@@ -28,7 +28,10 @@
             </v-date-picker>
           </v-menu>
 
+
+
           <v-btn rounded color="primary" dark @click="apiRequestfindrtbill(fromdate,SetStatus,SetBranch,Setdatatype)">Generate</v-btn>
+
 
           <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelDrt">
             <v-btn fab flat medium color="black">
@@ -56,6 +59,25 @@
                 Doctor Approval
               </v-badge>
             </v-btn>
+            <v-spacer></v-spacer>
+<!--
+            <v-text-field v-if="username=='finadmin'" v-model="fixdate" label="No of Days " outlined type="Number" shaped></v-text-field> -->
+
+            <v-menu absolute ref="menu3" v-if="username=='finadmin'" :close-on-content-click="false" v-model="menu3" :nudge-right="40" :return-value.sync="fromdate1" lazy transition="scale-transition" offset-y full-width min-width="150px">
+              <v-text-field slot="activator" v-model="fromdate1" placeholder="Select Date" prepend-inner-icon="event" readonly></v-text-field>
+              <v-date-picker color="primary" v-model="fromdate1" no-title scrollable :min="minDate1" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu3 = false" style="outline:none">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.menu3.save(fromdate1)" style="outline:none">Ok</v-btn>
+              </v-date-picker>
+            </v-menu>
+
+            <v-btn color="primary" v-if="username=='finadmin'" dark @click="lockdate(fromdate1)">
+              Lockdate
+            </v-btn>
+
+  <v-spacer></v-spacer>
+  <v-toolbar-title>Previous cutoff : {{this.fix_dte}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="billdata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
@@ -401,6 +423,7 @@ export default {
     finexpensedate: new Date().toISOString().substr(0, 7),
     dialogcancel: {},
     dialogexpensedate: {},
+    fixdate: '',
     Setdatetype: '',
     date_type: '',
     approval: true,
@@ -452,7 +475,7 @@ export default {
       "Mrn": "Mrn",
       "Name": "Name",
       "Total Net Amount": "Net_amount",
-      "Category":"Category",
+      "Category": "Category",
       "Reg ref": "REFERRALTYPENAME",
       "Bill Ref": "Reference",
       "DRT Name": "DRTNAME",
@@ -583,6 +606,7 @@ export default {
     ],
     message1: '',
     minDate: "2020-04-01",
+    minDate1:'2020-04-01',
     maxDate: curday('-'),
     minExDate: expensecurmonth('-'),
     bill_status: [{
@@ -634,6 +658,7 @@ export default {
     fileDate: null,
     loading: false,
     fromdate: null,
+    fromdate1:null,
     todate: null,
     menu: false,
     menu1: false,
@@ -643,7 +668,6 @@ export default {
     collection: null,
     billdata: null,
     billstatus: null,
-    loaddr: '',
     loaddr: null,
     drtbilldetail: null,
     Financeapprovedby: null,
@@ -653,6 +677,8 @@ export default {
     drtcusname: null,
     discount: null,
     schcomments: '',
+    username:'',
+    fix_dte: '',
 
   }),
   created() {
@@ -661,6 +687,7 @@ export default {
   mounted() {
     this.loadbranch();
     this.loaddoctorlist();
+      this.loadfixdate();
   },
 
   methods: {
@@ -671,22 +698,21 @@ export default {
     fin_expense_date(date) {
 
       var finemonth = new Date(date)
-      var month='';
+      var month = '';
       var finexpmonth = finemonth.getMonth() + 1;
-        if(finexpmonth<10){
-        month=("0" + (finemonth.getMonth() + 1)).slice(-2);
-      }
-  else {
-        month=finexpmonth;
+      if (finexpmonth < 10) {
+        month = ("0" + (finemonth.getMonth() + 1)).slice(-2);
+      } else {
+        month = finexpmonth;
 
       }
       var finexpyear = finemonth.getFullYear();
 
       var expensedate = finexpyear + "-" + month;
 
-    console.log(month);
+      console.log(month);
       console.log(expensedate);
-      return  finexpyear + "-" + month;
+      return finexpyear + "-" + month;
     },
 
     loaddoctorlist() {
@@ -697,6 +723,13 @@ export default {
           this.loaddr = this.loaddoctor[0];
           console.log(this.loaddr.count);
         })
+    },
+    loadfixdate() {
+      this.axios.get(`http://localhost:8888/api-getfixdate`).then(response => {
+
+        this.fix_dte = response.data.fixeddate[0].fix_date;
+
+      })
     },
     rowClick(id) {
       // alert(id);
@@ -748,9 +781,8 @@ export default {
         const mo = new Intl.DateTimeFormat('en', {
           month: 'numeric'
         }).format(expense_date)
-        if(mo <10)
-        {
-        var  mon='0'.concat(mo)
+        if (mo < 10) {
+          var mon = '0'.concat(mo)
         }
         expensedate = ye.concat("-", mon);
 
@@ -1057,6 +1089,8 @@ export default {
 
     loadbranch() {
       let userid = JSON.parse(sessionStorage.getItem("fin_user"));
+      console.log("---------------------");
+      console.log(userid);
       this.SetBranch = [];
       this.branch = [];
       var arr1 = [{
@@ -1068,6 +1102,8 @@ export default {
         .get(`http://localhost:8888/api-finbranch`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
+          this.username=userid.name;
+
         })
 
 
@@ -1173,18 +1209,15 @@ export default {
       var date4 = date3.getMonth() + "/" + date3.getDay() + "/" + date3.getYear();
       var currentDate = new Date(date4);
       let datetype = '';
-      console.log(fromdate+" "+SetStatus+" "+SetBranch+" "+Setdatatype);
+      console.log(fromdate + " " + SetStatus + " " + SetBranch + " " + Setdatatype);
 
-      if ((this.fromdate == '') || (this.fromdate == null)){
+      if ((this.fromdate == '') || (this.fromdate == null)) {
         alert("Please select Month");
         return false;
-      }
-      else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
         alert("Please select status");
         return false;
-      }
-
-      else {
+      } else {
 
         if (this.Setdatetype.text == 1) {
           datetype = this.Setdatetype.text;
@@ -1344,6 +1377,33 @@ export default {
 
     }
 
+
+    ,
+    lockdate(data) {
+  this.isLoading = true;
+        this.axios.get(`http://localhost:8888/api-fixdate/${data}`).then(response => {
+
+          console.log(response.data);
+          if (response.data.datefix == true) {
+            alert("date is fixed to : " + response.data.rest)
+            this.axios.get(`http://localhost:8888/api-getfixdate`).then(response => {
+
+              this.fix_dte = response.data.fixeddate[0].fix_date;
+              this.isLoading = false;
+            })
+
+
+          } else {
+            alert("error in updating date ");
+              this.isLoading = false;
+            return false;
+
+          }
+
+        })
+
+
+    }
   }
 
 
@@ -1444,3 +1504,4 @@ table#stickyHeader thead {
   -webkit-appearance: none;
 }
 </style>
+ṣ
