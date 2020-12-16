@@ -252,7 +252,7 @@ export default {
               }));
 			  
 			  
-			  if(this.name=="findrt"){
+			  if(this.name=="findrt" || this.name=="finadmin"){
 				serverBus.$emit("changeComponent", "AdminApproval");
 			  }else{
 			    serverBus.$emit("changeComponent", "Cashapproval");

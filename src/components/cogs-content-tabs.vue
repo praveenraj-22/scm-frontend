@@ -4109,6 +4109,77 @@
                 </tr>
 				
 				
+				<tr v-if="user_role=='group_user' || user_role=='overseas_user'"
+                  scope="row"
+                  v-for="(item,index) in nigeria"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogSuper(item,nigeria)"
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.ftd_cogs_percent.toFixed(2)}} %</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
+                </tr>
+				
+				
 				
 				
 				<tr v-if="user_role=='group_user' || user_role=='overseas_user'"

@@ -4,7 +4,7 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
-  <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
           <th width="20%">
             <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
@@ -14,6 +14,7 @@
 
 
           <v-btn rounded color="primary" dark @click="apiRequestfinpc(SetStatus,SetBranch)">Generate</v-btn>
+
 
 
         </v-toolbar>
@@ -26,7 +27,9 @@
             <v-toolbar-title>Petty Cash</v-toolbar-title>
             <v-spacer></v-spacer>
 
-
+            <v-btn color="primary" dark @click="categoryreference()">
+            Change category
+            </v-btn>
 
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="strch" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
@@ -37,13 +40,15 @@
               <tr>
                 <td @click="rowClick(props.item.STATUS)">{{ props.item.STATUS }}</td>
                 <td class="text-xs-left">{{ props.item.branch }}</td>
+                <td class="text-xs-left">{{ props.item.Opening_Balance }}</td>
                 <td class="text-xs-right">{{ props.item.credit }}</td>
                 <td class="text-xs-right">{{ props.item.approved }}</td>
 
-                <td class="text-xs-right" style="color:red">{{ props.item.cancelled }}</td>
-                <td class="text-xs-right" style="color:blue" >{{ props.item.pending }}</td>
-                  <td class="text-xs-right" style="color:green" >{{ props.item.balance }}</td>
-                  <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
+                <td class="text-xs-right" style="color:red">{{ props.item.can }}</td>
+                <td class="text-xs-right" style="color:blue">{{ props.item.pending }}</td>
+                <td class="text-xs-right" style="color:green">{{ props.item.balance }}</td>
+                <td class="text-xs-right" style="color:magenta">{{ props.item.refill }}</td>
+                <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
                 <td class="text-xs-left">
                   <v-btn slot="activator" small color="primary" @click="rowClick(props.item)">
                     View
@@ -53,7 +58,7 @@
                   <!-- <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn> -->
-                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.test, true)"  color="green">
+                  <v-btn slot="activator" small fab @click.stop="$set(dialogapprove, props.item.test, true)" color="green">
                     <v-icon>check</v-icon>
                   </v-btn>
 
@@ -67,7 +72,7 @@
 
                       <v-card-title>
 
-                        <span>Total amount: {{props.item.credit}}{{"------"}} Used amount : {{props.item.pending}} {{"------"}} Balance : {{props.item.balance}}</span>
+                        <span>Total amount: {{props.item.credit}}{{"-----"}} Used amount : {{props.item.pending}} {{"------"}} Balance : {{props.item.balance}}</span>
 
                       </v-card-title>
 
@@ -83,18 +88,24 @@
                         <!--
                         <span>Approving amount: {{props.item.totalamount}}</span> -->
 
-                        <span style="color:red">Cancelled amount :{{props.item.cancelled}}</span>
+                        <span style="color:red">Cancelled amount :{{props.item.can}}</span>
 
                       </v-card-title>
 
                       <v-card-text>
+
                         <v-container grid-list-md>
                           <v-layout wrap>
-
-                            <v-flex xs12 sm6>
-                              <!-- <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea> -->
-                              <v-text-field type="number" clearable v-model="refillamount" label="Amount" required></v-text-field>
+                            <v-flex xs12 sm6 md6>
+                              <v-checkbox v-model="enabled" hide-details class="shrink mr-2 mt-0"></v-checkbox>
+                              <v-text-field type="number" :disabled="!enabled" clearable v-model="refillamount" label="Enter Manual Amount" required></v-text-field>
                             </v-flex>
+
+                            <v-flex xs12 sm6 md6>
+                              <v-checkbox v-model="enabled1" hide-details class="shrink mr-2 mt-0"></v-checkbox>
+                              <v-textarea clearable :disabled="!enabled1" clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                            </v-flex>
+
                           </v-layout>
                         </v-container>
                       </v-card-text>
@@ -103,7 +114,7 @@
                       <v-card-actions>
 
                         <v-btn color="primary" flat @click.stop="$set(dialogapprove, props.item.test, false)">Close</v-btn>
-                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount,schcomments)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
 
                       </v-card-actions>
                     </v-card>
@@ -158,8 +169,9 @@
                           <th class="text-left">Total Amount</th>
                           <th class="text-left">Comments</th>
                           <th class="text-left">Decline</th>
-                          <th class="text-left">Bill Download</th>
                           <th class="text-left">Voucher Download</th>
+                          <th class="text-left">Bill Download</th>
+                          <th class="text-left">Category change</th>
                         </tr>
                         <tr v-for="item in groupdatadetail" :key="item.name">
                           <td class="text-left">{{ item.Bill_date }}</td>
@@ -178,15 +190,15 @@
                             <v-dialog v-model="dialogcancel[item.voucher_no]" persistent max-width="800px" lazy absolute :key="props.item">
                               <v-card>
                                 <v-card-title>
-                                  <span >{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
-                                  <span >{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br/>
+                                  <span>{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
+                                  <span>{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br />
                                 </v-card-title>
-                                  <v-card-title>
+                                <v-card-title>
                                   <span>{{' -- Amount : '}}{{item.debit}} </span>
-                                    </v-card-title>
-                                    <v-card-title>
-                                      <span>Cancel Remark</span>
-                                      </v-card-title>
+                                </v-card-title>
+                                <v-card-title>
+                                  <span>Cancel Remark</span>
+                                </v-card-title>
 
                                 <v-card-text>
                                   <v-container grid-list-md>
@@ -221,7 +233,7 @@
 
                           </td>
                           <td class="text-xs-right" v-else="(item.voucher_attach==='NA')">
-                            {{ NA }}
+                            {{ }}
                           </td>
                           <td class="text-xs-right" v-if="!(item.bill_attach==='NA')">
                             <v-btn slot="activator" small fab color="primary" @click="downloadbill(item.bill_attach)">
@@ -230,7 +242,60 @@
 
                           </td>
                           <td class="text-xs-right" v-else="(item.bill_attach==='NA')">
-                            {{NA }}
+                            {{ }}
+                          </td>
+
+                          <td class="text-xs-right" v-if="(item.Active_status !='Approved')">
+                            <v-btn slot="activator" small fab @click.stop="$set(dialogcategory, item.voucher_no, true)" color="pink">
+                              <v-icon>fas fa-exchange-alt</v-icon>
+                            </v-btn>
+
+
+
+                            <v-dialog v-model="dialogcategory[item.voucher_no]" persistent max-width="800px" lazy absolute :key="props.item">
+                              <v-card>
+                                <v-card-title>
+                                  <span>{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
+                                  <span>{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br />
+                                </v-card-title>
+                                <v-card-title>
+                                  <span>{{' Amount : '}}{{item.debit}} </span>
+                                </v-card-title>
+                                <v-card-title>
+                                  <span>{{' Category : '}}{{item.category_name}} </span>
+                                </v-card-title>
+                                <v-card-title>
+                                  <span>Change Category</span>
+                                </v-card-title>
+
+                                <v-card-text>
+                                  <v-container grid-list-md>
+                                    <v-layout wrap>
+
+                                      <!-- <v-flex xs12 sm6>
+                                        <v-textarea clearable clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                                      </v-flex> -->
+                                      <v-flex xs12>
+                                        <v-select v-model="category" :items="items" label="Category" item-text="shortCode" item-value="text"></v-select>
+                                      </v-flex>
+                                    </v-layout>
+                                  </v-container>
+                                </v-card-text>
+
+
+                                <v-card-actions>
+
+                                  <v-btn color="primary" flat @click.stop="$set(dialogcategory, item.voucher_no, false)">Close</v-btn>
+                                  <v-btn color="blue darken-1" flat @click="rowChange(item,category)" @click.stop="$set(dialogcategory, item.voucher_no, false)">Change</v-btn>
+
+                                </v-card-actions>
+                              </v-card>
+                            </v-dialog>
+
+
+                          </td>
+                          <td class="text-xs-right" v-else="!(item.Active_status==='Pending')">
+                            {{item.Active_status}}
                           </td>
 
                         </tr>
@@ -289,7 +354,55 @@ var curday = function(sp) {
 
 export default {
   data: () => ({
+    json_data: null,
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
+    json_fields: {
+      "Bill No": "Bill_no",
+      "Bill Date": "bill_date",
+      "Mrn": "Mrn",
+      "Name": "Name",
+      "Total Net Amount": "Net_amount",
+      "Category": "Category",
+      "Reg ref": "REFERRALTYPENAME",
+      "Bill Ref": "Reference",
+      "DRT Name": "DRTNAME",
+      "Payment type": "Payment_type",
+      "Infavour of": "Infavour_of",
+      "Pan no": "Pan_no",
+      "Bank name": "Bank_name",
+      "Bank ifsc": "Bank_ifsc",
+      "Account no": "Account_no",
+      "Agreed %": "Aggreed_percentage_value",
+      "Comm %": "Drt_percentage_value",
+      "Comm Amt": "Drt_amount",
+      "Comments": "Comments",
+      "Net Amount": "Net_amount",
+      "Status": "drtApproval_status",
+      "Created by": "Created_by",
+      "Submitted time": "Drt_Created_on",
+      "SCH Approved by": "sch_Approved_by",
+      "SCH Approved Time": "Drt_Approved_time",
+      "Finance Approved by": "Admin_approved_by",
+      "Finance Approved Time": "Drt_Admin_Approved_time",
+      "Cancelled By": "Cancelled_by",
+      "Cancelled Time": "Drt_Cancelled_time",
+      "Ch name": "CH_Name",
+      "Ch Branch": "CH_branch",
+      "Sch Name": "SCH_Name",
+      "Sch Branch": "SCH_Branch",
+      "Expense date": "Expense_date"
+    },
+    fileName: null,
+
+    items: [],
+    category: [],
+    enabled: false,
+    enabled1: false,
     dialogcancel: {},
+    dialogcategory: {},
     dialogapprove: {},
     refillamount: '',
     schcomments: '',
@@ -336,8 +449,7 @@ export default {
     menu2: false,
     isLoading: false,
     fullPage: true,
-    headers: [
-      {
+    headers: [{
         text: 'Status',
         align: 'left',
         sortable: false,
@@ -349,7 +461,12 @@ export default {
         sortable: false
       },
       {
-        text: 'Allocated',
+        text: 'Opening Balance',
+        value: 'Allocated',
+        sortable: false
+      },
+      {
+        text: 'credit',
         value: 'Allocated',
         sortable: false
       },
@@ -373,6 +490,11 @@ export default {
 
       {
         text: 'Balance',
+        value: 'Balance',
+        sortable: false
+      },
+      {
+        text: 'Refilled amount',
         value: 'Balance',
         sortable: false
       },
@@ -409,14 +531,27 @@ export default {
     showgroupdetail: false,
 
     selecteddata: [],
-
+    reportpettycash: null,
+    groupdata: '',
 
   }),
   mounted() {
     this.loadbranch();
-
+    this.loadcategory();
   },
   methods: {
+    categoryreference(){
+    serverBus.$emit('changeComponent', 'changecategory')
+    },
+    loadcategory() {
+
+      this.axios
+        .get(`http://localhost:8888/api-pettycashcategory`).then(response => {
+          this.items = response.data;
+
+        })
+    },
+
     loadbranch() {
       let userid = JSON.parse(sessionStorage.getItem("fin_user"));
       this.SetBranch = [];
@@ -435,19 +570,18 @@ export default {
 
     },
 
-    apiRequestfinpc( SetStatus, SetBranch) {
+    apiRequestfinpc(SetStatus, SetBranch) {
       // if ((this.fromdate == '') || (this.fromdate == '')) {
       //   alert("Please select Month");
       //   return false;
       // }
-     if ((this.SetBranch == '') || (this.SetBranch == null)) {
+      if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
+      } else if ((this.SetStatus === null) || (this.SetStatus == '')) {
+        alert("Please select status");
+        return false;
       }
-      else  if ((this.SetStatus === null) || (this.SetStatus == '')) {
-       alert("Please select status");
-       return false;
-     }
 
 
       this.isLoading = true;
@@ -458,14 +592,22 @@ export default {
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
+
           this.processliststrchdata(response.data);
 
+
+
         })
+      var str = "_"
+
+      this.fileName = `Drt_Report.csv`;
+
 
     },
     processliststrchdata(data) {
       this.strch = data.result["pcbill"]
       console.log(this.strch);
+
       this.show = true
     },
     rowClick(id) {
@@ -491,7 +633,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-    this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -502,51 +644,45 @@ export default {
 
     },
     groupclick(item) {
-
-      console.log(item);
-    //  return false;
+      //  return false;
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}`).
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
       then(response => {
+        console.log("group click");
         console.log(response);
         this.isLoading = false;
         this.showgroupdetail = true;
         this.groupdatadetail = response.data;
-        console.log("---------------------");
-        console.log(this.groupdatadetail);
       })
 
 
     },
-    rowApproveAll(item, refillamount) {
+    rowApproveAll(item, refillamount, schcomments) {
 
-
+      if (refillamount == '') {
+        refillamount = item.pending
+      }
 
       if (item.pending < refillamount) {
 
-        if (confirm("Entering amount is greater than refilled amount")) {
-
-        } else {
+        if (confirm("Entering amount is greater than refilled amount")) {} else {
           alert('Cancel')
           return false
         }
-        //      alert("Entering amount is greater than refilled amount")
-
       }
-        //  return false;
-      console.log(item);
-      console.log(refillamount);
+
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
-      console.log(normalusername);
-      // this.isLoading = true;
       this.$http.post(`http://localhost:8888/api-finptycshbillgroupapproveall`, {
         strch_id: normalusername.name,
         strch_branch: item.branch,
-      strch_date:item.bill_submission,
+        strch_date: item.bill_submission,
         status: item.statusno,
-        finrefilledamount: refillamount
+        finrefilledamount: refillamount,
+        comments: schcomments
       }).then(response => {
         this.isLoading = false;
+        this.refillamount='';
+        this.enabled= false;
         if (response.data.dataupdated == true) {
           alert("approved");
           this.isLoading = true;
@@ -554,7 +690,7 @@ export default {
           console.log(normalusername);
           this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
-              this.refillamount='';
+              this.refillamount = '';
               this.isLoading = false;
               console.log(response.data);
               this.processliststrchdata(response.data);
@@ -566,53 +702,6 @@ export default {
       })
 
     },
-    // rowApprove(item) {
-    //   console.log(item);
-    //   let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
-    //   console.log(normalusername);
-    //   console.log(this.fromdate + " " + this.todate);
-    //   this.isLoading = true;
-    //   this.$http.post(`http://localhost:8888/api-strchbillgroupapprove`, {
-    //     strch_id: normalusername.name,
-    //     strch_groupcategory: item.category_name,
-    //     strch_branch: item.branch,
-    //     strch_fdate: this.fromdate,
-    //     strch_tdate: this.todate,
-    //   }).then(response => {
-    //     this.isLoading = false;
-    //     if (response.data.dataupdated == true) {
-    //       alert("approved")
-    //
-    //       this.dialog = true;
-    //       this.showgroup = true;
-    //       this.isLoading = true;
-    //       this.showgroupdetail = false;
-    //       //http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${this.fromdate}/${this.todate}/${id.status1}
-    //       this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
-    //         .then(response => {
-    //           this.groupdata = response.data;
-    //           console.log(response.data);
-    //           this.isLoading = false;
-    //         })
-    //
-    //
-    //     } else {
-    //       alert("Error in updating data ");
-    //       this.dialog = true;
-    //       this.showgroup = true;
-    //       this.isLoading = true;
-    //       this.showgroupdetail = false;
-    //       this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${this.fromdate}/${this.todate}/${item.status1}`)
-    //         .then(response => {
-    //           this.isLoading = false;
-    //           this.groupdata = response.data;
-    //           console.log(response.data);
-    //         });
-    //
-    //     }
-    //
-    //   })
-    // },
 
     downloadvouchher(filename) {
       this.axios({
@@ -688,13 +777,13 @@ export default {
             this.showgroupdetail = false;
             this.groupdatadetail = response.data;
           });
-            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
             .then(response => {
               this.isLoading = false;
               this.groupdata = response.data;
               console.log(response.data);
               this.showgroup = true;
-                    this.showgroupdetail = true;
+              this.showgroupdetail = true;
             });
 
 
@@ -715,8 +804,105 @@ export default {
           this.declineamount = response.data;
 
         })
-    }
+    },
 
+    rowChange(item, category) {
+
+      let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
+      this.isLoading = true;
+
+      this.$http.post(`http://localhost:8888/api-categoryupdate`, {
+        categoryid: category,
+        itemid: item.sno,
+        branch: item.branch
+      }).then(response => {
+        if (response.data.dataupdated == true) {
+          alert("Category changed")
+          this.isLoading = true;
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
+          then(response => {
+
+            this.isLoading = false;
+            this.showgroupdetail = true;
+            this.groupdatadetail = response.data;
+
+            this.dialog = true;
+            this.showgroup = true;
+            this.isLoading = true;
+            this.showgroupdetail = false;
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+              .then(response => {
+                this.isLoading = false;
+                this.groupdata = response.data;
+                console.log(response.data);
+              })
+
+
+          })
+
+
+
+
+
+        } else {
+          alert("Error in saving data")
+          this.isLoading = true;
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
+          then(response => {
+
+            this.isLoading = false;
+            this.showgroupdetail = true;
+            this.groupdatadetail = response.data;
+
+            this.dialog = true;
+            this.showgroup = true;
+            this.isLoading = true;
+            this.showgroupdetail = false;
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+              .then(response => {
+                this.isLoading = false;
+                this.groupdata = response.data;
+                console.log(response.data);
+              })
+
+
+          })
+
+
+
+
+
+        }
+      })
+
+
+    },
+    // downloadExcelIC() {
+    //   let tempDataArr = [];
+    //   if (this.fileDate !== null) {
+    //
+    //
+    //
+    //     tempDataArr = this.reportpettycash;
+    //
+    //     return tempDataArr;
+    //   } else {
+    //     return null;
+    //   }
+    // },
+    // apigetpettycash(a, b) {
+    //   if ((a == '') && (b == '')) {
+    //     alert("empty")
+    //     return false;
+    //   }
+    //   console.log(a);
+    //   console.log(b);
+    //
+    //   this.axios.get(`http://localhost:8888/api-getpettycash/${a}/${b}`).then(response => {
+    //     console.log(response);
+    //     this.reportpettycash = response
+    //   })
+    // }
   }
 }
 </script>

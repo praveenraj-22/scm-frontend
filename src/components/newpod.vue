@@ -1860,7 +1860,7 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
 				</tr>
-				<!--<tr
+				<tr
                   scope="row"
                   v-for="(item,index) in nigeria"
                   :key="index+item.branch"
@@ -1889,7 +1889,7 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
                   
-                </tr>-->
+                </tr>
 				
 				<tr
                   scope="row"
@@ -3791,7 +3791,7 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
 				</tr>
-				<!--<tr
+				<tr
                   scope="row"
                   v-for="(item,index) in nigeria"
                   :key="index+item.branch"
@@ -3820,7 +3820,7 @@
                     class="text-xs-center"
                   >{{item.mtdopdpercentage}}</td>
                   
-                </tr>-->
+                </tr>
 				
 				<tr
                   scope="row"

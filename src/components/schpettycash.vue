@@ -4,7 +4,7 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
-<v-spacer></v-spacer>
+          <v-spacer></v-spacer>
           <th width="20%">
             <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
           </th>
@@ -12,25 +12,6 @@
           <v-spacer></v-spacer>
           <v-select :items="bill_status" v-model="SetStatus" label="Bill Status" id="SelEntity" item-text="shortCode" item-value="text"></v-select>
 
-          <!-- <v-spacer></v-spacer>
-          <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="fromdate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu>
-
-
-          <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
-            <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="todate" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
-            </v-date-picker>
-          </v-menu> -->
 
           <v-btn rounded color="primary" dark @click="apiRequestschpc(SetStatus,SetBranch)">Generate</v-btn>
 
@@ -56,19 +37,20 @@
               <tr>
                 <td>{{ props.item.STATUS }}</td>
                 <td class="text-xs-left">{{ props.item.branch }}</td>
-                <!-- <td class="text-xs-left">{{ props.item.Bill_date }}</td> -->
+                <td class="text-xs-left">{{ props.item.Opening_Balance }}</td>
                 <td class="text-xs-right">{{ props.item.credit }}</td>
                 <td class="text-xs-right">{{ props.item.approved }}</td>
                 <td class="text-xs-right" style="color:red">{{ props.item.cancelled }}</td>
-                <td class="text-xs-right" style="color:blue" >{{ props.item.pending }}</td>
-                  <td class="text-xs-right" style="color:green" >{{ props.item.balance }}</td>
+                <td class="text-xs-right" style="color:blue">{{ props.item.pending }}</td>
+                <td class="text-xs-right" style="color:green">{{ props.item.balance }}</td>
+                <td class="text-xs-right" style="color:magenta">{{ props.item.refill }}</td>
                 <td class="text-xs-left">{{ props.item.Submitted_date }}</td>
                 <td class="text-xs-left">
                   <v-btn slot="activator" small color="primary" @click="rowClick(props.item)">
                     View
                   </v-btn>
                 </td>
-                <td class="text-xs-left" v-if="props.item.pending !=0">
+                <td class="text-xs-left" v-if="(props.item.pending !=0 && props.item.STATUS=='pending')">
                   <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn>
@@ -127,7 +109,8 @@
                           <td class="text-left">{{ item.voucher_no }}</td>
                           <td class="text-right">{{ item.totalamount }}</td>
                           <td class="text-left"> {{item.Comments}}</td>
-                          <td class="text-xs-right" v-if="item.Active_status==='pending'">
+
+                          <td class="text-xs-right" v-if="(item.Active_status==='pending' || item.Active_status==='bill_raised' )">
                             <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, item.voucher_no, true)" color="red">
                               <v-icon>fas fa-times</v-icon>
                             </v-btn>
@@ -136,15 +119,15 @@
                             <v-dialog v-model="dialogcancel[item.voucher_no]" persistent max-width="800px" lazy absolute :key="item.voucher_no">
                               <v-card>
                                 <v-card-title>
-                                  <span >{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
-                                  <span >{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br/>
+                                  <span>{{'branch : '}}{{ item.branch }}{{" -- Bill no : "}}{{item.bill_no}} </span><br>
+                                  <span>{{" -- Vendor no : "}}{{item.voucher_no}} {{'-- Vendorname : '}}{{item.vendorname}} </span><br />
                                 </v-card-title>
-                                  <v-card-title>
+                                <v-card-title>
                                   <span>{{' -- Amount : '}}{{item.debit}} </span>
-                                    </v-card-title>
-                                    <v-card-title>
-                                      <span>Cancel Remark</span>
-                                      </v-card-title>
+                                </v-card-title>
+                                <v-card-title>
+                                  <span>Cancel Remark</span>
+                                </v-card-title>
 
                                 <v-card-text>
                                   <v-container grid-list-md>
@@ -169,6 +152,8 @@
 
 
                           </td>
+
+
                           <td class="text-xs-right" v-if="!(item.Active_status==='pending')">
                             {{item.Active_status}}
                           </td>
@@ -290,57 +275,66 @@ export default {
     menu2: false,
     isLoading: false,
     fullPage: true,
-    headers: [
-      {
+    headers: [{
         text: 'Status',
         align: 'left',
         value: 'status',
-          sortable: false,
+        sortable: false,
       },
-       {
+      {
         text: 'Branch',
         value: 'branch',
-          sortable: false,
-      }, , {
-        text: 'Allocated',
+        sortable: false,
+      }, {
+        text: 'Opening balance',
         value: 'total',
-          sortable: false,
+        sortable: false,
+      },
+      {
+        text: 'Credit',
+        value: 'total',
+        sortable: false,
       },
       {
         text: 'Approved',
         value: 'Used',
-          sortable: false,
+        sortable: false,
       },
       {
         text: ' Cancelled',
         value: 'Cancelled',
-          sortable: false,
+        sortable: false,
       },
       {
         text: 'Pending',
         value: 'Pending',
-          sortable: false,
+        sortable: false,
       },
       {
         text: 'Balance',
         value: 'Balance',
-          sortable: false,
+        sortable: false,
+      },
+      {
+        text: 'Refilled amount',
+        value: 'total',
+        sortable: false,
       },
       {
         text: 'Submitted',
         value: 'Submitted',
-          sortable: false,
+        sortable: false,
       },
 
       {
         text: 'View',
         value: 'View',
-          sortable: false,
+        sortable: false,
       },
       {
         text: 'Approve',
         value: 'Approve',
-          sortable: false,
+        sortable: false,
       },
 
       // {
@@ -384,17 +378,16 @@ export default {
 
     },
 
-    apiRequestschpc( SetStatus, SetBranch) {
+    apiRequestschpc(SetStatus, SetBranch) {
       // if ((this.fromdate == '') || (this.fromdate == '')) {
       //   alert("Please select Month");
       //   return false;
       //  }
 
-       if ((this.SetStatus === null) || (this.SetStatus == '')) {
+      if ((this.SetStatus === null) || (this.SetStatus == '')) {
         alert("Please select status");
         return false;
-      }
-       else if ((this.SetBranch == '') || (this.SetBranch == null)) {
+      } else if ((this.SetBranch == '') || (this.SetBranch == null)) {
         alert("Please select branch")
         return false;
       }
@@ -452,14 +445,12 @@ export default {
       console.log(" grpclick");
       console.log(item);
       this.isLoading = true;
-     this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.created_date}/${item.status1}`).
+      this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.created_date}/${item.status1}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
         this.showgroupdetail = true;
         this.groupdatadetail = response.data;
-        console.log("---------------------");
-        console.log(  this.groupdatadetail);
       })
 
 
@@ -482,7 +473,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           console.log(normalusername);
-        this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.isLoading = false;
               console.log(response.data);
@@ -506,7 +497,7 @@ export default {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
         strch_branch: item.branch,
-        strch_date:item.created_date
+        strch_date: item.created_date
       }).then(response => {
         this.isLoading = false;
         if (response.data.dataupdated == true) {
@@ -545,7 +536,7 @@ export default {
     downloadvouchher(filename) {
       this.axios({
         url: `http://localhost:8888/api-voucher-download/${filename}`,
-		//url: `http://localhost:8888/api-voucher-download/${filename}`,
+        //url: `http://localhost:8888/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -557,15 +548,15 @@ export default {
         fileLink.href = fileURL;
         fileLink.setAttribute('download', filename);
         document.body.appendChild(fileLink);
-         //con
+        //con
         fileLink.click();
       })
 
     },
-	downloadbill(filename) {
+    downloadbill(filename) {
       this.axios({
         url: `http://localhost:8888/api-bill-download/${filename}`,
-		//url: `http://localhost:8888/api-bill-download/${filename}`,
+        //url: `http://localhost:8888/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -574,7 +565,7 @@ export default {
         fileLink.href = fileURL;
         fileLink.setAttribute('download', filename);
         document.body.appendChild(fileLink);
-         //con
+        //con
         fileLink.click();
       })
 
@@ -609,14 +600,12 @@ export default {
           this.schcomments = '';
           console.log(item);
           this.isLoading = true;
-             this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
-            console.log("---------------");
-            console.log(this.groupdatadetail);
           });
 
           this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
@@ -643,7 +632,8 @@ export default {
 .inlineTable {
   display: inline-block;
 }
-.break1{
+
+.break1 {
   display: inline-block;
 }
 </style>

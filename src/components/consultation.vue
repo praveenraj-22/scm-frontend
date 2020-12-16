@@ -1929,7 +1929,7 @@
                   >{{item.mtdconsultcount}}</td>
         </tr>
 
-      	<!--<tr
+      	<tr
                   scope="row"
                   v-for="(item,index) in nigeria"
                   :key="index+item.branch"
@@ -1958,7 +1958,7 @@
                     class="text-xs-center"
                   >{{item.mtdconsultcount}}</td>
 
-                </tr>-->
+                </tr>
 
 
 				 <tr

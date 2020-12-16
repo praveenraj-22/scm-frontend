@@ -217,7 +217,7 @@ export default {
       this.branch = [];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
           this.branch = (response.data);
           console.log(this.branch);
         })
@@ -233,7 +233,7 @@ export default {
 
 
       this.isLoading = true;
-      this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+      this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
         .then(response => {
           this.processDatatpabill(response.data)
           this.isLoading = false;
@@ -253,7 +253,7 @@ export default {
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
 
       this.isLoading=true;
-      this.axios.post(`https://mis.dragarwal.com/api-tpabillsubmit`,{
+      this.axios.post(`http://localhost:8888/api-tpabillsubmit`,{
         tpabillid:data.bill_id,
         tpaid:data.id,
         submitted_id:userid.name
@@ -261,7 +261,7 @@ export default {
         if(response.data.dataupdated==true){
           alert("TPA bill sumbitted")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -272,7 +272,7 @@ export default {
         else{
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;

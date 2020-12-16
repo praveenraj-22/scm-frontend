@@ -137,19 +137,27 @@
                   <v-btn slot="activator" small fab color="primary" @click="downloadagreement(props.item.Agreement_d)">
                     <v-icon>cloud_download</v-icon>
                   </v-btn>
-
                 </td>
+
+                <td class="text-xs-right" v-else="props.item.Agreement_d==='NA'">
+                </td>
+
                 <td class="text-xs-right" v-if="!(props.item.Pan_d==='NA')">
                   <v-btn slot="activator" small fab color="primary" @click="downloadpan(props.item.Pan_d)">
                     <v-icon>cloud_download</v-icon>
                   </v-btn>
-
                 </td>
+
+                <td class="text-xs-right" v-else="props.item.Pan_d==='NA'">
+                </td>
+
                 <td class="text-xs-right" v-if="!(props.item.Passbook_d==='NA')">
                   <v-btn slot="activator" small fab color="primary" @click="downloadpassbook(props.item.Passbook_d)">
                     <v-icon>cloud_download</v-icon>
                   </v-btn>
+                </td>
 
+                <td class="text-xs-right" v-else="props.item.Passbook_d==='NA'">
                 </td>
 
               </tr>
@@ -541,7 +549,7 @@ export default {
 
       this.$http.post('http://localhost:8888/api-uploaddoctor', formData, {}).then(res => {
         this.isLoading = false;
-
+        console.log(res);
 
         if (res.data.doctordatainserted === true) {
           alert(" Doctor name addtion is sent for approval")
@@ -563,8 +571,7 @@ export default {
           this.$refs.agreementupload.files[0]='';
           console.log(formData);
         } else {
-
-          alert(res.data.doctordatainserted);
+          alert(res.data.ResponseMsg);
           this.isLoading = false;
           return false;
         }

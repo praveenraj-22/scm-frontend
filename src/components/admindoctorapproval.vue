@@ -238,7 +238,7 @@ export default {
       "Agreed %":"Percentage",
       "Pan no":"Pan_no",
       "Bank Name":"Bank_name",
-      "Account no":"Account_no",
+      "Account no":"Accnt_no",
       "Bank IFSC":"Bank_ifsc",
       "Payment type":"Payment_type",
 
