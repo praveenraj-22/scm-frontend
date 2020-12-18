@@ -53,7 +53,7 @@
                       <template slot="items" slot-scope="props">
                         <tr>
 
-                          <td class="text-xs-left">{{ props.item.status }}</td>
+                          <td class="text-xs-left">{{ props.item.STATUS }}</td>
                           <td class="text-xs-left">{{ props.item.entity }}</td>
                           <td class="text-xs-left">{{ props.item.branch }}</td>
                           <td class="text-xs-left">{{ props.item.category_name }}</td>
@@ -205,7 +205,7 @@ branch: [{
             text: 'Status',
             align: 'left',
             sortable: false,
-            value: 'status'
+            value: 'STATUS'
 
           },
           {
@@ -288,10 +288,10 @@ branch: [{
     value: "utf-8"
   }],
   json_fields: {
-    "Bill Status": "status",
+    "Bill Status": "STATUS",
     "Entity": "entity",
     "Branch": "branch",
-    "NS code":"code",
+    "NS code":"CODE",
     "NS Category Name": "category_name",
     "NS Ledger Name": "ledger_head",
     "Voucher No":"voucher_no",
@@ -299,8 +299,10 @@ branch: [{
     "Bill no": "bill_no",
     "Bill date": "bill_date",
     "MEMO": "remarks",
+    "Opening Balance": "OPENING",
     "Credit": "credit",
     "Debit": "debit",
+    "Balance":"CLOSING",
     "Refilled date": "refilled_date",
     "Ch id": "ch_id",
     "Created date": "created_date",
@@ -371,7 +373,7 @@ apiRequestreportpc(SetBranch,category,fromdate){
             .then(response =>{
 
             this.processDatalistreport(response.data);
-  this.isLoading = false;
+            this.isLoading = false;
 
             })
     }
@@ -388,8 +390,9 @@ apiRequestreportpc(SetBranch,category,fromdate){
 ,
 processDatalistreport(data)
 {
-  this.reportdata=data.result["pc"]
-  console.log(this.reportdata);
+
+  this.reportdata=data.result["pc"][1]
+
 },
 rowChange(item, category) {
 
@@ -410,8 +413,9 @@ rowChange(item, category) {
       this.isLoading = true;
       this.axios.get(`http://localhost:8888/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
         .then(response =>{
-
+  console.log(response.data);
         this.processDatalistreport(response.data);
+
 this.isLoading = false;
 
         })
