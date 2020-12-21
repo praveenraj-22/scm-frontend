@@ -28,7 +28,7 @@
             <v-spacer></v-spacer>
 
             <v-btn color="primary" dark @click="categoryreference()">
-            Change category
+              Change category
             </v-btn>
 
             <v-spacer></v-spacer>
@@ -96,14 +96,19 @@
 
                         <v-container grid-list-md>
                           <v-layout wrap>
-                            <v-flex xs12 sm6 md6>
+                            <v-flex xs12 sm6>
                               <v-checkbox v-model="enabled" hide-details class="shrink mr-2 mt-0"></v-checkbox>
                               <v-text-field type="number" :disabled="!enabled" clearable v-model="refillamount" label="Enter Manual Amount" required></v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm6 md6>
+                            <v-flex xs12 sm6>
                               <v-checkbox v-model="enabled1" hide-details class="shrink mr-2 mt-0"></v-checkbox>
                               <v-textarea clearable :disabled="!enabled1" clear-icon="cancel" label="Comments" v-model='schcomments'></v-textarea>
+                            </v-flex>
+
+                            <v-flex xs12>
+                              <input type="file" ref="billupload" id="billupload" accept="image/x-png, image/gif, image/jpeg,application/pdf" v-on:change="handleFileUploadBill()" /><span id="billUploaderr" ref="billUploaderr"
+                                style='color:red'></span>
                             </v-flex>
 
                           </v-layout>
@@ -114,11 +119,24 @@
                       <v-card-actions>
 
                         <v-btn color="primary" flat @click.stop="$set(dialogapprove, props.item.test, false)">Close</v-btn>
-                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount,schcomments)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount,schcomments,)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
 
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
+
+
+                </td>
+
+                <td class="text-xs-left" v-if="props.item.STATUS !='Pending'">
+                  {{ }}
+                </td>
+
+                <td class="text-xs-left" v-if="(!((props.item.Payment_receipt ==='NA')||(props.item.Payment_receipt ===null)||(props.item.Payment_receipt ==='')))">
+
+                  <v-btn slot="activator" small fab color="primary" @click="downloadPayreceipt(props.item.Payment_receipt)">
+                    <v-icon>download</v-icon>
+                  </v-btn>
 
 
                 </td>
@@ -143,12 +161,6 @@
                           </td>
                           <td class="text-xs-right">{{grpdata.totalamount}}</td>
                           <td class="text-xs-right" v-if="grpdata.status==='Pending'">
-                            <!-- <v-btn slot="activator" small fab color="success" @click="rowApprove(grpdata)">
-                              <v-icon>check</v-icon>
-                            </v-btn> -->
-                            <!-- <v-btn slot="activator" small color="primary" @click="groupclick(grpdata)">
-                              View
-                            </v-btn> -->
                             {{grpdata.status}}
                           </td>
                           <td class="text-xs-right" v-else>
@@ -515,6 +527,12 @@ export default {
         sortable: false
 
       },
+      {
+        text: 'Payment_receipt',
+        value: 'Payment_receipt',
+        sortable: false
+
+      },
 
       // {
       //   text: 'Decline',
@@ -540,8 +558,8 @@ export default {
     this.loadcategory();
   },
   methods: {
-    categoryreference(){
-    serverBus.$emit('changeComponent', 'changecategory')
+    categoryreference() {
+      serverBus.$emit('changeComponent', 'changecategory')
     },
     loadcategory() {
 
@@ -671,18 +689,32 @@ export default {
         }
       }
 
+
+      if ((this.fileBill == null) || (this.fileBill == '')) {
+        alert("Please upload Payment Receipt")
+        return false
+      } else if ((this.fileBill.size > 1000000)) {
+        alert("Voucher file is greater than 1Mb");
+        return false;
+      }
+
+
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
-      this.$http.post(`http://localhost:8888/api-finptycshbillgroupapproveall`, {
-        strch_id: normalusername.name,
-        strch_branch: item.branch,
-        strch_date: item.bill_submission,
-        status: item.statusno,
-        finrefilledamount: refillamount,
-        comments: schcomments
-      }).then(response => {
+
+      var formData = new FormData()
+
+      formData.append("strch_id", normalusername.name);
+      formData.append("strch_branch", item.branch);
+      formData.append("strch_date", item.bill_submission);
+      formData.append("status", item.statusno);
+      formData.append("finrefilledamount", refillamount);
+      formData.append("comments", schcomments);
+      formData.append("payment_receipt", this.fileBill);
+
+      this.$http.post(`http://localhost:8888/api-finptycshbillgroupapproveall`, formData, {}).then(response => {
         this.isLoading = false;
-        this.refillamount='';
-        this.enabled= false;
+        this.refillamount = '';
+        this.enabled = false;
         if (response.data.dataupdated == true) {
           alert("approved");
           this.isLoading = true;
@@ -697,16 +729,35 @@ export default {
 
             })
         } else {
-          alert("Error in approving date")
+          alert("Error in approving date");
+          this.refillamount = '';
+          this.enabled = false;
         }
       })
 
     },
+    downloadPayreceipt(filename) {
+      this.axios({
+        url: `http://localhost:8888/api-payment-download/${filename}`,
+        method: 'GET',
+        responseType: 'blob',
+      }).then(response => {
 
+
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement('a');
+
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', filename);
+        document.body.appendChild(fileLink);
+        //con
+        fileLink.click();
+      })
+
+    },
     downloadvouchher(filename) {
       this.axios({
         url: `http://localhost:8888/api-voucher-download/${filename}`,
-        //url: `http://localhost:8888/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -789,6 +840,7 @@ export default {
 
         } else {
           alert('error in cancelling data');
+          this.schcomments = '';
         }
       })
 
@@ -877,6 +929,18 @@ export default {
 
 
     },
+
+    handleFileUploadBill() {
+      this.fileBill = this.$refs.billupload.files[0];
+      if ((this.fileBill.size > 1000000)) {
+
+        alert("Bill file is greater than 1MB");
+        this.fileBill = '';
+        console.log(this.fileBill);
+        return false;
+
+      }
+    }
     // downloadExcelIC() {
     //   let tempDataArr = [];
     //   if (this.fileDate !== null) {
