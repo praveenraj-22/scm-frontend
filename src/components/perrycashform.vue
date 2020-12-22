@@ -51,11 +51,11 @@
               </v-flex>
 
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="vendorname" label="Vendor Name"></v-text-field>
+                <v-text-field v-model="vendorname" label="Vendor Name" v-on:change="handlevendor(vendorname)"></v-text-field>
               </v-flex>
 
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="billno" label="Bill No"></v-text-field>
+                <v-text-field v-model="billno" label="Bill No" v-on:change="handlebill(billno)"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
 
@@ -80,7 +80,7 @@
 
               <v-flex xs12 sm6 md4>
 
-                <v-text-field v-model="remarks" label="Memo"></v-text-field>
+                <v-text-field v-model="remarks" label="Memo" v-on:change="handlecomments(remarks)"></v-text-field>
               </v-flex>
 
               <v-flex xs12 sm6 md4>
@@ -188,6 +188,42 @@ export default {
     getToday() {
       this.today = moment().format("YYYY-MM-DD");
     },
+    handlecomments(a) {
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+
+      if (pattern.test(a)) {
+        this.remarks = '';
+
+        alert("Cannot allow special characters in memo field")
+        return false;
+
+      }
+
+    },
+    handlevendor(a) {
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+
+      if (pattern.test(a)) {
+        this.vendorname = '';
+
+        alert("Cannot allow special characters in vendorname field")
+        return false;
+
+      }
+
+    },
+    handlebill(a) {
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+
+      if (pattern.test(a)) {
+        this.billno = '';
+
+        alert("Cannot allow special characters in Billno field")
+        return false;
+
+      }
+
+    },
     submit() {
 
       if (this.selbranch == '') {
@@ -228,8 +264,18 @@ export default {
         alert("Please check the amount ")
         return false;
       }
+      if (this.vendorname == '') {
+        alert("Please enter Vendor name");
+        return false;
+      }
+      if (this.billno == '') {
+        alert("Please enter Bill name");
+        return false;
+      }
       var formData = new FormData()
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
+
+
 
 
       formData.append("branch", this.selbranch);
