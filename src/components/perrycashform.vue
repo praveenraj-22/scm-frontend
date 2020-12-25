@@ -189,7 +189,7 @@ export default {
       this.today = moment().format("YYYY-MM-DD");
     },
     handlecomments(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
 
       if (pattern.test(a)) {
         this.remarks = '';
@@ -201,7 +201,7 @@ export default {
 
     },
     handlevendor(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
 
       if (pattern.test(a)) {
         this.vendorname = '';
@@ -213,7 +213,7 @@ export default {
 
     },
     handlebill(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？' ']");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
 
       if (pattern.test(a)) {
         this.billno = '';
@@ -224,6 +224,7 @@ export default {
       }
 
     },
+    
     submit() {
 
       if (this.selbranch == '') {
