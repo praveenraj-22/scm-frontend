@@ -119,7 +119,7 @@
                       <v-card-actions>
 
                         <v-btn color="primary" flat @click.stop="$set(dialogapprove, props.item.test, false)">Close</v-btn>
-                        <v-btn color="blue darken-1" flat @click="rowApproveAll(props.item,refillamount,schcomments,)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
+                        <v-btn color="blue darken-1" flat :disabled="!approvevalid" @click="rowApproveAll(props.item,refillamount,schcomments,)" @click.stop="$set(dialogapprove, props.item.test, false)">Refill&Approve</v-btn>
 
                       </v-card-actions>
                     </v-card>
@@ -227,7 +227,7 @@
                                 <v-card-actions>
 
                                   <v-btn color="primary" flat @click.stop="$set(dialogcancel, item.voucher_no, false)">Close</v-btn>
-                                  <v-btn color="blue darken-1" flat @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.voucher_no, false)">Decline</v-btn>
+                                  <v-btn color="blue darken-1" flat :disabled="!declinievalid" @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.voucher_no, false)">Decline</v-btn>
 
                                 </v-card-actions>
                               </v-card>
@@ -408,7 +408,8 @@ export default {
       "Expense date": "Expense_date"
     },
     fileName: null,
-
+    approvevalid: true,
+    declinievalid: true,
     items: [],
     category: [],
     enabled: false,
@@ -629,13 +630,14 @@ export default {
       this.show = true
     },
     rowClick(id) {
+      console.log("hit in ");
       console.log(id);
       //return false;
       this.dialog = true;
       this.showgroup = true;
       this.isLoading = true;
       this.showgroupdetail = false;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${id.branch}/${id.statusno}/${id.bill_submission}`)
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${id.branch}/${id.statusno}`)
         .then(response => {
           this.isLoading = false;
           this.groupdata = response.data;
@@ -663,8 +665,9 @@ export default {
     },
     groupclick(item) {
       //  return false;
+      console.log(item);
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status1}`).
       then(response => {
         console.log("group click");
         console.log(response);
@@ -676,7 +679,7 @@ export default {
 
     },
     rowApproveAll(item, refillamount, schcomments) {
-
+      this.approvevalid = false;
       if (refillamount == '') {
         refillamount = item.pending
       }
@@ -726,12 +729,13 @@ export default {
               this.isLoading = false;
               console.log(response.data);
               this.processliststrchdata(response.data);
-
+              this.approvevalid = true;
             })
         } else {
           alert("Error in approving date");
           this.refillamount = '';
           this.enabled = false;
+          this.approvevalid = true;
         }
       })
 
@@ -795,11 +799,13 @@ export default {
     rowDecline(item, schcomments) {
       console.log(item);
       console.log("jhit");
+
+
+      this.declinievalid = false;
+
       //  this.dialogcancel=false;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
-
       this.isLoading = true;
-
       this.$http.post(`http://localhost:8888/api-finpcbillgroupdecline`, {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
@@ -815,49 +821,40 @@ export default {
 
 
       }).then(response => {
-        this.isLoading = false;
+        this.isLoading = true;
+
         if (response.data.dataupdated == true) {
           alert('Cancelled');
           this.schcomments = '';
           console.log(item);
-          this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
             console.log(response);
 
-            this.showgroupdetail = false;
+            this.showgroupdetail = true;
             this.groupdatadetail = response.data;
-          });
-          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
-            .then(response => {
-              this.isLoading = false;
-              this.groupdata = response.data;
-              console.log(response.data);
-              this.showgroup = true;
-              this.showgroupdetail = true;
-            });
 
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
+              .then(response => {
+                this.isLoading = false;
+                this.groupdata = response.data;
+                console.log(response.data);
+                this.showgroup = true;
+                this.showgroupdetail = true;
+              });
+
+          });
+
+          this.declinievalid = true;
 
         } else {
           alert('error in cancelling data');
           this.schcomments = '';
+          this.declinievalid = true;
         }
       })
 
     },
-    declineamount(item) {
-      console.log(item);
-      return false;
-      this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-declineamount/${item.branch}/${this.fromdate}/${this.todate}`)
-        .then(response => {
-          console.log(response);
-          this.isLoading = false;
-          this.declineamount = response.data;
-
-        })
-    },
-
     rowChange(item, category) {
 
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
@@ -871,7 +868,7 @@ export default {
         if (response.data.dataupdated == true) {
           alert("Category changed")
           this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
 
             this.isLoading = false;
@@ -882,7 +879,7 @@ export default {
             this.showgroup = true;
             this.isLoading = true;
             this.showgroupdetail = false;
-            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;
@@ -899,7 +896,7 @@ export default {
         } else {
           alert("Error in saving data")
           this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
 
             this.isLoading = false;
@@ -910,7 +907,7 @@ export default {
             this.showgroup = true;
             this.isLoading = true;
             this.showgroupdetail = false;
-            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;
@@ -941,32 +938,7 @@ export default {
 
       }
     }
-    // downloadExcelIC() {
-    //   let tempDataArr = [];
-    //   if (this.fileDate !== null) {
-    //
-    //
-    //
-    //     tempDataArr = this.reportpettycash;
-    //
-    //     return tempDataArr;
-    //   } else {
-    //     return null;
-    //   }
-    // },
-    // apigetpettycash(a, b) {
-    //   if ((a == '') && (b == '')) {
-    //     alert("empty")
-    //     return false;
-    //   }
-    //   console.log(a);
-    //   console.log(b);
-    //
-    //   this.axios.get(`http://localhost:8888/api-getpettycash/${a}/${b}`).then(response => {
-    //     console.log(response);
-    //     this.reportpettycash = response
-    //   })
-    // }
+
   }
 }
 </script>

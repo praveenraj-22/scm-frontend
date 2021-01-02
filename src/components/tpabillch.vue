@@ -5,7 +5,7 @@
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
           <v-spacer></v-spacer>
-          <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
+          <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -66,6 +66,14 @@
                 {{props.item.senddate}}
 
               </td>
+              <td class="text-xs-right">
+                <v-btn slot="activator" small fab color="primary" @click="rowPrint(props.item)">
+                  <v-icon>fa fa-print</v-icon>
+                </v-btn>
+
+              </td>
+
+
 
             </template>
           </v-data-table>
@@ -161,7 +169,10 @@ export default {
         text: 'Submit',
         value: 'Submit'
       },
-
+      {
+        text:'Print',
+        value:'Print'
+      }
     ],
     selected: [],
     BILLED: '',
@@ -297,6 +308,14 @@ export default {
       return null;
       }
     },
+    rowPrint(item){
+    
+        this.axios.get(`http://localhost:8888/api-tpaprintch/${item.AGENCY_NAME}/${item.BILLED}/${item.BILLNO}/${ittem.bill_id}`).then(
+          response =>{
+
+          }
+        )
+    }
   }
 }
 </script>

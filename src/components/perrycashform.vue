@@ -22,7 +22,7 @@
                 <th class="text-xs-center" scope="col">Credit</th>
                 <th class="text-xs-center" scope="col">Debit</th>
                 <th class="text-xs-center" scope="col">Balance</th>
-                <th class="text-xs-center" scope="col">Next approval limit </th>
+                <th class="text-xs-center" scope="col">Next SCH approval limit </th>
               </tr>
             </thead>
             <tbody>
@@ -117,7 +117,7 @@
 
               </v-flex>
 
-              <v-btn class="mr-4" @click="submit">submit</v-btn>
+              <v-btn class="mr-4" @click="submit"  :disabled="!submitvalid" >submit</v-btn>
               <v-btn @click="clear">clear</v-btn>
               <v-btn @click="back()">back</v-btn>
 
@@ -149,6 +149,7 @@ var curday = function(sp) {
 };
 export default {
   data: () => ({
+    submitvalid:true,
     loading: false,
     isLoading: false,
     fullPage: true,
@@ -224,53 +225,65 @@ export default {
       }
 
     },
-    
-    submit() {
 
+    submit() {
+    this.submitvalid=false;
       if (this.selbranch == '') {
         alert("Branch is required");
+          this.submitvalid=true;
         return false;
       }
       if (this.voucherno == '') {
         alert("Voucher No is required");
+          this.submitvalid=true;
         return false;
       }
       if (this.category == '') {
         alert("Category is required");
+          this.submitvalid=true;
         return false;
       }
       if (this.expensedate == '') {
         alert("Bill/ Expense Date is required");
+          this.submitvalid=true;
         return false;
       }
       if (this.amount == '') {
         alert("Amount is required");
+          this.submitvalid=true;
         return false;
       }
       if (!this.$refs.voucherupload.files[0]) {
         alert("Voucher is required");
+
+          this.submitvalid=true;
         return false;
       }
       if ((this.fileVoucher.size > 500000)) {
         alert("Voucher file is greater than 500KB");
+          this.submitvalid=true;
         return false;
       }
       if (this.fileBill != null) {
         if ((this.fileBill.size > 500000)) {
           alert("Bill file is greater than 500KB");
+            this.submitvalid=true;
           return false;
         }
       }
       if (this.amount <= 0) {
         alert("Please check the amount ")
+          this.submitvalid=true;
         return false;
       }
       if (this.vendorname == '') {
         alert("Please enter Vendor name");
+          this.submitvalid=true;
         return false;
       }
       if (this.billno == '') {
         alert("Please enter Bill name");
+          this.submitvalid=true;
         return false;
       }
       var formData = new FormData()
@@ -298,7 +311,9 @@ export default {
         alert(res.data.ResponseMsg);
         this.isLoading = false;
         this.clear();
+
         this.show = false;
+        this.submitvalid=true;
       })
 
 

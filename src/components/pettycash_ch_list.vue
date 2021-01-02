@@ -316,7 +316,6 @@ export default {
 
 
       this.$http
-        //.get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`) // https need for server
         .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`)
         .then(response => {
           console.log(response)
@@ -363,6 +362,7 @@ export default {
     },
 
     rowDecline(item, comments) {
+      console.log(item);
 
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
       let id = item.sno;
@@ -374,6 +374,7 @@ export default {
       let vendor_name = item.vendorname;
       let voucher_attach = item.voucher_attach;
       let bill_attach = item.bill_attch;
+
       this.isLoading = true;
       this.$http.post(`http://localhost:8888/api-chpettycashcancel`, {
         ch_id: userid.name,
@@ -410,8 +411,7 @@ export default {
 
 
           this.$http
-            //.get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`) // https need for server
-            .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
+          .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
             .then(response => {
               console.log(response)
               this.isLoading = false;
@@ -441,7 +441,6 @@ export default {
 
 
           this.$http
-            //.get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`) // https need for server
             .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
             .then(response => {
               console.log(response)

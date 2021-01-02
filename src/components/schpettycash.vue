@@ -51,7 +51,7 @@
                   </v-btn>
                 </td>
                 <td class="text-xs-left" v-if="(props.item.pending !=0 && props.item.STATUS=='pending')">
-                  <v-btn slot="activator" small fab color="success" @click="rowApproveAll(props.item)">
+                  <v-btn slot="activator" small fab color="success" :disabled="!approvevalid" @click="rowApproveAll(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn>
                 </td>
@@ -76,7 +76,7 @@
                           </td>
                           <td class="text-xs-right">{{grpdata.totalamount}}</td>
                           <td class="text-xs-right" v-if="grpdata.status==='Pending'">
-                            <v-btn slot="activator" small fab color="success" @click="rowApprove(grpdata)">
+                            <v-btn slot="activator" small fab color="success" :disabled="!approverowvalid" @click="rowApprove(grpdata)">
                               <v-icon>check</v-icon>
                             </v-btn>
                           </td>
@@ -144,7 +144,7 @@
                                 <v-card-actions>
 
                                   <v-btn color="primary" flat @click.stop="$set(dialogcancel, item.voucher_no, false)">Close</v-btn>
-                                  <v-btn color="blue darken-1" flat @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.voucher_no, false)">Decline</v-btn>
+                                  <v-btn color="blue darken-1" flat :disabled="!declinevalid" @click="rowDecline(item,schcomments)" @click.stop="$set(dialogcancel, item.voucher_no, false)">Decline</v-btn>
 
                                 </v-card-actions>
                               </v-card>
@@ -266,7 +266,9 @@ export default {
         text: '5'
       },
     ],
-
+    approvevalid: true,
+    declinevalid: true,
+    approverowvalid: true,
     fromdate: null,
     todate: null,
     minDate: "2020-08-01",
@@ -458,6 +460,7 @@ export default {
     rowApproveAll(item) {
       console.log("rowapproveall");
       console.log(item);
+      this.approvevalid = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
       this.isLoading = true;
@@ -478,10 +481,11 @@ export default {
               this.isLoading = false;
               console.log(response.data);
               this.processliststrchdata(response.data);
-
+              this.approvevalid = false;
             })
         } else {
           alert("Error in approving date")
+          this.approvevalid = false;
         }
       })
 
@@ -489,6 +493,7 @@ export default {
     rowApprove(item) {
       console.log("rowapprove");
       console.log(item);
+      this.approverowvalid = false;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
 
@@ -514,7 +519,7 @@ export default {
               console.log(response.data);
               this.isLoading = false;
             })
-
+          this.approverowvalid = true;
 
         } else {
           alert("Error in updating data ");
@@ -528,6 +533,7 @@ export default {
               this.groupdata = response.data;
               console.log(response.data);
             });
+          this.approverowvalid = true;
 
         }
 
@@ -575,6 +581,7 @@ export default {
       console.log(item);
       console.log("jhit");
       //  this.dialogcancel=false;
+      this.declinevalid = false;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
 
       this.isLoading = true;
@@ -600,25 +607,30 @@ export default {
           this.schcomments = '';
           console.log(item);
           this.isLoading = true;
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status1}`).
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
+
+            this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+              .then(response => {
+                this.isLoading = false;
+                this.groupdata = response.data;
+                console.log(response.data);
+                this.showgroup = true;
+              });
+              
+
           });
 
-          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
-            .then(response => {
-              this.isLoading = false;
-              this.groupdata = response.data;
-              console.log(response.data);
-              this.showgroup = true;
-            });
 
+          this.declinevalid = true;
 
         } else {
           alert('error in cancelling data');
+          this.declinevalid = true;
         }
       })
 
