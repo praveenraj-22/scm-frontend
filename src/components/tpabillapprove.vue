@@ -55,7 +55,7 @@
               <td class="text-xs-left">{{ props.item.PATIENT_NAME}}</td>
               <td class="text-xs-left">{{ props.item.BILLNO}}</td>
               <td class="text-xs-left">{{ props.item.AGENCY_NAME}}</td>
-              <td class="text-xs-left">{{ props.item.tpa_claim}}</td>
+              <td class="text-xs-left">{{ props.item.TPA_CLAIM}}</td>
               <td class="text-xs-left">{{ props.item.totalamount}}</td>
               <td class="text-xs-left">{{ props.item.discount}}</td>
               <td class="text-xs-left">{{ props.item.netamount}}</td>
@@ -65,7 +65,7 @@
                 {{props.item.senddate}}
               </td>
 
-              <td class="text-xs-right" v-if="((props.item.acknowledge_date ===null) ) ">
+              <td class="text-xs-right" v-if="((props.item.ACKNOWLEDGE_DATE ===null) ) ">
                 <v-btn slot="activator" small fab color="success" @click="rowacknowledge(props.item)">
                   <v-icon>check</v-icon>
                 </v-btn>
@@ -82,12 +82,12 @@
 
               </td> -->
 
-              <td class="text-xs-right" v-if="((props.item.submitted_date ===null) )">
-                <v-btn slot="activator" small fab color="success" @click.stop="$set(dialogexpensedate, props.item.bill_no, true)">
+              <td class="text-xs-right" v-if="((props.item.SUBMITTED_DATE ===null) )">
+                <v-btn slot="activator" small fab color="success" @click.stop="$set(dialogexpensedate, props.item.BILLNO, true)">
                   <v-icon>check</v-icon>
                 </v-btn>
 
-                <v-dialog v-model="dialogexpensedate[props.item.bill_no]" persistent max-width="400px" lazy absolute :key="props.item.bill_no">
+                <v-dialog v-model="dialogexpensedate[props.item.BILLNO]" persistent max-width="400px" lazy absolute :key="props.item.BILLNO">
                   <v-card>
 
                     <v-card-text>
@@ -105,8 +105,8 @@
                     <v-card-actions>
 
 
-                      <v-btn color="primary" flat @click.stop="$set(dialogexpensedate, props.item.bill_no, false)">Close</v-btn>
-                      <v-btn color="blue darken-1" flat @click.stop="rowsubmitted(props.item,finexpensedate),$set(dialogexpensedate, props.item.bill_no, false)">Update</v-btn>
+                      <v-btn color="primary" flat @click.stop="$set(dialogexpensedate, props.item.BILLNO, false)">Close</v-btn>
+                      <v-btn color="blue darken-1" flat @click.stop="rowsubmitted(props.item,finexpensedate),$set(dialogexpensedate, props.item.BILLNO, false)">Update</v-btn>
 
                     </v-card-actions>
 
@@ -116,7 +116,7 @@
                     </v-card-title>
                     <v-card-title>
 
-                      <span>{{ props.item.MRN }}{{ " -- "}}{{ props.item.bill_no  }}</span>
+                      <span>{{ props.item.MRN }}{{ " -- "}}{{ props.item.BILLNO  }}</span>
                       <br>
 
                     </v-card-title>
@@ -343,7 +343,7 @@ export default {
       "Date": "BILLEDDATE",
       "MRN": "MRN",
       "Name": "PATIENT_NAME",
-      "Bill no": "bill_no",
+      "Bill no": "BILLNO",
       "Payor name": "AGENCY_NAME",
       "Claim id": "tpa_claim",
       "Total amount": "totalamount",
@@ -351,12 +351,12 @@ export default {
       "Net amount": "netamount",
       "Patient amount": "patamount",
       "Payor amount": "tpaamount",
-      "CH submitted": "send_date",
-      "Ch Name": "sent_id",
-      "Acknowledged date": "acknowledge_date",
-      "Acknowledged Name": "acknowledge_id",
-      "Submitted date": "submitted_date",
-      "Submitted Name": "submitted_id",
+      "CH submitted": "SEND_DATE",
+      "Ch Name": "SENT_ID",
+      "Acknowledged date": "ACKNOWLEDGE_DATE",
+      "Acknowledged Name": "ACKNOWLEDGE_ID",
+      "Submitted date": "SUBMITTED_DATE",
+      "Submitted Name": "SUBMITTED_ID",
     },
     fileName: null,
   }),
@@ -379,7 +379,7 @@ export default {
       }];
 
       this.axios
-        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
+        .get(`http://localhost:8888/api-branch/${selectObj}`).then(response => {
           this.branch = arr1.concat(response.data);
         })
 
@@ -390,7 +390,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.axios
-        .get(`https://mis.dragarwal.com/api-finbranchregion/${normalusername.name}`).then(response => {
+        .get(`http://localhost:8888/api-finbranchregion/${normalusername.name}`).then(response => {
           console.log(response.data);
           if (response.data[0].TEXT == 'ALL') {
             this.enabled = true;
@@ -398,7 +398,7 @@ export default {
             this.SetBranch = [];
             this.branch = [];
             this.axios
-              .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+              .get(`http://localhost:8888/api-finbranch`).then(response => {
                 this.branch = (response.data);
                 console.log(this.branch);
               })
@@ -416,7 +416,7 @@ export default {
               text: 'All'
             }];
             this.axios
-              .get(`https://mis.dragarwal.com/api-fintpabranch/${normalusername.name}`).then(response => {
+              .get(`http://localhost:8888/api-fintpabranch/${normalusername.name}`).then(response => {
                 this.branch = arr1.concat(response.data);
                 console.log(this.branch);
               })
@@ -455,28 +455,28 @@ export default {
         let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
         if (SetStatus == 'All') {
 
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 0) {
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 1) {
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 2) {
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -504,8 +504,8 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
-      this.axios.post(`https://mis.dragarwal.com/api-tpabillack`, {
-        tpabillid: data.bill_id,
+      this.axios.post(`http://localhost:8888/api-tpabillack`, {
+        tpabillid: data.BILL_ID,
         tpaid: data.id,
         submitted_id: normalusername.name
       }).then(response => {
@@ -517,7 +517,7 @@ export default {
 
           if (this.SetStatus == 'All') {
             console.log(this.SetStatus);
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               //  this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
               .then(response => {
                 this.processDatatpabill(response.data)
@@ -526,7 +526,7 @@ export default {
               })
           } else if (this.SetStatus == 0) {
             console.log(this.SetStatus);
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -534,7 +534,7 @@ export default {
               })
           } else if (this.SetStatus == 1) {
             console.log(this.SetStatus);
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -542,7 +542,7 @@ export default {
               })
           } else if (this.SetStatus == 2) {
             console.log(this.SetStatus);
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -554,7 +554,7 @@ export default {
         } else {
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             //  this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
             .then(response => {
               this.processDatatpabill(response.data)
@@ -577,8 +577,8 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
-      this.axios.post(`https://mis.dragarwal.com/api-tpabillsub`, {
-        tpabillid: data.bill_id,
+      this.axios.post(`http://localhost:8888/api-tpabillsub`, {
+        tpabillid: data.BILL_ID,
         tpaid: data.id,
         submitted_id: normalusername.name,
         submitted_date: date
@@ -588,28 +588,28 @@ export default {
           this.isLoading = true;
           if (this.SetStatus == 'All') {
             //    this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 0) {
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 1) {
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 2) {
-            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -622,7 +622,7 @@ export default {
         } else {
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             //    this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
             .then(response => {
               this.processDatatpabill(response.data)

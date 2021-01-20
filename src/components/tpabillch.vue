@@ -55,14 +55,14 @@
               <td class="text-xs-left">{{ props.item.netamount}}</td>
               <td class="text-xs-left">{{ props.item.patamount}}</td>
               <td class="text-xs-left">{{ props.item.tpaamount}}</td>
-              <td class="text-xs-right" v-if="props.item.send_date===null">
+              <td class="text-xs-right" v-if="(props.item.SEND_DATE===null)">
                 <v-btn slot="activator" small fab color="success" @click="rowApprove(props.item)">
                   <v-icon>check</v-icon>
                 </v-btn>
 
               </td>
 
-              <td class="text-xs-right" v-else="props.item.send_date !=null">
+              <td class="text-xs-right" v-else="props.item.SEND_DATE !=null">
                 {{props.item.senddate}}
 
               </td>
@@ -198,7 +198,7 @@ export default {
       "Date": "BILLEDDATE",
       "MRN": "MRN",
       "Name": "PATIENT_NAME",
-      "Bill no": "bill_no",
+      "Bill no": "BILLNO",
       "Payor name": "AGENCY_NAME",
       "Claim id": "tpa_claim",
       "Total amount":"totalamount",
@@ -206,12 +206,12 @@ export default {
       "Net amount": "netamount",
       "Patient amount": "patamount",
       "Payor amount": "tpaamount",
-      "CH submitted": "send_date",
-      "Ch Name":"sent_id",
-      "Acknowledged date": "acknowledge_date",
-      "Acknowledged Name":"acknowledge_id",
-      "Submitted date": "submitted_date",
-      "Submitted Name":"submitted_id",
+      "CH submitted": "SEND_DATE",
+      "Ch Name":"SENT_ID",
+      "Acknowledged date": "ACKNOWLEDGE_DATE",
+      "Acknowledged Name":"ACKNOWLEDGE_ID",
+      "Submitted date": "SUBMITTED_DATE",
+      "Submitted Name":"SUBMITTED_ID",
     },
     fileName: null,
   }),
@@ -262,10 +262,9 @@ export default {
 
     rowApprove(data){
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
-
       this.isLoading=true;
       this.axios.post(`http://localhost:8888/api-tpabillsubmit`,{
-        tpabillid:data.bill_id,
+        tpabillid:data.BILL_ID,
         tpaid:data.id,
         submitted_id:userid.name
       }).then(response =>{
@@ -309,8 +308,8 @@ export default {
       }
     },
     rowPrint(item){
-    
-        this.axios.get(`http://localhost:8888/api-tpaprintch/${item.AGENCY_NAME}/${item.BILLED}/${item.BILLNO}/${ittem.bill_id}`).then(
+
+        this.axios.get(`http://localhost:8888/api-tpaprintch/${item.AGENCY_NAME}/${item.BILLED}/${item.BILLNO}/${ittem.BILL_ID}`).then(
           response =>{
 
           }
