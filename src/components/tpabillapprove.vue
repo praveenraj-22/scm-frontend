@@ -379,7 +379,7 @@ export default {
       }];
 
       this.axios
-        .get(`http://localhost:8888/api-branch/${selectObj}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
           this.branch = arr1.concat(response.data);
         })
 
@@ -390,7 +390,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.axios
-        .get(`http://localhost:8888/api-finbranchregion/${normalusername.name}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-finbranchregion/${normalusername.name}`).then(response => {
           console.log(response.data);
           if (response.data[0].TEXT == 'ALL') {
             this.enabled = true;
@@ -398,7 +398,7 @@ export default {
             this.SetBranch = [];
             this.branch = [];
             this.axios
-              .get(`http://localhost:8888/api-finbranch`).then(response => {
+              .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
                 this.branch = (response.data);
                 console.log(this.branch);
               })
@@ -416,7 +416,7 @@ export default {
               text: 'All'
             }];
             this.axios
-              .get(`http://localhost:8888/api-fintpabranch/${normalusername.name}`).then(response => {
+              .get(`https://mis.dragarwal.com/api-fintpabranch/${normalusername.name}`).then(response => {
                 this.branch = arr1.concat(response.data);
                 console.log(this.branch);
               })
@@ -455,28 +455,28 @@ export default {
         let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
         if (SetStatus == 'All') {
 
-          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 0) {
-          this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 1) {
-          this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
 
             })
         } else if (SetStatus == 2) {
-          this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -504,7 +504,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
-      this.axios.post(`http://localhost:8888/api-tpabillack`, {
+      this.axios.post(`https://mis.dragarwal.com/api-tpabillack`, {
         tpabillid: data.BILL_ID,
         tpaid: data.id,
         submitted_id: normalusername.name
@@ -517,8 +517,8 @@ export default {
 
           if (this.SetStatus == 'All') {
             console.log(this.SetStatus);
-            this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
-              //  this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+              //  this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -526,7 +526,7 @@ export default {
               })
           } else if (this.SetStatus == 0) {
             console.log(this.SetStatus);
-            this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -534,7 +534,7 @@ export default {
               })
           } else if (this.SetStatus == 1) {
             console.log(this.SetStatus);
-            this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -542,7 +542,7 @@ export default {
               })
           } else if (this.SetStatus == 2) {
             console.log(this.SetStatus);
-            this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -554,8 +554,8 @@ export default {
         } else {
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
-            //  this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            //  this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -577,7 +577,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("tpa_user"));
 
       this.isLoading = true;
-      this.axios.post(`http://localhost:8888/api-tpabillsub`, {
+      this.axios.post(`https://mis.dragarwal.com/api-tpabillsub`, {
         tpabillid: data.BILL_ID,
         tpaid: data.id,
         submitted_id: normalusername.name,
@@ -587,29 +587,29 @@ export default {
           alert("TPA bill sumbitted")
           this.isLoading = true;
           if (this.SetStatus == 'All') {
-            //    this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
-            this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            //    this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 0) {
-            this.axios.get(`http://localhost:8888/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinpend/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 1) {
-            this.axios.get(`http://localhost:8888/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinack/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
 
               })
           } else if (this.SetStatus == 2) {
-            this.axios.get(`http://localhost:8888/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            this.axios.get(`https://mis.dragarwal.com/api-tpabillfinsub/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
               .then(response => {
                 this.processDatatpabill(response.data)
                 this.isLoading = false;
@@ -622,8 +622,8 @@ export default {
         } else {
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
-            //    this.axios.get(`http://localhost:8888/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
+          this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}/${normalusername.name}`)
+            //    this.axios.get(`https://mis.dragarwal.com/api-tpabillfin/${this.SetEntity}/${this.SetBranch}/${this.fromdate}/${this.SetStatus}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;

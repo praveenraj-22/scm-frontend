@@ -149,14 +149,14 @@
 				    width="35%"
                     class="text-xs-center"
                     scope="col"
-                    colspan="5"
+                    colspan="6"
                   >Perimeter (Count)</td>
 				   
 				  <td
 				    width="14%"
                     class="text-xs-center"
                     scope="col"
-                     colspan="2"
+                     colspan="3"
                   >Perimeter (Revenue)	</td> 
 				 
                 </tr>
@@ -192,6 +192,7 @@
                     scope="col"
                     
                   >MTD</td>
+				  
 				   <td
 				    width="7%"
                     class="text-xs-center"
@@ -210,6 +211,12 @@
                     scope="col"
                     
                   >MTD</td> 
+				  <td
+				    width="7%"
+                    class="text-xs-center"
+                    scope="col"
+                    
+                  >YTD</td>
 				  <td
 				    width="7%"
                     class="text-xs-center"
@@ -234,6 +241,12 @@
                     scope="col"
                     
                   >MTD</td>
+				  <td
+				    width="7%"
+                    class="text-xs-center"
+                    scope="col"
+                    
+                  >YTD</td>
                 </tr>
                
              
@@ -291,6 +304,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
 				    width="7%"
@@ -307,6 +325,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				   <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>          
                 
@@ -363,6 +386,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
                     scope="row"
@@ -378,6 +406,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>
 				
@@ -437,6 +470,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
                     scope="row"
@@ -452,6 +490,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>
 				
@@ -509,6 +552,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
                     scope="row"
@@ -524,6 +572,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>
                   
@@ -579,6 +632,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
 				    width="7%"
@@ -595,6 +653,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                  
                 </tr>
                 
@@ -647,6 +710,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
 				    width="7%"
@@ -663,6 +731,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>
                 
@@ -716,6 +789,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
                     scope="row"
@@ -731,6 +809,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>
                
@@ -789,6 +872,11 @@
 				    width="7%"
                     scope="row"
                     class="text-xs-center"
+                  >{{item.deviceytd}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
                   >{{item.target}}</td>
 				  <td
 				    width="7%"
@@ -805,6 +893,11 @@
                     scope="row"
                     class="text-xs-center"
                   >{{item.revenuemtdamount}}</td>
+				  <td
+				    width="7%"
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.revenueytdamount}}</td>
                   
                 </tr>							
               </tbody>

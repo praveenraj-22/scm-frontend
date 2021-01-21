@@ -4252,6 +4252,78 @@
                   >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
                 </tr>
 				
+				
+				
+				<tr v-if="user_role=='group_user' || user_role=='overseas_user'"
+                  scope="row"
+                  v-for="(item,index) in rwanda_branches"
+                  :key="index+item.branch"
+                  class="grey lighten-4"
+                >
+                  <td
+                    scope="row"
+                    :class="changeColorSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+                    @click="processDialogSuper(item,rwanda_branches)"
+                    style="cursor:pointer"
+                  >{{item.branch}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.ftdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.ftd_cogs_percent.toFixed(2)}} %</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdpha| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdopt| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdot| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdlab| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtd| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center"
+                  >{{item.mtdrev| lakhFormatSuper}}</td>
+                  <td
+                    scope="row"
+                    class="text-xs-center grey lighten-1"
+                  >{{item.mtd_cogs_percent.toFixed(2)}} %</td>
+                </tr>
+				
 				<tr v-if="user_role=='group_user' || user_role=='overseas_user'"
                   scope="row"
                   v-for="(item,index) in mauritius"
@@ -6284,6 +6356,7 @@ export default {
     mozambique_branches: null,
 	nigeria: null,
 	rwanda: null,
+	rwanda_branches: null,
 	mauritius: null,
     mauritius_branches: null,
 	zambia: null,
@@ -6449,7 +6522,8 @@ export default {
 	  this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
 	  this.nigeria = data.branchwise["Nigeria"];
-	  this.rwanda = data.branchwise["Rwanda"];
+	  this.rwanda = [data.ohcgroup["Rwanda"]]; 
+	  this.rwanda_branches = data.branchwise["Rwanda"];
 	  this.mauritius = [data.ohcgroup["Mauritius"]];
       this.mauritius_branches = data.branchwise["Mauritius"];
 	  this.zambia = data.branchwise["Zambia"];
@@ -6514,6 +6588,7 @@ export default {
 				this.mozambique,
 				this.mozambique_branches,			 
 				this.rwanda,
+				this.rwanda_branches,
 				this.mauritius,
 				this.mauritius_branches,
 				this.zambia,
@@ -6534,6 +6609,7 @@ export default {
 				this.mozambique,
 				this.mozambique_branches,			 
 				this.rwanda,
+				this.rwanda_branches,
 				this.mauritius,
 				this.mauritius_branches,
 				this.zambia,

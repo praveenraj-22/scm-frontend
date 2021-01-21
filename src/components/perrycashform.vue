@@ -60,7 +60,7 @@
               <v-flex xs12 sm6 md4>
 
 
-                <!-- <v-text-field
+								 <!-- <v-text-field
 								  v-model="expensedate"
 								  label="Bill/ Expense Date"
 								  type="date"
@@ -70,15 +70,15 @@
 								></v-text-field> -->
                 <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="expensedate" lazy transition="scale-transition" offset-y full-width min-width="150px">
                   <v-text-field slot="activator" v-model="expensedate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-                  <v-date-picker color="primary" v-model="expensedate" no-title scrollable :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+                  <v-date-picker color="primary" v-model="expensedate" no-title scrollable  :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
                     <v-spacer></v-spacer>
                     <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
                     <v-btn flat color="primary" @click="$refs.menu1.save(expensedate)" style="outline:none">Ok</v-btn>
                   </v-date-picker>
                 </v-menu>
-              </v-flex>
-
-              <v-flex xs12 sm6 md4>
+							</v-flex>
+							
+							<v-flex xs12 sm6 md4>
 
                 <v-text-field v-model="remarks" label="Memo" v-on:change="handlecomments(remarks)"></v-text-field>
               </v-flex>
@@ -134,9 +134,7 @@
 
 <script>
 import moment from "moment";
-import {
-  serverBus
-} from "../main";
+import { serverBus } from "../main";
 var curday = function(sp) {
   var today = new Date();
   var dd = today.getDate();
@@ -190,7 +188,7 @@ export default {
       this.today = moment().format("YYYY-MM-DD");
     },
     handlecomments(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>��/?~!@#?��&*|{}??�;:��'?,??]");
 
       if (pattern.test(a)) {
         this.remarks = '';
@@ -202,7 +200,7 @@ export default {
 
     },
     handlevendor(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>��/?~!@#?��&*|{}??�;:��'?,??]");
 
       if (pattern.test(a)) {
         this.vendorname = '';
@@ -214,7 +212,7 @@ export default {
 
     },
     handlebill(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>《》/?~！@#￥……&*|{}【】‘；：”“'。，、？]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>��/?~!@#?��&*|{}??�;:��'?,??]");
 
       if (pattern.test(a)) {
         this.billno = '';
@@ -305,107 +303,102 @@ export default {
       formData.append("fileBill", this.fileBill);
       formData.append("chid", normalusername.name);
 
-      this.$http.post('http://localhost:8888/api-petty-cash-bill-submit', formData, {}).then(res => {
+      this.$http.post('https://mis.dragarwal.com/api-petty-cash-bill-submit', formData, {}).then(res => {
         this.isLoading = true;
         this.loading = true;
         alert(res.data.ResponseMsg);
         this.isLoading = false;
         this.clear();
-
         this.show = false;
         this.submitvalid=true;
       })
 
 
 
-    },
-    handleFileUploadVoucher() {
-      this.fileVoucher = this.$refs.voucherupload.files[0];
-      if ((this.fileVoucher.size > 500000)) {
-        //alert("Voucher file is greater than 500KB");
-        return false;
-
-      }
-    },
-    handleFileUploadBill() {
-      this.fileBill = this.$refs.billupload.files[0];
-      if ((this.fileBill.size > 500000)) {
-        //alert("Bill file is greater than 500KB");
-        return false;
-
-      }
-    },
-    clear() {
-      this.voucherno = ''
-      this.selbranch = [];
-      this.category = [];
-      this.remarks = '';
-      this.expensedate = '';
-      this.amount = '';
-      this.vendorname = '';
-      this.billno = '';
-      //this.sumbissiondate='';
-      this.$refs.voucherupload.value = null;
-      this.$refs.billupload.value = null;
-      this.$refs.voucherUploaderr.innerText = '';
-      this.$refs.billUploaderr.innerText = '';
-      this.fileVoucher = null;
-      this.fileBill = null;
-
-
-    },
-    loadbranch() {
-      let userid = JSON.parse(sessionStorage.getItem("normal_user"));
-
-      this.isLoading = true;
-      this.loading = true;
-      this.axios
-        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
-          console.log(response.data);
-          this.branch = response.data;
-          //alert(JSON.stringify(this.branch));
-          this.isLoading = false;
-          console.log(this.branch);
-        })
-    },
-
-    branchamount(selectObj) {
-      this.isLoading = true;
-      this.loading = true;
-      this.axios
-        .get(`http://localhost:8888/api-bramch-allocated-amount/${selectObj}`).then(response => {
-          //alert(response.data[0]['credit']);
-          console.log(response);
-          this.show = true;
-          this.pettycash_branch = response.data[0]['branch'];
-          this.pettycash_credit = response.data[0]['credit'];
-          this.pettycash_debit = response.data[0]['debit'];
-          this.pettycash_balance = response.data[0]['balance'];
+      },
+	  handleFileUploadVoucher(){
+		this.fileVoucher = this.$refs.voucherupload.files[0];	
+		if ((this.fileVoucher.size > 500000)) {		    
+			 //alert("Voucher file is greater than 500KB");
+			 return false;
+		
+		}
+	  },
+	  handleFileUploadBill(){
+		this.fileBill = this.$refs.billupload.files[0];	
+		if ((this.fileBill.size > 500000)) {		    
+			 //alert("Bill file is greater than 500KB");
+			 return false;
+		
+		}
+	  },
+      clear () {        
+        this.voucherno = ''        
+        this.selbranch = [];
+		this.category = [];
+		this.remarks='';
+		this.expensedate='';
+		this.amount='';
+		this.vendorname='';
+		this.billno='';
+		//this.sumbissiondate='';
+		this.$refs.voucherupload.value = null;
+		this.$refs.billupload.value = null;
+		this.$refs.voucherUploaderr.innerText = '';
+		this.$refs.billUploaderr.innerText = '';
+		this.fileVoucher = null;
+		this.fileBill = null;
+		
+        
+      },
+	  loadbranch() {
+		  let userid = JSON.parse(sessionStorage.getItem("normal_user"));
+           
+          var arr1 = [{TEXT: '',shortCode: 'Select All', }];
+		  this.isLoading = true;
+		  this.loading = true;		  
+		  this.axios		   
+			.get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {		
+			  console.log(response.data);
+			  this.branch = arr1.concat(response.data);
+			  //alert(JSON.stringify(this.branch));
+			  this.isLoading = false;
+			  console.log(this.branch);
+			})
+	},
+	
+	branchamount(selectObj) {
+	      this.isLoading = true;
+		  this.loading = true;	
+		  this.axios		   
+			.get(`https://mis.dragarwal.com/api-bramch-allocated-amount/${selectObj}`).then(response => {			
+				//alert(response.data[0]['credit']);
+				this.show = true;
+				this.pettycash_branch=response.data[0]['branch'];
+				this.pettycash_credit=response.data[0]['credit'];
+				this.pettycash_debit=response.data[0]['debit'];
+				this.pettycash_balance=response.data[0]['balance'];
           this.voucherno = response.data[0]['voucher_no'];
           this.pettycash_limit = response.data[0]['notify_amount'];
-          console.log(this.pettycash_limit);
-          this.isLoading = false;
-
-        })
+				this.isLoading = false;
+				
+			})
+	},
+	
+	loadcategoty() {           
+          var arr2 = [{text: '',shortCode: 'Select All', }];		  
+		  this.axios		   
+			.get(`https://mis.dragarwal.com/api-pettycashcategory`).then(response => {			  
+			  this.items = arr2.concat(response.data);		  
+			 
+			})
+	},
+	back() {
+		serverBus.$emit('changeComponent', 'pettycash_ch_list')
+	}
+	
     },
-
-    loadcategoty() {
-      var arr2 = [{
-        text: '',
-        shortCode: 'Select All',
-      }];
-      this.axios
-        .get(`http://localhost:8888/api-pettycashcategory`).then(response => {
-          this.items = arr2.concat(response.data);
-
-        })
-    },
-    back() {
-      serverBus.$emit('changeComponent', 'pettycash_ch_list')
-    }
-
-  },
-}
+  }
 </script>
 
 <style>

@@ -11,11 +11,29 @@
 
 
           <v-spacer></v-spacer>
+		  
+		  
+		  <th width="20%"  v-if="show"><v-select 
+				  :items=regions				  
+				  v-model="SetRegion"    
+				  label="Region:"    
+				  id="SelRegion"
+				   item-text="shortCode"
+				   item-value="text"
+				 
+				 
+				></v-select>
+			</th>
+		  <v-spacer></v-spacer>
+		  
+		  
           <th width="20%">
             <v-select :items=branch v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
           </th>
           <v-spacer></v-spacer>
-
+		  
+		 
+           <v-spacer></v-spacer>
           <!--<v-select :items="department" v-model="Setdepartment" label="Department type" item-text="shortCode" item-value="text"></v-select>-->
 
           <v-spacer></v-spacer>
@@ -27,6 +45,9 @@
               <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
           </v-menu>
+		   <v-spacer></v-spacer>
+		
+		  
 
 
           <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,SetEntity,SetBranch)">Generate</v-btn>
@@ -44,6 +65,19 @@
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->
+		<br>
+		
+<table  width="100%" id="tblDeparnment">
+    <tr>        
+		 <td width="15%"><label><input id="depart1" type="checkbox" value="PHARMACY"/> PHARMACY </label></td>
+		 <td width="15%"><label><input id="depart2" type="checkbox" value="OPTICALS"/> OPTICALS </label></td>
+		  <td width="15%"><label><input id="depart3" type="checkbox" value="LAB"/> LAB </label></td>
+		  <td width="15%"><label><input id="depart4" type="checkbox" value="OT"/> OT </label></td>
+		  <td width="15%"><label><input id="depart5" type="checkbox" value="CONTACT LENS"/> CONTACT LENS </label></td>
+		   <td width="15%"><label><input id="depart6" type="checkbox" value="OTHERS"/> OTHERS </label></td>  		 	
+    </tr>
+    
+</table>
        
 
         <back-to-top bottom="90px" right="90px">
@@ -81,6 +115,10 @@ export default{
         shortCode: 'Select All',
         text: 'All'
       },
+	  {
+        shortCode: 'All India',
+        text: 'All India'
+      },
       {
         shortCode: 'AEH',
         text: 'AEH'
@@ -89,11 +127,25 @@ export default{
         shortCode: 'AHC',
         text: 'AHC'
       },
+	  {
+        shortCode: 'AHI',
+        text: 'AHI'
+      },
       {
         shortCode: 'OHC',
         text: 'OHC'
       },
     ],
+	regions : [
+        { shortCode: 'Select All', text: ''},
+		{ shortCode: 'CHN', text: 'CHN'},
+		{ shortCode: 'ETN', text: 'ETN'},
+		{ shortCode: 'HTN', text: 'HTN'},	
+		{ shortCode: 'KA', text: 'KA'},	
+		{ shortCode: 'TS', text: 'TS'},        
+		{ shortCode: 'ROI', text: 'ROI'},	
+		{ shortCode: 'ROTN', text: 'ROTN'}       
+      ],
     branch: [{
         shortCode: 'Select All',
         text: 'All'
@@ -101,6 +153,7 @@ export default{
       
       SetBranch: [],
       SetEntity: [],
+	   SetRegion : [],
       userName: null,
       isLoading: false,
       fullPage: true,
@@ -144,6 +197,7 @@ export default{
 		"UNITPRICE":"UNITPRICE",
 		"DEPTID":"DEPTID",
 		"DEPTNAME":"DEPTNAME",
+		"DEPARTMENT_NAME":"DEPARTMENT_NAME",
 		"OpeningStock":"OpeningStock",
 		"OpeningValue":"OpeningValue",
 		"Purchase":"Purchase",
@@ -184,17 +238,79 @@ export default{
         shortCode: 'Select All',
         text: 'All'
       }];
+	  
+	  
+	  if(selectObj=='All India'){
+		this.show=true;
+	  }else{
+	  this.show=false;
+	  }
+	  
+	  
       //if(this.SetEntity!='' && selectObj!='')
-      this.axios
-        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
-          this.branch = arr1.concat(response.data);
-          console.log(arr1);
+	  if(selectObj!='AHI'){
+		  this.axios
+			.get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
+			  this.branch = arr1.concat(response.data);
+			  console.log(arr1);
 
-          console.log(this.branch);
+			  console.log(this.branch);
 
-        })
+			})
+	   }else{
+		this.branch=[
+		{
+        shortCode: 'Select All',
+        text: 'All',
+		
+      },
+		
+		{
+        shortCode: 'VSH',
+        text: 'VSH',		
+		}
+		
+		]
+	   }
 
     },
+	
+	getRegion(selectObj){
+	    
+		if(!selectObj){
+			this.regions=[
+				{ shortCode: 'Select All', text: 'All'},
+				{ shortCode: 'Chennai', text: 'Chennai'},
+				{ shortCode: 'ROTN', text: 'ROTN'},
+				{ shortCode: 'ROI', text: 'ROI'},	
+				{ shortCode: 'KA', text: 'KA'},	
+				{ shortCode: 'Kerala', text: 'Kerala'},	
+				{ shortCode: 'Maharashtra', text: 'Maharashtra'},
+				{ shortCode: 'Madhya Pradesh', text: 'Madhya Pradesh'},				
+				{ shortCode: 'TS', text: 'TS'},					
+				{ shortCode: 'AP', text: 'AP'},	
+				{ shortCode: 'WB', text: 'WB'},
+				{ shortCode: 'OD', text: 'OD'}
+			  ];
+		}
+		this.SetRegion = [];
+		this.SetBranch = [];
+		this.branch=[];
+		
+		var arr2 = [{shortCode: 'Select All', text: 'All'}];
+		if(selectObj){
+			this.axios
+			  //.get(`https://mis.dragarwal.com/api-region/${selectObj}`).then(response => {	
+			 .get(`https://mis.dragarwal.com/api-region/${selectObj}`).then(response => {
+					//console.log(response.data);
+					console.log(response.data.url);
+					console.log(response.data.explanation);
+					this.regions = arr2.concat(response.data);					
+					
+				});
+		}
+	
+	},
 
     getToday() {
       this.today = moment()
@@ -222,15 +338,57 @@ else if((SetBranch==null)||(SetBranch=='')){
 else {
 
   
-    type = 'All';
+    
+  //alert(this.SetRegion);
+  var regionvalue='';
+  if(this.SetRegion==''){
+	regionvalue = "All";
+  }else{
+    regionvalue = this.SetRegion;
+  }
+  //alert(this.SetRegion);
+  
+  
+var selected = new Array();
+ 
+//Reference the Table.
+var tblDeparnment = document.getElementById("tblDeparnment");
+
+//Reference all the CheckBoxes in Table.
+var chks = tblDeparnment.getElementsByTagName("INPUT");
+
+// Loop and push the checked CheckBox value in Array.
+var departvales='';
+for (var i = 0; i < chks.length; i++) {
+	if (chks[i].checked) {
+	    departvales+="'"+chks[i].value+"',";
+		//selected.push(chks[i].value);
+		
+	}
+}
+
+
+
+var departnment = '';  
+if(departvales==''){
+   departnment='All';
+} else{
+	departnment=departvales.replace(/(^,)|(,$)/g, "");
+}
   
 
-  console.log(fromdate+SetEntity+SetBranch+type);
-  this.isLoading = true;
-  this.axios
-  .get(`https://mis.dragarwal.com/api-stockledger/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
-  //.get(`http://localhost:8888/api-stockledger/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
-    .then(response =>{
+
+        var formData = new FormData()
+        formData.append("date", this.fromdate);
+		formData.append("entity", this.SetEntity);
+		formData.append("region", regionvalue);
+		formData.append("branch", this.SetBranch);
+		formData.append("departnment", departnment);
+
+	this.isLoading = true;
+  
+	
+	this.$http.post('https://mis.dragarwal.com/api-stockledger', formData, {}).then(response => {
 
       console.log(response.data);
       this.processDatacogs(response.data);

@@ -104,6 +104,24 @@ export default {
 	  }else if(sessionStorage.getItem('group_user')){
 		 let superSess = JSON.parse(sessionStorage.getItem('group_user'))        
 		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('overseas_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem('overseas_user'))        
+		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('indian_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem('indian_user'))        
+		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('optical_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem('optical_user'))        
+		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('tpa_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem(tpa_user))        
+		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('coll_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem(coll_user))        
+		this.userId = superSess.name		
+	  }else if(sessionStorage.getItem('fin_user')){
+		 let superSess = JSON.parse(sessionStorage.getItem(fin_user))        
+		this.userId = superSess.name		
 	  }else {
         let superSess = JSON.parse(sessionStorage.getItem('admin_user'))        
 		this.userId = superSess.name		

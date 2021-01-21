@@ -5,7 +5,7 @@
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
         <v-toolbar flat color="grey lighten-2">
           <v-spacer></v-spacer>
-          <v-autocomplete :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-autocomplete>
+          <v-select :items="branch" v-model="SetBranch" label="Branch:" item-text="shortCode" item-value="text" id="SelBranch"></v-select>
 
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
@@ -55,25 +55,17 @@
               <td class="text-xs-left">{{ props.item.netamount}}</td>
               <td class="text-xs-left">{{ props.item.patamount}}</td>
               <td class="text-xs-left">{{ props.item.tpaamount}}</td>
-              <td class="text-xs-right" v-if="(props.item.SEND_DATE===null)">
+              <td class="text-xs-right" v-if="props.item.send_date===null">
                 <v-btn slot="activator" small fab color="success" @click="rowApprove(props.item)">
                   <v-icon>check</v-icon>
                 </v-btn>
 
               </td>
 
-              <td class="text-xs-right" v-else="props.item.SEND_DATE !=null">
+              <td class="text-xs-right" v-else="props.item.send_date !=null">
                 {{props.item.senddate}}
 
               </td>
-              <td class="text-xs-right">
-                <v-btn slot="activator" small fab color="primary" @click="rowPrint(props.item)">
-                  <v-icon>fa fa-print</v-icon>
-                </v-btn>
-
-              </td>
-
-
 
             </template>
           </v-data-table>
@@ -169,10 +161,7 @@ export default {
         text: 'Submit',
         value: 'Submit'
       },
-      {
-        text:'Print',
-        value:'Print'
-      }
+
     ],
     selected: [],
     BILLED: '',
@@ -198,7 +187,7 @@ export default {
       "Date": "BILLEDDATE",
       "MRN": "MRN",
       "Name": "PATIENT_NAME",
-      "Bill no": "BILLNO",
+      "Bill no": "bill_no",
       "Payor name": "AGENCY_NAME",
       "Claim id": "tpa_claim",
       "Total amount":"totalamount",
@@ -206,12 +195,12 @@ export default {
       "Net amount": "netamount",
       "Patient amount": "patamount",
       "Payor amount": "tpaamount",
-      "CH submitted": "SEND_DATE",
-      "Ch Name":"SENT_ID",
-      "Acknowledged date": "ACKNOWLEDGE_DATE",
-      "Acknowledged Name":"ACKNOWLEDGE_ID",
-      "Submitted date": "SUBMITTED_DATE",
-      "Submitted Name":"SUBMITTED_ID",
+      "CH submitted": "send_date",
+      "Ch Name":"sent_id",
+      "Acknowledged date": "acknowledge_date",
+      "Acknowledged Name":"acknowledge_id",
+      "Submitted date": "submitted_date",
+      "Submitted Name":"submitted_id",
     },
     fileName: null,
   }),
@@ -262,9 +251,10 @@ export default {
 
     rowApprove(data){
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
+
       this.isLoading=true;
       this.axios.post(`https://mis.dragarwal.com/api-tpabillsubmit`,{
-        tpabillid:data.BILL_ID,
+        tpabillid:data.bill_id,
         tpaid:data.id,
         submitted_id:userid.name
       }).then(response =>{
@@ -307,14 +297,6 @@ export default {
       return null;
       }
     },
-    rowPrint(item){
-
-        this.axios.get(`https://mis.dragarwal.com/api-tpaprintch/${item.AGENCY_NAME}/${item.BILLED}/${item.BILLNO}/${ittem.BILL_ID}`).then(
-          response =>{
-
-          }
-        )
-    }
   }
 }
 </script>

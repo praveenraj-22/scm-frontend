@@ -175,7 +175,8 @@ export default {
         { shortCode: 'Select', text: ''},
 		{ shortCode: '2018', text: '2018'},
 		{ shortCode: '2019', text: '2019'},
-		{ shortCode: '2020', text: '2020'}
+		{ shortCode: '2020', text: '2020'},
+		{ shortCode: '2021', text: '2021'}
       ],
       month : [
         { shortCode: 'Select', text: ''},

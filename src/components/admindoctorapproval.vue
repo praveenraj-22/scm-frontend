@@ -259,9 +259,9 @@ export default {
         text: 'All'
       }];
       this.axios
-
+       
         //.get(`http://localhost:8888/api-finbranch`).then(response => {
-		.get(`http://localhost:8888/api-finbranch`).then(response => {
+		.get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -270,7 +270,7 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Agreement_d}`,
-		url: `http://localhost:8888/api-download/${Agreement_d}`,
+		url: `https://mis.dragarwal.com/api-download/${Agreement_d}`,		
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -289,7 +289,7 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Pan_d}`,
-		url: `http://localhost:8888/api-download/${Pan_d}`,
+		url: `https://mis.dragarwal.com/api-download/${Pan_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -308,8 +308,8 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Passbook_d}`,
-		url: `http://localhost:8888/api-download/${Passbook_d}`,
-
+		url: `https://mis.dragarwal.com/api-download/${Passbook_d}`,
+		
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -336,7 +336,7 @@ export default {
       }
       this.isLoading = true;
       //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-	  this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
+	  this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)	 
         .then(response => {
           console.log(response.data);
           this.processdatalist(response.data)
@@ -354,7 +354,7 @@ export default {
 
       this.isLoading = true;
       //this.$http.post(`http://localhost:8888/api-doctorapprove/`, {
-	  this.$http.post(`http://localhost:8888/api-doctorapprove/`, {
+	  this.$http.post(`https://mis.dragarwal.com/api-doctorapprove/`, {	  
         fin_id: row.ID,
       }).then(response => {
         this.isLoading = false;
@@ -362,7 +362,7 @@ export default {
         console.log("this.Setstatus : " + this.Setstatus);
         console.log("this.SetBranch :" + this.SetBranch);
         //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-		this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
+		this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)		
           .then(response => {
             console.log(response.data);
             this.processdatalist(response.data)
@@ -377,7 +377,7 @@ export default {
       let fin_id = '';
       this.isLoading = true;
       //this.$http.post(`http://localhost:8888/api-doctorreject/`, {
-	  this.$http.post(` http://localhost:8888/api-doctorreject/`, {
+	  this.$http.post(` https://mis.dragarwal.com/api-doctorreject/`, {	 
         fin_id: row.ID,
 
       }).then(response => {
@@ -386,7 +386,7 @@ export default {
         console.log("this.Setstatus : " + this.Setstatus);
         console.log("this.SetBranch :" + this.SetBranch);
         //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-		this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
+		this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
           .then(response => {
             console.log(response.data);
             this.processdatalist(response.data)

@@ -285,8 +285,8 @@ export default {
         shortCode: 'Select All',
       }];
       this.axios
-        //.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
-        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
+        //.get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
           console.log(response.data);
           this.branch = arr1.concat(response.data);
           //alert(JSON.stringify(this.branch));
@@ -316,7 +316,7 @@ export default {
 
 
       this.$http
-        .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`)
+        .get(`https://mis.dragarwal.com/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${date}`)
         .then(response => {
           console.log(response)
           this.isLoading = false;
@@ -325,8 +325,8 @@ export default {
     },
     downloadvouchher(filename) {
       this.axios({
-        //url: `http://localhost:8888/api-voucher-download/${filename}`,
-        url: `http://localhost:8888/api-voucher-download/${filename}`,
+        //url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
+        url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -345,8 +345,8 @@ export default {
     },
     downloadbill(filename) {
       this.axios({
-        //url: `http://localhost:8888/api-bill-download/${filename}`,
-        url: `http://localhost:8888/api-bill-download/${filename}`,
+        //url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -376,7 +376,7 @@ export default {
       let bill_attach = item.bill_attch;
 
       this.isLoading = true;
-      this.$http.post(`http://localhost:8888/api-chpettycashcancel`, {
+      this.$http.post(`https://mis.dragarwal.com/api-chpettycashcancel`, {
         ch_id: userid.name,
         billno: id,
         comment: comments,
@@ -411,7 +411,7 @@ export default {
 
 
           this.$http
-          .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
+          .get(`https://mis.dragarwal.com/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
             .then(response => {
               console.log(response)
               this.isLoading = false;
@@ -441,7 +441,7 @@ export default {
 
 
           this.$http
-            .get(`http://localhost:8888/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
+            .get(`https://mis.dragarwal.com/api-petty-cash-details/${userid.name}/${branchvalue}/${statusvalue}/${this.date}`)
             .then(response => {
               console.log(response)
               this.isLoading = false;
