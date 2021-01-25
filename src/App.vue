@@ -126,6 +126,7 @@ import stock_ledger from "./components/stock-ledger.vue"
 import changecategory from "./components/changecategory.vue"
 
 import iwsr from "./components/iwsr.vue"
+import dob from './components/dob.vue'
 
 import { serverBus } from "./main";
 
@@ -192,8 +193,8 @@ export default {
 	Tpa_Approve,
 	stock_ledger,
 	changecategory,
-  iwsr
-
+  iwsr,
+dob
   },
   created () {
     serverBus.$on("changeComponent", component => {
@@ -308,11 +309,11 @@ export default {
 		 this.tabItems = ['TPAApproval']
 	}else if (this.userType == 'centerhead') {
 	    if(this.userId=='itteamch' || this.userId=='104608' || this.userId=='101248' || this.userId=='106000' || this.userId=='104786' || this.userId=='100952' || this.userId=='104790'  ){
-			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA"]
+			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA",'dob']
 		}else if(this.userId=='103741'){
 			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA","FTD List"]
 		}else{
-		   this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA"]
+		   this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA","dob"]
 		}
 
 
@@ -492,6 +493,9 @@ export default {
       }
       if (item === 'iwsr') {
         serverBus.$emit('changeComponent', 'iwsr')
+      }
+      if (item === 'dob') {
+        serverBus.$emit('changeComponent', 'dob')
       }
 
     }

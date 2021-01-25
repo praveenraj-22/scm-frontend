@@ -43,22 +43,7 @@
           </download-excel>
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
-        <v-dialog
-             v-model="dialog"
-             persistent
-             max-width="290"
-           >
-           <v-card>
-        <v-card-title class="headline">
-          Use Google's location service?
-        </v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
 
-        </v-card-actions>
-      </v-card>
-         </v-dialog>
         <back-to-top bottom="90px" right="90px">
           <v-btn class="red darken-4" dark absolute fab small>
             <v-icon>expand_less</v-icon>
@@ -91,7 +76,7 @@ var curday = function(sp) {
 };
 var start = function() {
 
-  alert("Download Started... Please wait Untill Download complete....");
+  alert("Download Started... Please wait");
 };
 var stop = function() {
   alert("Download Completed");
