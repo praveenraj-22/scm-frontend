@@ -103,7 +103,7 @@ export default {
         return false;
       }
       this.isLoading = true;
-      this.$http.get(`http://localhost:8888/api-getdob/${date}`).then(response => {
+      this.$http.get(`https://mis.dragarwal.com/api-getdob/${date}`).then(response => {
         this.dobdetail = response.data;
         console.log(this.dobdetail);
         this.show = true;

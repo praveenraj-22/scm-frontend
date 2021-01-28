@@ -21,15 +21,23 @@
           <v-spacer></v-spacer>
           <v-menu absolute ref="menu1" :close-on-content-click="false" v-model="menu1" :nudge-right="40" :return-value.sync="fromdate" lazy transition="scale-transition" offset-y full-width min-width="150px">
             <v-text-field slot="activator" v-model="fromdate" placeholder="Select From Date" prepend-inner-icon="event" readonly></v-text-field>
-            <v-date-picker color="primary" v-model="fromdate" type="month" no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+            <v-date-picker color="primary" v-model="fromdate"  no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="menu1 = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu1.save(fromdate)" style="outline:none">Ok</v-btn>
             </v-date-picker>
           </v-menu>
+          <v-spacer></v-spacer>
+          <v-menu absolute ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="todate" lazy transition="scale-transition" offset-y full-width min-width="150px">
+            <v-text-field slot="activator" v-model="todate" placeholder="Select To Date" prepend-inner-icon="event" readonly></v-text-field>
+            <v-date-picker color="primary" v-model="todate"  no-title scrollable :min="minDate" :max="maxDate" backgroundRevenue-color="red" style="box-shadow:none">
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu2 = false" style="outline:none">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu2.save(todate)" style="outline:none">Ok</v-btn>
+            </v-date-picker>
+          </v-menu>
 
-
-          <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment)">Generate</v-btn>
+          <v-btn rounded color="primary" dark @click="apiRequestCogsdata(fromdate,todate,SetEntity,SetBranch,Setdepartment)">Generate</v-btn>
 
 
 
@@ -221,7 +229,7 @@ export default{
       todate: null,
       menu: false,
       menu1: false,
-
+  menu2: false,
       Cogs: null,
       Cogslist: null,
 
@@ -277,7 +285,7 @@ export default{
       }];
       //if(this.SetEntity!='' && selectObj!='')
       this.axios
-        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
+        .get(`http://localhost:8888/api-branch/${selectObj}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(arr1);
 
@@ -292,12 +300,36 @@ export default{
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-apiRequestCogsdata(fromdate,SetEntity,SetBranch,Setdepartment){
+apiRequestCogsdata(fromdate,todate,SetEntity,SetBranch,Setdepartment){
   let entity = '';
   let branch = '';
     let type = '';
 
+    var date3 = new Date();
+    console.log(date3);
+    var date4 = date3.getFullYear()+'-'+date3.getMonth()+'-'+date3.getDate();
+
+    var currentDate = new Date(date4);
+    console.log(currentDate);
+
+
+
+    if (fromdate > todate) {
+      alert("From date should be less than todate");
+      return false;
+    } else if (fromdate > currentDate) {
+      alert("From Date should be less than current date");
+      return false;
+    } else if (todate > currentDate) {
+      alert("To Date should be less than current date");
+      return false;
+    }
+
 if((fromdate==null)||fromdate==''){
+  alert("please select date")
+  return false;
+}
+if((todate==null)||todate==''){
   alert("please select date")
   return false;
 }
@@ -310,6 +342,8 @@ else if((SetBranch==null)||(SetBranch=='')){
   return false;
 }
 
+
+
 else {
 
   if (!this.Setdepartment.text == '') {
@@ -318,10 +352,10 @@ else {
     type = this.Setdepartment
   }
 
-  console.log(fromdate+SetEntity+SetBranch+type);
+  console.log(fromdate+SetEntity+SetBranch+type+todate);
   this.isLoading = true;
   this.axios
-  .get(`https://mis.dragarwal.com/api-cogsdetail/${this.fromdate}/${this.SetEntity}/${this.SetBranch}/${type}`)
+  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.todate}/${this.SetEntity}/${this.SetBranch}/${type}`)
     .then(response =>{
 
       console.log(response.data);

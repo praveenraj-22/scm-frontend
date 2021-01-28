@@ -32,15 +32,52 @@
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
 
-
+         
 
         <template>
+		
           <v-card-title>
             <v-toolbar-title>TPA Bill Submission</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="tpabilldata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
+		  
+		  
+		   <!--<v-dialog v-model="dialog" width="900">
+		   <span id="tpaBillPrevTemp" ref="tpaBillPrevTemp" style="width:800px"></span>
+		    </v-dialog>-->
+		  
+	
+              <v-dialog v-model="dialog" width="900">
+                <v-card>
+                  <v-card-title>
+                   
 
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container grid-list-md>
+                      <v-layout wrap>
+
+                      <span id="tpaBillPrevTemp" ref="tpaBillPrevTemp" style="width:800px"></span>
+
+
+                      </v-layout>
+                    </v-container>
+                   
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+                    <v-btn color="blue darken-1" flat @click="tpaBillPrintScreen();">Print</v-btn>
+
+                  </v-card-actions>
+                </v-card>
+
+
+
+              </v-dialog>
+        
+		
           <v-data-table :headers="headers" :items="tpabilldata" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <td class="text-xs-left">{{ props.item.BILLED }}</td>
@@ -67,17 +104,17 @@
 
               </td>
               <td class="text-xs-right">
-                <v-btn slot="activator" small fab color="primary" @click="rowPrint(props.item)">
+                <v-btn slot="activator" small fab color="primary" @click="tpaBillPrinPreview(props.item);">
                   <v-icon>fa fa-print</v-icon>
                 </v-btn>
 
               </td>
-
-
-
             </template>
           </v-data-table>
+		  
         </template>
+		
+		
 
 
 
@@ -117,6 +154,8 @@ export default {
     fullPage: true,
     tpabilldata: null,
     search: '',
+	tpaBillHtml:null,
+	 dialog: false,
     headers: [{
         text: 'Branch',
         value: 'BILLED'
@@ -307,14 +346,47 @@ export default {
       return null;
       }
     },
-    rowPrint(item){
+   
+	tpaBillPrinPreview(item){       
+						
+			this.axios.get(`https://mis.dragarwal.com/api-tpabillprint/${item.BILL_ID}/${item.BILLED}/Reliance General Insurance Co.`).then(
+			//this.axios.get(`http://localhost:8888/api-tpabillprint/${item.BILL_ID}/${item.BILLED}/Reliance General Insurance Co.`).then(
+			  response =>{			       
+                   this.isLoading=true;
+				   if(response.data.ResponseCode==200){
+				    //alert(response.data.ResponseMsg);
+				    this.isLoading=false;
+					 this.dialog = true;
+                    this.$refs.tpaBillPrevTemp.innerHTML='';
+					this.tpaBillHtml = '';					
+				    this.$refs.tpaBillPrevTemp.innerHTML = response.data.ResponseMsg;
+					
+					//document.getElementById("tpaBillPrevTemp").innerHTML = response.data.ResponseMsg;
+					console.log("ddd");
+					//this.$refs.tpaBillPrevTemp.innerHTML = "ddddd";
+					this.tpaBillHtml  = response.data.ResponseMsg;
+					
+				   
+				   }else{
+				        this.dialog = false;
+				        this.isLoading=false;
+						this.$refs.tpaBillPrevTemp.innerHTML='';
+					    this.tpaBillHtml = '';
+						alert(response.data.ResponseMsg);
+				   }
+             
 
-        this.axios.get(`https://mis.dragarwal.com/api-tpaprintch/${item.AGENCY_NAME}/${item.BILLED}/${item.BILLNO}/${ittem.BILL_ID}`).then(
-          response =>{
-
-          }
-        )
-    }
+			  }
+			)
+	},
+	tpaBillPrintScreen(){
+	    
+		var myWindow=window.open('','','width=600,height=300');
+		myWindow.document.write(this.tpaBillHtml);
+		myWindow.document.close(); //missing code
+		myWindow.focus();
+		myWindow.print(); 
+	}
   }
 }
 </script>

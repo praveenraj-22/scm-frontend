@@ -57,7 +57,7 @@
           <span class="white--text body-2 mr-2">{{userName }}</span>
           <v-icon dark>fa fa-user-circle</v-icon>
         </template>
-        <v-list>
+        <v-list >
           <v-list-tile
             v-for="(item,index) in items"
             :key="index"
@@ -124,13 +124,10 @@ import Tpa from "./components/tpabillch.vue"
 import Tpa_Approve from "./components/tpabillapprove.vue"
 import stock_ledger from "./components/stock-ledger.vue"
 import changecategory from "./components/changecategory.vue"
-
 import iwsr from "./components/iwsr.vue"
 import dob from './components/dob.vue'
 
 import { serverBus } from "./main";
-
-
 import away from "away";
 const timer = away(1.8e6);
 
@@ -150,8 +147,8 @@ export default {
     };
   },
   name: "App",
-  components: {
-    login,
+  components: {  
+    login,    
 	group,
 	normalrevenue,
 	domesticrevenue,
@@ -160,7 +157,7 @@ export default {
 	datafetch,
 	emailrecipi,
 	revenuelist,
-	exchangerates,
+	exchangerates,	
 	chart,
     cogs,
     cogsSuper,
@@ -270,14 +267,14 @@ dob
 			this.userName = superSess.userName
 			this.userId = superSess.name
 			this.userType = 'normal'
-	 }
+	 }	  
 	if(this.userType=='group'){
 		if(this.userId==103390){
 			this.tabItems = ['NewOPD']
 		}else if(this.userId==100019){
 			this.tabItems = ['Domestic','Group','Cogs Vs Revn','NewOPD']
 		}else if(this.userId=='scmteam'){
-			this.tabItems = ['Cogsdata','StockLedger','iwsr']
+			this.tabItems = ['Cogsdata','StockLedger','IWSR']
 		}else if(this.userId==102055){
 			this.tabItems = ['AVA-Magic50','NewOPD']
 		}else if(this.userId==104860){
@@ -290,13 +287,15 @@ dob
  		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','CogsVariance','Cogsdata']
 		}else if(this.userId=='anosh') {
  		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo']
+		}else if(this.userId=='Csight'){
+			this.tabItems = ['Cogsdata','StockLedger','IWSR']
 		}
 		else{
 			this.tabItems = ['Domestic','Group', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Collection','Newconsultation']
 		}
 	}else if(this.userType=='admin'){
 		//this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','Surgery','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata'];
-		this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata','StockLedger'];
+		this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata','StockLedger','IWSR','DOB'];
 	}else if(this.userType=='domestic'){
 		this.tabItems = ['Domestic', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Collection','Newconsultation'];
 	}else if(this.userType=='overcease'){
@@ -309,14 +308,14 @@ dob
 		 this.tabItems = ['TPAApproval']
 	}else if (this.userType == 'centerhead') {
 	    if(this.userId=='itteamch' || this.userId=='104608' || this.userId=='101248' || this.userId=='106000' || this.userId=='104786' || this.userId=='100952' || this.userId=='104790'  ){
-			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA",'dob']
+			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA"]
 		}else if(this.userId=='103741'){
 			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA","FTD List"]
 		}else{
-		   this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA","dob"]
+		   this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT','Petty Cash',"TPA"]
 		}
-
-
+	
+        
     }else if (this.userType == 'strcenterhead') {
 	    if(this.userId=='itteamsch' || this.userId=='101506' || this.userId=='100552' || this.userId=='100078' || this.userId=='100405'){
 			this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRTApproval','pettycashApproval']
@@ -329,18 +328,20 @@ dob
 		}else{
 			this.tabItems = ['AdminApproval']
 		}
-
+        
     }else{
 		if(this.userId==103390){
 			this.tabItems = ['Domestic', 'Cogs Vs Revn','NewOPD'];
+		}else if(this.userId=='300025'){
+			this.tabItems = ['Domestic', 'Cogs Vs Revn','NewOPD','DOB']
 		}else{
 			this.tabItems = ['Domestic', 'Cogs Vs Revn','NewOPD','AVA-Demo'];
 		}
-
+		
 	}
-
-
-
+	  
+	
+	  
     });
     timer.on("idle", () => {
       this.logout();
@@ -356,7 +357,7 @@ dob
         sessionStorage.clear();
       });
     },
-    changeCategory (item) {
+    changeCategory (item) {    
 	  if(item==='Domestic'){
 	    if((this.userType=='domestic') || (this.userType=='group') || (this.userType=='overcease') || (this.userType=='admin')){
 			serverBus.$emit('changeComponent', 'domesticrevenue')
@@ -384,21 +385,21 @@ dob
 			serverBus.$emit('changeComponent', 'exchangerates')
 	  }
 	  if((this.userType=='domestic') || (this.userType=='group') || (this.userType=='overcease') || (this.userType=='admin')){
-
+	  
 	    if (item === 'Revenue') serverBus.$emit('changeComponent', 'revenueSuper')
         if (item === 'Cogs Vs Revn') serverBus.$emit('changeComponent', 'cogsSuper')
-
+        
       }else {
         if (item === 'Revenue') serverBus.$emit('changeComponent', 'revenue')
         if (item === 'Cogs Vs Revn') serverBus.$emit('changeComponent', 'cogs')
       }
 	  if((this.userType=='domestic') || (this.userType=='group') || (this.userType=='overcease') || (this.userType=='admin')){
        if (item === 'NewOPD') serverBus.$emit('changeComponent', 'newpod')
-
+        
       }
       else {
-	   if (item === 'NewOPD') serverBus.$emit('changeComponent', 'newopdnormal')
-
+	   if (item === 'NewOPD') serverBus.$emit('changeComponent', 'newopdnormal')   
+       
       }
 	  if(item==='Dashboard'){
 			serverBus.$emit('changeComponent', 'chart')
@@ -425,19 +426,19 @@ dob
 	 if(item==='CogsVariance'){
 		serverBus.$emit('changeComponent', 'revenuevscogs')
 	  }
-
-
-
+	  
+	  
+	 
 	 if(item==='Petty Cash'){
 		serverBus.$emit('changeComponent', 'pettycash_ch_list')
 	 }
-
-
+	 
+	 
 	 if(item==='AVA-Demo'){
 	  serverBus.$emit('changeComponent', 'avamagicdemo')
 	  }
-
-
+	  
+	  
 	  if (item === 'DRT') {
         serverBus.$emit('changeComponent', 'DRT')
       }
@@ -468,7 +469,7 @@ dob
       if(item==='Cashapproval'){
         serverBus.$emit('changeComponent','Cashapproval')
       }
-
+	  
 	  if(item==='TPA'){
 		serverBus.$emit('changeComponent', 'Tpa')
 	 }
@@ -478,23 +479,23 @@ dob
 	 if(item==='StockLedger'){
 		serverBus.$emit('changeComponent', 'stock_ledger')
 	 }
-
-
-
+	 
+	 
+	  
 	  if(item==='Logout'){
 		this.logout();
 	  }
 	  if(item==='Change Password'){
 		serverBus.$emit('changeComponent', 'changepassword')
 	  }
-
+	  
       if (item === 'Cogsdata') {
         serverBus.$emit('changeComponent', 'Cogsdata')
       }
-      if (item === 'iwsr') {
+      if (item === 'IWSR') {
         serverBus.$emit('changeComponent', 'iwsr')
       }
-      if (item === 'dob') {
+	  if (item === 'DOB') {
         serverBus.$emit('changeComponent', 'dob')
       }
 

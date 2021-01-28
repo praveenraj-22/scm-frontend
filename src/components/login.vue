@@ -115,7 +115,7 @@ export default {
 			  
 			  if(this.name=="103390" || this.name=="100019"){
 				serverBus.$emit("changeComponent", "newpod");
-			  }else if(this.name=="scmteam"){
+			  }else if(this.name=="scmteam" || this.name=="Csight"){
 				serverBus.$emit("changeComponent", "Cogsdata");
 			  }else if(this.name=="102055"){
 				serverBus.$emit("changeComponent", "avamagic");
