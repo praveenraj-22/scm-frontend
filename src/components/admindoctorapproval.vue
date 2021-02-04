@@ -84,9 +84,38 @@
 
                 </td>
                 <td class="text-xs-left" v-if="props.item.Active_status==='Pending for approval'">
-                  <v-btn slot="activator" small fab color="red" @click="rowDecline(props.item)">
+                  <v-btn slot="activator" small fab color="red" @click.stop="$set(dialogcancel, props.item.ID, true)">
                     <v-icon>fas fa-times</v-icon>
                   </v-btn>
+
+                  <v-dialog v-model="dialogcancel[props.item.ID]" persistent max-width="800px" lazy absolute :key="props.item.ID">
+                    <v-card>
+                      <v-card-title>
+                        <span>{{ props.item.Name }}{{ " -- "}}{{ props.item.Account_no  }} Cance Note</span>
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container grid-list-md>
+                          <v-layout wrap>
+
+                            <v-flex xs12 sm6>
+                              <v-textarea clearable clear-icon="cancel" label="Comments" v-model='fincomments'></v-textarea>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-text>
+
+
+                      <v-card-actions>
+
+
+                        <v-btn color="primary" flat @click.stop="$set(dialogcancel, props.item.ID, false)">Close</v-btn>
+                        <v-btn color="blue darken-1" flat @click="rowDecline(props.item,fincomments)">Decline</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+
 
                 </td>
 
@@ -244,6 +273,8 @@ export default {
 
         },
     fileName: null,
+        dialogcancel: {},
+        fincomments:'',
   }),
   mounted() {
     this.loadbranch();
@@ -259,9 +290,9 @@ export default {
         text: 'All'
       }];
       this.axios
-       
+
         //.get(`http://localhost:8888/api-finbranch`).then(response => {
-		.get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+		.get(`http://localhost:8888/api-finbranch`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -270,7 +301,7 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Agreement_d}`,
-		url: `https://mis.dragarwal.com/api-download/${Agreement_d}`,		
+		url: `http://localhost:8888/api-download/${Agreement_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -289,7 +320,7 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Pan_d}`,
-		url: `https://mis.dragarwal.com/api-download/${Pan_d}`,
+		url: `http://localhost:8888/api-download/${Pan_d}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -308,8 +339,8 @@ export default {
 
       this.axios({
         //url: `http://localhost:8888/api-download/${Passbook_d}`,
-		url: `https://mis.dragarwal.com/api-download/${Passbook_d}`,
-		
+		url: `http://localhost:8888/api-download/${Passbook_d}`,
+
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -336,7 +367,7 @@ export default {
       }
       this.isLoading = true;
       //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-	  this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)	 
+	  this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
         .then(response => {
           console.log(response.data);
           this.processdatalist(response.data)
@@ -354,7 +385,7 @@ export default {
 
       this.isLoading = true;
       //this.$http.post(`http://localhost:8888/api-doctorapprove/`, {
-	  this.$http.post(`https://mis.dragarwal.com/api-doctorapprove/`, {	  
+	  this.$http.post(`http://localhost:8888/api-doctorapprove/`, {
         fin_id: row.ID,
       }).then(response => {
         this.isLoading = false;
@@ -362,7 +393,7 @@ export default {
         console.log("this.Setstatus : " + this.Setstatus);
         console.log("this.SetBranch :" + this.SetBranch);
         //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-		this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)		
+		this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
           .then(response => {
             console.log(response.data);
             this.processdatalist(response.data)
@@ -373,20 +404,22 @@ export default {
       })
 
     },
-    rowDecline(row) {
+    rowDecline(row,fincomments) {
       let fin_id = '';
       this.isLoading = true;
       //this.$http.post(`http://localhost:8888/api-doctorreject/`, {
-	  this.$http.post(` https://mis.dragarwal.com/api-doctorreject/`, {	 
+	  this.$http.post(` http://localhost:8888/api-doctorreject/`, {
         fin_id: row.ID,
+        fin_comm:fincomments,
 
       }).then(response => {
-        this.isLoading = false;
+      
         alert("cancelled");
         console.log("this.Setstatus : " + this.Setstatus);
         console.log("this.SetBranch :" + this.SetBranch);
+        this.fincomments='';
         //this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
-		this.$http.get(`https://mis.dragarwal.com/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
+		      this.$http.get(`http://localhost:8888/api-findoctorlist/${this.Setstatus}/${this.SetBranch}`)
           .then(response => {
             console.log(response.data);
             this.processdatalist(response.data)

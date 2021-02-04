@@ -3,7 +3,7 @@
   <v-slide-y-transition mode="out-in">
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
-        <v-toolbar flat color="grey lighten-2">
+        <v-toolbar flat color="grey lighten-2" >
           <v-toolbar-title>Cogs </v-toolbar-title>
           <v-divider class="mx-2 black" inset vertical></v-divider>
           <v-spacer></v-spacer>
@@ -49,7 +49,9 @@
               </v-tooltip>
             </v-btn>
           </download-excel>
+
         </v-toolbar>
+
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->
         <div class="table-responsive">

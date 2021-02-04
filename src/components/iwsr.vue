@@ -114,6 +114,10 @@ export default {
         text: 'AHC'
       },
       {
+        shortCode: 'AHI',
+        text: 'AHI'
+      },
+      {
         shortCode: 'OHC',
         text: 'OHC'
       },
@@ -294,12 +298,7 @@ dialog:false,
   start()
       if (this.fileDate !== null) {
       tempDataArr = this.Iwsrlist
-      for(let i=0;i<=tempDataArr.length;i++){
-        console.log(i);
-        if(i==tempDataArr.length){
-          alert("Download completed...")
-        }
-      }
+         alert("Download completed...")
 
       return tempDataArr
       } else {

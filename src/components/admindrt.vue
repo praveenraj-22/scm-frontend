@@ -712,7 +712,7 @@ export default {
       }
       else {
         month=finexpmonth;
-        
+
       }
       var finexpyear = finemonth.getFullYear();
 
@@ -991,7 +991,7 @@ export default {
 
     },
     rowupdatexpense(row, finexpensedate) {
-	
+
       let sch_expensedate = '';
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       this.isLoading = true;
