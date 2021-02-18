@@ -126,6 +126,7 @@ import stock_ledger from "./components/stock-ledger.vue"
 import changecategory from "./components/changecategory.vue"
 import iwsr from "./components/iwsr.vue"
 import dob from './components/dob.vue'
+import snapshotrevenue from "./components/snapshotrevenue.vue"
 
 import { serverBus } from "./main";
 import away from "away";
@@ -190,8 +191,9 @@ export default {
 	Tpa_Approve,
 	stock_ledger,
 	changecategory,
-  iwsr,
-dob
+	iwsr,
+	dob,
+	snapshotrevenue
   },
   created () {
     serverBus.$on("changeComponent", component => {
@@ -271,6 +273,8 @@ dob
 	if(this.userType=='group'){
 		if(this.userId==103390){
 			this.tabItems = ['NewOPD']
+		}else if(this.userId==106138){
+			this.tabItems = ['Domestic','Group', 'RevenueBudget']
 		}else if(this.userId==100019){
 			this.tabItems = ['Domestic','Group','Cogs Vs Revn','NewOPD']
 		}else if(this.userId=='scmteam'){
@@ -284,7 +288,7 @@ dob
 		}else if(this.userType=='group' && (this.userId==102170 || this.userId==103108)) {
  		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation']
 		}else if(this.userId==104038) {
- 		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','CogsVariance','Cogsdata']
+ 		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','CogsVariance','Cogsdata','IWSR','RevenueBudget']
 		}else if(this.userId=='anosh') {
  		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo']
 		}else if(this.userId=='Csight'){
@@ -295,7 +299,7 @@ dob
 		}
 	}else if(this.userType=='admin'){
 		//this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','Surgery','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata'];
-		this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata','StockLedger','IWSR','DOB'];
+		this.tabItems = ['Domestic','Group','Trigger Email','Fetch Data','E-Recipients','FTD List','Exchange Rates', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo','CogsVariance','Cogsdata','StockLedger','IWSR','DOB','RevenueBudget'];
 	}else if(this.userType=='domestic'){
 		this.tabItems = ['Domestic', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Collection','Newconsultation'];
 	}else if(this.userType=='overcease'){
@@ -497,6 +501,8 @@ dob
       }
 	  if (item === 'DOB') {
         serverBus.$emit('changeComponent', 'dob')
+      }if (item === 'RevenueBudget') {
+        serverBus.$emit('changeComponent', 'snapshotrevenue')
       }
 
     }

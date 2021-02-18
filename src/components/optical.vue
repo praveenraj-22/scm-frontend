@@ -1036,7 +1036,7 @@ ROIbranches:null,
     },
 
     numberformat(number){
-      return Math.round(number)
+      return number.toLocaleString('en');
     },
 
     apiRequestOPDSuper (date) {
@@ -1195,7 +1195,7 @@ return null;
 
 
 
-
+    
     },
 
     changeColorOPDSuper (data) {

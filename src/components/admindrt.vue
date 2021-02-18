@@ -996,7 +996,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       this.isLoading = true;
       this.$http
-		//.post(`http://localhost:8888/api-finbillexpenseupdate`, {
+		//.post(`https://mis.dragarwal.com/api-finbillexpenseupdate`, {
         .post(`https://mis.dragarwal.com/api-finbillexpenseupdate`, {
           sch_bill_id: row.id,
           sch_id: normalusername.name,

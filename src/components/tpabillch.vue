@@ -32,26 +32,26 @@
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
 
-         
+
 
         <template>
-		
+
           <v-card-title>
             <v-toolbar-title>TPA Bill Submission</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field v-model="search" v-if="tpabilldata" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
           </v-card-title>
-		  
-		  
+
+
 		   <!--<v-dialog v-model="dialog" width="900">
 		   <span id="tpaBillPrevTemp" ref="tpaBillPrevTemp" style="width:800px"></span>
 		    </v-dialog>-->
-		  
-	
+
+
               <v-dialog v-model="dialog" width="900">
                 <v-card>
                   <v-card-title>
-                   
+
 
                   </v-card-title>
                   <v-card-text>
@@ -63,7 +63,7 @@
 
                       </v-layout>
                     </v-container>
-                   
+
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -76,8 +76,8 @@
 
 
               </v-dialog>
-        
-		
+
+
           <v-data-table :headers="headers" :items="tpabilldata" :search="search" class="elevation-4">
             <template slot="items" slot-scope="props">
               <td class="text-xs-left">{{ props.item.BILLED }}</td>
@@ -111,10 +111,10 @@
               </td>
             </template>
           </v-data-table>
-		  
+
         </template>
-		
-		
+
+
 
 
 
@@ -267,7 +267,7 @@ export default {
       this.branch = [];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {
+        .get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
           this.branch = (response.data);
           console.log(this.branch);
         })
@@ -283,7 +283,7 @@ export default {
 
 
       this.isLoading = true;
-      this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+      this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
         .then(response => {
           this.processDatatpabill(response.data)
           this.isLoading = false;
@@ -302,7 +302,7 @@ export default {
     rowApprove(data){
       let userid = JSON.parse(sessionStorage.getItem("normal_user"));
       this.isLoading=true;
-      this.axios.post(`https://mis.dragarwal.com/api-tpabillsubmit`,{
+      this.axios.post(`http://localhost:8888/api-tpabillsubmit`,{
         tpabillid:data.BILL_ID,
         tpaid:data.id,
         submitted_id:userid.name
@@ -310,7 +310,7 @@ export default {
         if(response.data.dataupdated==true){
           alert("TPA bill sumbitted")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -321,7 +321,7 @@ export default {
         else{
           alert("error in updating record")
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-tpabill/${this.SetBranch}/${this.fromdate}`)
+          this.axios.get(`http://localhost:8888/api-tpabill/${this.SetBranch}/${this.fromdate}`)
             .then(response => {
               this.processDatatpabill(response.data)
               this.isLoading = false;
@@ -346,27 +346,29 @@ export default {
       return null;
       }
     },
-   
-	tpaBillPrinPreview(item){       
-						
-			this.axios.get(`https://mis.dragarwal.com/api-tpabillprint/${item.BILL_ID}/${item.BILLED}/Reliance General Insurance Co.`).then(
+
+	tpaBillPrinPreview(item){
+
+console.log(item);
+
+			this.axios.get(`http://localhost:8888/api-tpabillprint/${item.BILL_ID}/${item.BILLED}/${item.AGENCY_NAME}`).then(
 			//this.axios.get(`http://localhost:8888/api-tpabillprint/${item.BILL_ID}/${item.BILLED}/Reliance General Insurance Co.`).then(
-			  response =>{			       
+			  response =>{
                    this.isLoading=true;
 				   if(response.data.ResponseCode==200){
 				    //alert(response.data.ResponseMsg);
 				    this.isLoading=false;
 					 this.dialog = true;
                     this.$refs.tpaBillPrevTemp.innerHTML='';
-					this.tpaBillHtml = '';					
+					this.tpaBillHtml = '';
 				    this.$refs.tpaBillPrevTemp.innerHTML = response.data.ResponseMsg;
-					
+
 					//document.getElementById("tpaBillPrevTemp").innerHTML = response.data.ResponseMsg;
 					console.log("ddd");
 					//this.$refs.tpaBillPrevTemp.innerHTML = "ddddd";
 					this.tpaBillHtml  = response.data.ResponseMsg;
-					
-				   
+
+
 				   }else{
 				        this.dialog = false;
 				        this.isLoading=false;
@@ -374,18 +376,18 @@ export default {
 					    this.tpaBillHtml = '';
 						alert(response.data.ResponseMsg);
 				   }
-             
+
 
 			  }
 			)
 	},
 	tpaBillPrintScreen(){
-	    
+
 		var myWindow=window.open('','','width=600,height=300');
 		myWindow.document.write(this.tpaBillHtml);
 		myWindow.document.close(); //missing code
 		myWindow.focus();
-		myWindow.print(); 
+		myWindow.print();
 	}
   }
 }

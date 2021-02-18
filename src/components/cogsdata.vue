@@ -3,7 +3,7 @@
   <v-slide-y-transition mode="out-in">
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
-        <v-toolbar flat color="grey lighten-2" >
+        <v-toolbar flat color="grey lighten-2">
           <v-toolbar-title>Cogs </v-toolbar-title>
           <v-divider class="mx-2 black" inset vertical></v-divider>
           <v-spacer></v-spacer>
@@ -49,9 +49,7 @@
               </v-tooltip>
             </v-btn>
           </download-excel>
-
         </v-toolbar>
-
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->
         <div class="table-responsive">
@@ -287,7 +285,7 @@ export default{
       }];
       //if(this.SetEntity!='' && selectObj!='')
       this.axios
-        .get(`http://localhost:8888/api-branch/${selectObj}`).then(response => {
+        .get(`https://mis.dragarwal.com/api-branch/${selectObj}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(arr1);
 
@@ -357,7 +355,7 @@ else {
   console.log(fromdate+SetEntity+SetBranch+type+todate);
   this.isLoading = true;
   this.axios
-  .get(`http://localhost:8888/api-cogsdetail/${this.fromdate}/${this.todate}/${this.SetEntity}/${this.SetBranch}/${type}`)
+  .get(`https://mis.dragarwal.com/api-cogsdetail/${this.fromdate}/${this.todate}/${this.SetEntity}/${this.SetBranch}/${type}`)
     .then(response =>{
 
       console.log(response.data);
