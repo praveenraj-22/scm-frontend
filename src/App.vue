@@ -292,7 +292,7 @@ export default {
 		}else if(this.userId=='anosh') {
  		  this.tabItems = ['Domestic','Group','Cogs Vs Revn','Dashboard','NewOPD','Optical','Discount','Collection','AVA-Magic50','Newconsultation','AVA-Demo']
 		}else if(this.userId=='Csight'){
-			this.tabItems = ['Cogsdata','StockLedger','IWSR']
+			this.tabItems = ['Cogsdata','StockLedger','IWSR','NewOPD']
 		}
 		else{
 			this.tabItems = ['Domestic','Group', 'Cogs Vs Revn','Dashboard','NewOPD','Optical','Collection','Newconsultation']

@@ -460,7 +460,7 @@ export default {
     rowApproveAll(item) {
       console.log("rowapproveall");
       console.log(item);
-      this.approvevalid = true;
+      this.approvevalid = false;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
       this.isLoading = true;
@@ -481,11 +481,11 @@ export default {
               this.isLoading = false;
               console.log(response.data);
               this.processliststrchdata(response.data);
-              this.approvevalid = false;
+              this.approvevalid = true;
             })
         } else {
           alert("Error in approving date")
-          this.approvevalid = false;
+          this.approvevalid = true;
         }
       })
 

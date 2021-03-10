@@ -55,10 +55,10 @@
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
 
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
 
               </tr>
@@ -66,30 +66,30 @@
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
               <tr scope="row" v-for="(item,index) in ROTN" :key="index+item.groupwise">
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
               <tr scope="row" v-for="(item,index) in Karnataka" :key="index+item.groupwise">
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -97,10 +97,10 @@
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -108,40 +108,44 @@
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
               <tr scope="row" v-for="(item,index) in AP" :key="index+item.groupwise">
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
+
+
+              <tr scope="row" v-for="(item,index) in Kerala" :key="index+item.groupwise">
+                <td></td>
+                <td></td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
+              </tr>
+
+
               <tr scope="row" v-for="(item,index) in Kolkata" :key="index+item.groupwise">
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
-              </tr>
-              <tr scope="row" v-for="(item,index) in Odisha" :key="index+item.groupwise">
-                <td></td>
-                <td></td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{numberformat(item.lstoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -149,23 +153,34 @@
                 <td></td>
                 <td></td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
 
-                            <tr scope="row" v-for="(item,index) in MathayaPradesh" :key="index+item.groupwise">
+                            <tr scope="row" v-for="(item,index) in Madhyapradesh" :key="index+item.groupwise">
                               <td></td>
                               <td></td>
                               <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
-                              <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{numberformat(item.mtdoptrev)}}</td>
-                              <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{numberformat(item.lstoptrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{lakhFormat(item.mtdoptrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right font-weight-black ">{{lakhFormat(item.lstoptrev)}}</td>
                               <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right">{{item.mtdoptperc}}%</td>
-                              <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                               <td scope="row" style="cursor:pointer" class="font-weight-black  text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
+                            </tr>
+
+                            <tr scope="row" v-for="(item,index) in Odisha" :key="index+item.groupwise">
+                              <td></td>
+                              <td></td>
+                              <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right">{{item.mtdoptperc}}%</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
+                              <td scope="row" style="cursor:pointer" class="text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
                             </tr>
 
 
@@ -173,10 +188,10 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">Chennai</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -184,10 +199,10 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">ROTN</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -196,10 +211,10 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  "> Karnataka</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -207,10 +222,10 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">Maharashtra</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -218,10 +233,10 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">Hyderabad</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -230,10 +245,22 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">AP</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in Keralabranches" :key="index+item.branch">
+                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Kerala</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -241,44 +268,47 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">Kolkata</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
-              <tr scope="row" v-for="(item,index) in Odishabranches" :key="index+item.branch">
-                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Odisha</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
-              </tr>
+
 
 
               <tr scope="row" v-for="(item,index) in ROIbranches" :key="index+item.branch">
                 <td scope="row" style="cursor:pointer" class="font-weight-black  ">ROI</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
-              <tr scope="row" v-for="(item,index) in MathayaPradeshbranches" :key="index+item.branch">
-                <td scope="row" style="cursor:pointer" class="font-weight-black  ">MathayaPradesh</td>
+              <tr scope="row" v-for="(item,index) in Madhyapradeshbranches" :key="index+item.branch">
+                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Madhya Pradesh</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.mtdoptrev)}}</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{numberformat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
-                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{numberformat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in Odishabranches" :key="index+item.branch">
+                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Odisha</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.lstoptrev)}}</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{item.mtdoptperc}}%</td>
+                <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetcolor">{{lakhFormat(item.targetmtdrev)}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
@@ -332,25 +362,34 @@ export default {
     modal: false,
     menu2: false,
     today: "",
+
     alin: null,
-    Ap: null,
+    AP: null,
     Chennai: null,
     ROTN: null,
     Karnataka: null,
+    kerala:null,
     Hyderabad: null,
     Kolkata: null,
+    Maharashtra:null,
     Odisha: null,
     ROI: null,
-    MathayaPradesh:null,
+    Madhyapradesh:null,
+
+
     Chennaibranches: null,
     ROTNbranches: null,
     Karnatakabranches: null,
     Hyderabadbranches: null,
+    Keralabranches:null,
     APbranches: null,
     Kolkatabranches: null,
+    Maharashtrabranches:null,
     Odishabranches: null,
     ROIbranches: null,
-    MathayaPradeshbranches:null,
+    Madhyapradeshbranches:null,
+
+
     json_data: null,
     json_meta: [{
       key: "charset",
@@ -380,6 +419,9 @@ export default {
 
     numberformat(number) {
       return number.toLocaleString('en');
+    },
+	lakhFormat (num) {
+      return (Number(num) / 100000).toFixed(2);
     },
 
     apiRequestOPDSuper(date) {
@@ -411,27 +453,33 @@ export default {
       } else if (sessionStorage.getItem('optical_user')) {
         this.user_role = 'optical_user';
       }
+      console.log(data);
+
       this.Chennai = [data.group['Chennai']];
       this.AP = [data.group['AP']];
       this.ROTN = [data.group['ROTN']];
       this.Karnataka = [data.group['Karnataka']];
+      this.Kerala = [data.group['Kerala']];
       this.Maharashtra = [data.group['Maharashtra']];
       this.Hyderabad = [data.group['Hyderabad']];
       this.Kolkata = [data.group['Kolkata']];
       this.Odisha = [data.group['Odisha']];
       this.ROI = [data.group['ROI']];
-      this.MathayaPradesh=[data.group['MathayaPradesh']];
+      this.Madhyapradesh=[data.group['Madhyapradesh']];
+
+
       this.alin = [data.alin];
       this.Chennaibranches = data.branch['Chennai'];
       this.ROTNbranches = data.branch['ROTN'];
       this.Karnatakabranches = data.branch['Karnataka'];
+        this.Keralabranches = data.branch['Kerala'];
       this.Maharashtrabranches = data.branch['Maharashtra'];
       this.Hyderabadbranches = data.branch['Hyderabad'];
       this.APbranches = data.branch['AP'];
       this.Kolkatabranches = data.branch['Kolkata'];
       this.Odishabranches = data.branch['Odisha'];
       this.ROIbranches = data.branch['ROI'];
-      this.MathayaPradeshbranches=data.branch['MathayaPradesh'];
+      this.Madhyapradeshbranches=data.branch['Madhyapradesh'];
 
 
       this.show = true;
@@ -446,21 +494,24 @@ export default {
           this.AP,
           this.ROTN,
           this.Karnataka,
+          this.Kerala,
           this.Hyderabad,
           this.Kolkata,
           this.Odisha,
           this.ROI,
-          this.MathayaPradesh,
-          // this.alin ,
+          this.Madhyapradesh,
+           this.Maharashtra ,
           this.Chennaibranches,
           this.ROTNbranches,
           this.Karnatakabranches,
+          this.Keralabranches,
           this.Hyderabadbranches,
           this.APbranches,
           this.Kolkatabranches,
           this.Odishabranches,
           this.ROIbranches,
-          this.MathayaPradeshbranches,
+          this.Madhyapradeshbranches,
+          this.Maharashtrabranches ,
         );
         return tempDataArr;
       } else {
