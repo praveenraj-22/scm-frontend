@@ -161,7 +161,7 @@
               </tr>
 
 
-                            <tr scope="row" v-for="(item,index) in Madhyapradesh" :key="index+item.groupwise">
+                            <tr scope="row" v-for="(item,index) in Madhya_Pradesh" :key="index+item.groupwise">
                               <td></td>
                               <td></td>
                               <td scope="row" style="cursor:pointer" class="font-weight-black allindiagroup">{{item.groupwise}}</td>
@@ -289,8 +289,8 @@
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right targetachicolor">{{item.mtdoptpercachieved}}%</td>
               </tr>
 
-              <tr scope="row" v-for="(item,index) in Madhyapradeshbranches" :key="index+item.branch">
-                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Madhya Pradesh</td>
+              <tr scope="row" v-for="(item,index) in Madhya_Pradeshbranches" :key="index+item.branch">
+                <td scope="row" style="cursor:pointer" class="font-weight-black  ">Madhya_Pradesh</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branchcode}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black ">{{item.branch}}</td>
                 <td scope="row" style="cursor:pointer" class="font-weight-black text-xs-right">{{lakhFormat(item.mtdoptrev)}}</td>
@@ -374,7 +374,7 @@ export default {
     Maharashtra:null,
     Odisha: null,
     ROI: null,
-    Madhyapradesh:null,
+    Madhya_Pradesh:null,
 
 
     Chennaibranches: null,
@@ -387,7 +387,7 @@ export default {
     Maharashtrabranches:null,
     Odishabranches: null,
     ROIbranches: null,
-    Madhyapradeshbranches:null,
+    Madhya_Pradeshbranches:null,
 
 
     json_data: null,
@@ -465,7 +465,7 @@ export default {
       this.Kolkata = [data.group['Kolkata']];
       this.Odisha = [data.group['Odisha']];
       this.ROI = [data.group['ROI']];
-      this.Madhyapradesh=[data.group['Madhyapradesh']];
+      this.Madhya_Pradesh=[data.group['Madhya_Pradesh']];
 
 
       this.alin = [data.alin];
@@ -479,7 +479,7 @@ export default {
       this.Kolkatabranches = data.branch['Kolkata'];
       this.Odishabranches = data.branch['Odisha'];
       this.ROIbranches = data.branch['ROI'];
-      this.Madhyapradeshbranches=data.branch['Madhyapradesh'];
+      this.Madhya_Pradeshbranches=data.branch['Madhya_Pradesh'];
 
 
       this.show = true;
@@ -499,7 +499,7 @@ export default {
           this.Kolkata,
           this.Odisha,
           this.ROI,
-          this.Madhyapradesh,
+          this.Madhya_Pradesh,
            this.Maharashtra ,
           this.Chennaibranches,
           this.ROTNbranches,
@@ -510,7 +510,7 @@ export default {
           this.Kolkatabranches,
           this.Odishabranches,
           this.ROIbranches,
-          this.Madhyapradeshbranches,
+          this.Madhya_Pradeshbranches,
           this.Maharashtrabranches ,
         );
         return tempDataArr;
