@@ -93,7 +93,7 @@
               <td class="text-xs-left">{{ props.item.patamount}}</td>
               <td class="text-xs-left">{{ props.item.tpaamount}}</td>
               <td class="text-xs-right" v-if="(props.item.SEND_DATE===null)">
-                <v-btn slot="activator" small fab color="success" @click="rowApprove(props.item)">
+                <v-btn v-if="user_id!=102301"  slot="activator" small fab color="success" @click="rowApprove(props.item)">
                   <v-icon>check</v-icon>
                 </v-btn>
 
@@ -253,9 +253,12 @@ export default {
       "Submitted Name":"SUBMITTED_ID",
     },
     fileName: null,
+	user_id:null
   }),
   created() {
     this.getToday();
+	let user_see = JSON.parse(sessionStorage.getItem("normal_user"));
+	this.user_id = user_see.name;
   },
   mounted() {
     this.loadbranch();

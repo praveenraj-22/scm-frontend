@@ -1,779 +1,228 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    class="grey lighten-3"
-  >
-    <v-slide-y-transition mode="out-in">
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs12
-          sm10
-          offset-sm1
-          md10
-          offest-md1
-          lg10
-          offset-lg1
-        >
-          <v-toolbar
-            flat
-            color="grey lighten-2"
-          >
-            <v-toolbar-title>NewConsultation </v-toolbar-title>
-            <v-divider
-              class="mx-2 black"
-              inset
-              vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
-            <v-menu
-              absolute
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="date"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="200px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="date"
-                placeholder="Select Date"
-                prepend-inner-icon="event"
-                readonly
-              ></v-text-field>
-              <v-date-picker
-                color="primary"
-                v-model="date"
-                no-title
-                scrollable
-                min="2018-04-01"
-                :max="today"
-                backgroundRevenue-color="grey"
-                style="box-shadow:none"
-              >
-                <v-spacer></v-spacer>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="menu = false"
-                  style="outline:none"
-                >Cancel</v-btn>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="$refs.menu.save(date);apiRequestOPDConsultSuper(date)"
-                  style="outline:none"
-                >Generate</v-btn>
-              </v-date-picker>
+<v-container fluid fill-height class="grey lighten-3">
+  <v-slide-y-transition mode="out-in">
+    <v-layout row wrap>
+      <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
+        <v-toolbar flat color="grey lighten-2">
+          <v-toolbar-title>NewConsultation </v-toolbar-title>
+          <v-divider class="mx-2 black" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-menu absolute ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="date" lazy transition="scale-transition" offset-y full-width min-width="200px">
+            <v-text-field slot="activator" v-model="date" placeholder="Select Date" prepend-inner-icon="event" readonly></v-text-field>
+            <v-date-picker color="primary" v-model="date" no-title scrollable min="2018-04-01" :max="today" backgroundRevenue-color="grey" style="box-shadow:none">
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu = false" style="outline:none">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu.save(date);apiRequestOPDConsultSuper(date)" style="outline:none">Generate</v-btn>
+            </v-date-picker>
 
 
 
 
 
-            </v-menu>
-            <download-excel
-              :data="json_data"
-              :fields="json_fields"
-              type="csv"
-              :name="fileName"
-              :fetch="downloadExcelconsultationSuper"
-            >
-              <v-btn
-                fab
-                flat
-                medium
-                color="black"
-              >
-                <v-tooltip bottom>
-                  <v-icon
-                    slot="activator"
-                    color="green darken-4"
-                  >fas fa-file-excel</v-icon>
-                  <span>Export</span>
-                </v-tooltip>
-              </v-btn>
-            </download-excel>
-          </v-toolbar>
-          <loading
-            :active.sync="isLoading"
-            :is-full-page="fullPage"
-            color="#7f0000"
-            loader="bars"
-          ></loading>
-          <!-- Vuetify Data table -->
-          <div class="table-responsive">
-            <table
-              class="table table-hover table-bordered"
-              v-if="show"
-            >
-              <thead>
+          </v-menu>
+          <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelconsultationSuper">
+            <v-btn fab flat medium color="black">
+              <v-tooltip bottom>
+                <v-icon slot="activator" color="green darken-4">fas fa-file-excel</v-icon>
+                <span>Export</span>
+              </v-tooltip>
+            </v-btn>
+          </download-excel>
+        </v-toolbar>
+        <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
+        <!-- Vuetify Data table -->
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered" v-if="show">
+            <thead>
 
-                <tr class="grey lighten-2">
-                  <th
-                    class="text-xs-left"
-                    width="15%"
-                    scope="col"
-                    rowspan="2"
-                  >Branch</th>
-                  <th
-                    class="text-xs-center"
-                    scope="col"
-                    colspan="2"
-                  >New OPD</th>
-                  <th
-                    class="text-xs-center"
-                    scope="col"
-                    colspan="2"
-                  >Bill Count</th>
-                </tr>
-                <tr class="grey lighten-2">
-                  <th
-                    scope="col"
-                    class="text-xs-center"
-                  >FTD</th>
-                  <th
-                    scope="col"
-                    class="text-xs-center"
-                  >MTD</th>
-                  <th
-                    scope="col"
-                    class="text-xs-center"
-                  >FTD</th>
-                  <th
-                    scope="col"
-                    class="text-xs-center"
-                  >MTD</th>
-                  </tr>
-              </thead>
-              <tbody v-if="user_role=='super_user'">
+              <tr class="grey lighten-2">
+                <th class="text-xs-left" width="15%" scope="col" rowspan="2">Branch</th>
+                <th class="text-xs-center" scope="col" colspan="2">New OPD</th>
+                <th class="text-xs-center" scope="col" colspan="2">Bill Count</th>
+              </tr>
+              <tr class="grey lighten-2">
+                <th scope="col" class="text-xs-center">FTD</th>
+                <th scope="col" class="text-xs-center">MTD</th>
+                <th scope="col" class="text-xs-center">FTD</th>
+                <th scope="col" class="text-xs-center">MTD</th>
+              </tr>
+            </thead>
+            <tbody v-if="user_role=='super_user'">
 
-			  <tr
-                  scope="row"
-                  v-for="(item,index) in group"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
+              <tr scope="row" v-for="(item,index) in group" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
 
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in alin"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in alin" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
 
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ahc"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
+              </tr>
 
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ohc"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              <tr scope="row" v-for="(item,index) in ohc" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="text-xs-left" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
+              </tr>
 
-				<tr
-                  scope="row"
-                 class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
+              <tr scope="row" class="font-weight-black branchesgrp">
+                <td scope="row" :class="text-xs-left">AEH</td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
 
-                  >AEH</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in cmh" :key="index+item.branch" class="font-weight-black">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in cmh"
-                  :key="index+item.branch"
-                  class="font-weight-black"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh_chennai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh_chennai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh_chennai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in kanchi_vel" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh_chennai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
+              <tr scope="row" v-for="(item,index) in kanchi_vel_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in kum_ney_vil" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kanchi_vel"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in kum_ney_vil_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kanchi_vel_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
+              <tr scope="row" v-for="(item,index) in dha_salem_krish" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in dha_salem_krish_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kum_ney_vil"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in erod_hosure" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kum_ney_vil_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
+              <tr scope="row" v-for="(item,index) in erod_hosure_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in jaipur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in dha_salem_krish"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" class="font-weight-black allindiagroup">
+                <td scope="row" :class="text-xs-left" style="cursor:pointer">AHC </td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in dha_salem_krish_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc_chennai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc_chennai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in erod_hosure"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in erod_hosure_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in jaipur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-                    style="cursor:pointer"
-                  >AHC </td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahc_chennai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahc_chennai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                  <!-- <tr
+              </tr>
+              <!-- <tr
                   scope="row"
                   v-for="(item,index) in amb"
                   :key="index+item.branch"
@@ -805,919 +254,280 @@
                 </tr> -->
 
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in pondycherry"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tirunelveli"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in coimbatore"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tuti_madurai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tuti_madurai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in trichy"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in thanjavur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in tiruppur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in karnataka"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in banglore"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in banglore_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hub_mys"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hub_mys_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in maharashtra"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in maharashtra_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-
-
-
-
-
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in telangana"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hyderabad"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hyderabad_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in andhra"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in andhra_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in roi"
-                  :key="index+item.branch"
-                  class="rotgrp"
-				  style="font-weight: 900!important;"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer;color : #ffffff!important;font-weight: 900!important;"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                 <tr
-                  scope="row"
-                  v-for="(item,index) in kerla"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kerla_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kolk"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kolk_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahmedabad"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-               <tr
-                  scope="row"
-                  v-for="(item,index) in madhyapradesh"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in madhyapradesh_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in odisha"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in odisha_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <!-- <tr
+              <tr scope="row" v-for="(item,index) in pondycherry" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in tirunelveli" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in coimbatore" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+
+
+              <tr scope="row" v-for="(item,index) in tuti_madurai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in tuti_madurai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in trichy" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in thanjavur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in andaman" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in tiruppur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in karnataka" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in banglore" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in banglore_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hub_mys" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hub_mys_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in maharashtra" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in maharashtra_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+
+
+
+
+
+
+
+              <tr scope="row" v-for="(item,index) in telangana" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hyderabad" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hyderabad_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in andhra" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in andhra_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in roi" :key="index+item.branch" class="rotgrp" style="font-weight: 900!important;">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer;color : #ffffff!important;font-weight: 900!important;">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kerla" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kerla_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kolk" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kolk_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+
+
+              <tr scope="row" v-for="(item,index) in ahmedabad" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in madhyapradesh" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in madhyapradesh_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in odisha" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in odisha_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <!-- <tr
                   scope="row"
                   v-for="(item,index) in amb"
                   :key="index+item.branch"
@@ -1750,994 +560,288 @@
 
 
 
-				<tr
-                  scope="row"
-                  class="font-weight-black ochfont"
-
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-                    style="cursor:pointer"
-                  >OHC:</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-
-                </tr>
-
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in madagascar"
-                  :key="index+item.branch"
-                  class="ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in mozambique"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in mozambique_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4 "
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-				</tr>
-
-        <tr
-                  scope="row"
-                  v-for="(item,index) in rwanda"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-           <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-          <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in rwanda_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4 "
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-           <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-          <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-        </tr>
-
-      	<tr
-                  scope="row"
-                  v-for="(item,index) in nigeria"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-				 <tr
-                  scope="row"
-                  v-for="(item,index) in mauritius"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in mauritius_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-				</tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in zambia"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ghana"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in nairobi"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in uganda"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in tanzania"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-              </tbody>
-
-			   <tbody v-if="user_role=='indian_user'">
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in alin"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ahc"
-                  :key="index+item.branch"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                 class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-
-                  >AEH:</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in cmh"
-                  :key="index+item.branch"
-                  class="font-weight-black"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh_chennai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in aeh_chennai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kanchi_vel"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kanchi_vel_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kum_ney_vil"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kum_ney_vil_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in dha_salem_krish"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in dha_salem_krish_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in erod_hosure"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in erod_hosure_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in jaipur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  class="font-weight-black allindiagroup"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-                    style="cursor:pointer"
-                  >AHC:</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  ></td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahc_chennai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahc_chennai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                  <!-- <tr
+              <tr scope="row" class="font-weight-black ochfont">
+                <td scope="row" :class="text-xs-left" style="cursor:pointer">OHC:</td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in madagascar" :key="index+item.branch" class="ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in mozambique" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in mozambique_branches" :key="index+item.branch" class="grey lighten-4 ">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in rwanda" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in rwanda_branches" :key="index+item.branch" class="grey lighten-4 ">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in nigeria" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in mauritius" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in mauritius_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in zambia" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in ghana" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in nairobi" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in uganda" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in tanzania" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+            </tbody>
+
+            <tbody v-if="user_role=='indian_user'">
+
+
+              <tr scope="row" v-for="(item,index) in alin" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc" :key="index+item.branch" class="font-weight-black allindiagroup">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" class="font-weight-black branchesgrp">
+                <td scope="row" :class="text-xs-left">AEH:</td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in cmh" :key="index+item.branch" class="font-weight-black">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh_chennai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in aeh_chennai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kanchi_vel" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kanchi_vel_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kum_ney_vil" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kum_ney_vil_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in dha_salem_krish" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in dha_salem_krish_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in erod_hosure" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in erod_hosure_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in jaipur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" class="font-weight-black allindiagroup">
+                <td scope="row" :class="text-xs-left" style="cursor:pointer">AHC:</td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+                <td scope="row" class="text-xs-center"></td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc_chennai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in ahc_chennai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <!-- <tr
                   scope="row"
                   v-for="(item,index) in amb"
                   :key="index+item.branch"
@@ -2768,982 +872,297 @@
 
                 </tr> -->
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in pondycherry"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tirunelveli"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in coimbatore"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tuti_madurai"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tuti_madurai_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in trichy"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in thanjavur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in tiruppur"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="'text-xs-left'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in karnataka"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in banglore"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in banglore_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hub_mys"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hub_mys_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in maharashtra"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in maharashtra_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-
-
-
-
-
-
-
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in telangana"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hyderabad"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in hyderabad_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in andhra"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in andhra_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in roi"
-                  :key="index+item.branch"
-                  class="rotgrp"
-				  style="font-weight: 900!important;"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer;color : #ffffff!important;font-weight: 900!important;"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in triv"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kolk"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in kolk_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-
-                <tr
-                  scope="row"
-                  v-for="(item,index) in ahmedabad"
-                  :key="index+item.branch"
-                  class="font-weight-black branchesgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in indore"
-                  :key="index+item.branch"
-                  class="font-weight-black"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in odisha"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in odisha_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-              </tbody>
-
-
-			   <tbody v-if="user_role=='overseas_user'">
-
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ohc"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="text-xs-left"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in madagascar"
-                  :key="index+item.branch"
-                  class="ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in mozambique"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in mozambique_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4 "
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-				</tr>
-
-
-
-        <!-- <tr
+              <tr scope="row" v-for="(item,index) in pondycherry" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in tirunelveli" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in coimbatore" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in tuti_madurai" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in tuti_madurai_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in trichy" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in thanjavur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in andaman" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+
+              <tr scope="row" v-for="(item,index) in tiruppur" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="'text-xs-left'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in karnataka" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in banglore" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in banglore_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hub_mys" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hub_mys_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in maharashtra" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in maharashtra_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+
+
+
+
+
+
+
+
+              <tr scope="row" v-for="(item,index) in telangana" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hyderabad" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in hyderabad_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in andhra" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in andhra_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in roi" :key="index+item.branch" class="rotgrp" style="font-weight: 900!important;">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer;color : #ffffff!important;font-weight: 900!important;">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in triv" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kolk" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in kolk_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+
+              <tr scope="row" v-for="(item,index) in ahmedabad" :key="index+item.branch" class="font-weight-black branchesgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in indore" :key="index+item.branch" class="font-weight-black">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in odisha" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in odisha_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+            </tbody>
+
+
+            <tbody v-if="user_role=='overseas_user'">
+
+
+              <tr scope="row" v-for="(item,index) in ohc" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="text-xs-left" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in madagascar" :key="index+item.branch" class="ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+
+              <tr scope="row" v-for="(item,index) in mozambique" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+
+              </tr>
+              <tr scope="row" v-for="(item,index) in mozambique_branches" :key="index+item.branch" class="grey lighten-4 ">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+              </tr>
+
+
+
+              <!-- <tr
                   scope="row"
                   v-for="(item,index) in rwanda"
                   :key="index+item.branch"
@@ -3803,7 +1222,7 @@
         </tr>
  -->
 
-        <!-- <tr
+              <!-- <tr
                   scope="row"
                   v-for="(item,index) in rwanda"
                   :key="index+item.branch"
@@ -3833,280 +1252,98 @@
                   >{{item.mtdopdpercentage}}</td>
 
                 </tr> -->
-         <tr
-                  scope="row"
-                  v-for="(item,index) in mauritius"
-                  :key="index+item.branch"
-                  class="font-weight-black rotgrp"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
-           <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
-          <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
+              <tr scope="row" v-for="(item,index) in mauritius" :key="index+item.branch" class="font-weight-black rotgrp">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrevlastyear}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdpercentage}}</td>
 
-                </tr>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in mauritius_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
+              <tr scope="row" v-for="(item,index) in mauritius_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrevlastyear}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdpercentage}}</td>
+              </tr>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
-           <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
-          <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
-        </tr>
+              <tr scope="row" v-for="(item,index) in mauritius_branches" :key="index+item.branch" class="grey lighten-4">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
+              </tr>
+              <tr scope="row" v-for="(item,index) in zambia" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-              <tr
-                  scope="row"
-                  v-for="(item,index) in mauritius_branches"
-                  :key="index+item.branch"
-                  class="grey lighten-4"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
+              </tr>
 
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-				</tr>
-				<tr
-                  scope="row"
-                  v-for="(item,index) in zambia"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
+              <tr scope="row" v-for="(item,index) in ghana" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              </tr>
 
-                </tr>
+              <tr scope="row" v-for="(item,index) in nairobi" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in ghana"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
+              </tr>
 
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
+              <tr scope="row" v-for="(item,index) in uganda" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                </tr>
+              </tr>
 
-				<tr
-                  scope="row"
-                  v-for="(item,index) in nairobi"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
+              <tr scope="row" v-for="(item,index) in tanzania" :key="index+item.branch" class="font-weight-black ochfont">
+                <td scope="row" :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdconsultcount}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdconsultcount}}</td>
 
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in uganda"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-
-				<tr
-                  scope="row"
-                  v-for="(item,index) in tanzania"
-                  :key="index+item.branch"
-                  class="font-weight-black ochfont"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorOPDSuper(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"
-                    style="cursor:pointer"
-
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdcount}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdcount}}</td>
-				   <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdconsultcount}}</td>
-				  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdconsultcount}}</td>
-
-                </tr>
-              </tbody>
+              </tr>
+            </tbody>
 
 
 
-            </table>
-          </div>
+          </table>
+        </div>
 
-          <back-to-top
-            bottom="90px"
-            right="90px"
-          >
-            <v-btn
-              class="red darken-4"
-              dark
-              absolute
-              fab
-              small
-            >
-              <v-icon>expand_less</v-icon>
-            </v-btn>
-          </back-to-top>
-          <!-- end Data Tabel -->
-        </v-flex>
-      </v-layout>
-    </v-slide-y-transition>
-  </v-container>
+        <back-to-top bottom="90px" right="90px">
+          <v-btn class="red darken-4" dark absolute fab small>
+            <v-icon>expand_less</v-icon>
+          </v-btn>
+        </back-to-top>
+        <!-- end Data Tabel -->
+      </v-flex>
+    </v-layout>
+  </v-slide-y-transition>
+</v-container>
 </template>
 
 
 <script>
 import moment from "moment";
-import { serverBus } from "../main";
+import {
+  serverBus
+} from "../main";
 export default {
   data: () => ({
 
@@ -4120,7 +1357,7 @@ export default {
     fullPage: true,
 
     title: null,
-	user_role : null,
+    user_role: null,
 
     rowColor: null,
     isActive: false,
@@ -4134,13 +1371,13 @@ export default {
     menu2: false,
     today: "",
     alin: null,
-	group: null,
+    group: null,
     cmh: null,
     aeh_chennai: null,
     aeh_chennai_branches: null,
     aeh: null,
     ahc: null,
-	ohc : null,
+    ohc: null,
     kanchi_vel: null,
     kanchi_vel_branches: null,
     kum_ney_vil: null,
@@ -4154,7 +1391,7 @@ export default {
     ahc_chennai: null,
     ahc_chennai_branches: null,
     tirunelveli: null,
-	coimbatore: null,
+    coimbatore: null,
     tuti_madurai: null,
     tuti_madurai_branches: null,
     trichy: null,
@@ -4176,55 +1413,53 @@ export default {
     kolk: null,
     kolk_branches: null,
     ahmedabad: null,
-    madhyapradesh :null,
-	madhyapradesh_branches :null,
+    madhyapradesh: null,
+    madhyapradesh_branches: null,
     odisha: null,
     odisha_branches: null,
-	maharashtra :null,
-	maharashtra_branches :null,
-	pondycherry :null,
-	tiruppur : null,
-	madagascar: null,
-	mozambique: null,
+    maharashtra: null,
+    maharashtra_branches: null,
+    pondycherry: null,
+    tiruppur: null,
+    madagascar: null,
+    mozambique: null,
     mozambique_branches: null,
-	nigeria: null,
-	rwanda: null,
-  rwanda_branches: null,
-	mauritius: null,
+    nigeria: null,
+    rwanda: null,
+    rwanda_branches: null,
+    mauritius: null,
     mauritius_branches: null,
-	zambia: null,
-	ghana: null,
-	nairobi: null,
-	uganda: null,
-	tanzania: null,
+    zambia: null,
+    ghana: null,
+    nairobi: null,
+    uganda: null,
+    tanzania: null,
     json_data: null,
-    json_meta: [
-      {
-        key: "charset",
-        value: "utf-8"
-      }
-    ],
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
     json_fields: {
       "Group/Branch": "branch",
       "FTD": "ftdopdcount",
       "MTD": "mtdopdcount",
-	  "FTDConsultation": "ftdconsultcount",
-	  "MTDConsultation": "mtdconsultcount",
+      "FTDConsultation": "ftdconsultcount",
+      "MTDConsultation": "mtdconsultcount",
 
 
     },
     fileName: null
   }),
-  created () {
+  created() {
     this.getToday();
   },
   methods: {
-    getToday () {
+    getToday() {
       this.today = moment()
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-    apiRequestOPDConsultSuper (date) {
+    apiRequestOPDConsultSuper(date) {
       // let superUserName = sessionStorage.getItem("super_user");
       if (date !== null) {
         this.fileDate = date;
@@ -4232,31 +1467,32 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-         .get(`https://mis.dragarwal.com/api-consultation-super/${date}`)
-		//.get(`http://localhost:8888/api-consultation-super/${date}`)
-                    .then(response => {
+      //    .get(`https://mis.dragarwal.com/api-consultation-super/${date}`)
+          .get(`http://localhost:8888/api-consultation-super/${date}`)
+          .then(response => {
             this.processDataOPDCONSULTSuper(response.data);
-              console.log(response.data);
+            console.log(response.data);
             this.isLoading = false;
           });
       } else {
         return null;
       }
     },
-    processDataOPDCONSULTSuper (data) {
-	  if ((sessionStorage.getItem('group_user')) || (sessionStorage.getItem('admin_user'))){
-	     this.user_role = 'super_user';
-	  }else if(sessionStorage.getItem('overseas_user')){
-	    this.user_role = 'overseas_user';
-	  }else if(sessionStorage.getItem('domestic_user')){
-		this.user_role = 'indian_user';
-	  }
+    processDataOPDCONSULTSuper(data) {
+      if ((sessionStorage.getItem('group_user')) || (sessionStorage.getItem('admin_user'))) {
+        this.user_role = 'super_user';
+      } else if (sessionStorage.getItem('overseas_user')) {
+        this.user_role = 'overseas_user';
+      } else if (sessionStorage.getItem('domestic_user')) {
+        this.user_role = 'indian_user';
+      }
 
-	  this.group = [data.group];
+        console.log(data);
+      this.group = [data.group];
       this.alin = [data.alin];
       this.aeh = [data.aeh];
       this.ahc = [data.ahc];
-	  this.ohc = [data.ohc];
+      this.ohc = [data.ohc];
       // this.cmh = [data.aehgroup["Chennai Main Hospital"]];
       this.cmh = data.branchwise["Chennai Main Hospital"];
       this.aeh_chennai = [data.aehgroup["Chennai Branches"]];
@@ -4276,7 +1512,7 @@ export default {
       this.ahc_chennai_branches = data.branchwise["Chennai branches"];
       // this.tirunelveli = [data.ahcgroup["Tirunelveli"]];
       this.tirunelveli = data.branchwise["Tirunelveli"];
-	  this.coimbatore = data.branchwise["Coimbatore"];
+      this.coimbatore = data.branchwise["Coimbatore"];
 
       this.tuti_madurai = [data.ahcgroup["Tuticorin + Madurai"]];
       this.tuti_madurai_branches = data.branchwise[
@@ -4286,7 +1522,7 @@ export default {
       this.trichy = data.branchwise["Trichy"];
       // this.thanjavur = [data.ahcgroup["Thanjavur"]];
       this.thanjavur = data.branchwise["Thanjavur"];
-      this.andaman = [data.ahcgroup["Andaman"]];
+      this.andaman = [data.ahcgroup["Port Blair"]];
       this.karnataka = [data.ahcgroup["Karnataka"]];
       this.banglore = [data.ahcgroup["Banglore"]];
       this.banglore_branches = data.branchwise["Banglore"];
@@ -4304,34 +1540,34 @@ export default {
       this.kolk = [data.ahcgroup["Kolkata"]];
       this.kolk_branches = data.branchwise["Kolkata"];
       this.ahmedabad = data.branchwise["Ahmedabad"];
-	  this.madhyapradesh = [data.ahcgroup["Madhya Pradesh"]];
+      this.madhyapradesh = [data.ahcgroup["Madhya Pradesh"]];
       this.madhyapradesh_branches = data.branchwise["Madhya Pradesh"];
       this.odisha = [data.ahcgroup["Odisha"]];
       this.odisha_branches = data.branchwise["Odisha"];
-	  this.maharashtra = [data.ahcgroup["Maharashtra"]];
+      this.maharashtra = [data.ahcgroup["Maharashtra"]];
       this.maharashtra_branches = data.branchwise["Maharashtra"];
-	  this.pondycherry = data.branchwise["Pondycherry"];
-	  this.tiruppur = data.branchwise["Tiruppur"];
+      this.pondycherry = data.branchwise["Pondycherry"];
+      this.tiruppur = data.branchwise["Tiruppur"];
 
-	  this.madagascar = data.branchwise["Madagascar"];
+      this.madagascar = data.branchwise["Madagascar"];
 
-    this.mozambique = [data.ohcgroup["Mozambique"]];
+      this.mozambique = [data.ohcgroup["Mozambique"]];
       this.mozambique_branches = data.branchwise["Mozambique"];
 
       this.rwanda = [data.ohcgroup["Rwanda"]];
-        this.rwanda_branches = data.branchwise["Rwanda"];
+      this.rwanda_branches = data.branchwise["Rwanda"];
 
 
-	  this.nigeria = data.branchwise["Nigeria"];
+      this.nigeria = data.branchwise["Nigeria"];
 
 
-	  this.mauritius = [data.ohcgroup["Mauritius"]];
+      this.mauritius = [data.ohcgroup["Mauritius"]];
       this.mauritius_branches = data.branchwise["Mauritius"];
-	  this.zambia = data.branchwise["Zambia"];
-	  this.ghana = data.branchwise["Ghana"];
-	  this.nairobi = data.branchwise["Nairobi"];
-	  this.uganda = data.branchwise["Uganda"];
-	  this.tanzania = data.branchwise["Tanzania"];
+      this.zambia = data.branchwise["Zambia"];
+      this.ghana = data.branchwise["Ghana"];
+      this.nairobi = data.branchwise["Nairobi"];
+      this.uganda = data.branchwise["Uganda"];
+      this.tanzania = data.branchwise["Tanzania"];
 
 
 
@@ -4340,158 +1576,160 @@ export default {
       // this.amb = [data.ahcgroup["Ambattur"]];
       this.show = true;
     },
-    downloadExcelconsultationSuper () {
+    downloadExcelconsultationSuper() {
 
-		if(this.user_role=='super_user'){
-		  let tempDataArr = [];
-		  if (this.fileDate !== null) {
-			tempDataArr = this.group.concat(
-			   this.alin,
-			  this.aeh,
-			  this.ahc,
-			  this.cmh,
-			  this.aeh_chennai,
-			  this.aeh_chennai_branches,
-			  this.kanchi_vel,
-			  this.kanchi_vel_branches,
-			  this.kum_ney_vil,
-			  this.kum_ney_vil_branches,
-			  this.dha_salem_krish,
-			  this.dha_salem_krish_branches,
-			  this.erod_hosure,
-			  this.erod_hosure_branches,
-			  this.jaipur,
-			  this.ahc_chennai,
-			  this.ahc_chennai_branches,
-			  this.pondycherry,
-			  this.tirunelveli,
-			  this.coimbatore,
-			  this.tuti_madurai,
-			  this.tuti_madurai_branches,
-			  this.trichy,
-			  this.thanjavur,
-			  this.karnataka,
-			  this.banglore,
-			  this.banglore_branches,
-			  this.hub_mys,
-			  this.hub_mys_branches,
-			  this.maharashtra,
-			  this.maharashtra_branches,
-			  this.telangana,
-			  this.hyderabad,
-			  this.hyderabad_branches,
-			  this.andhra,
-			  this.andhra_branches,
-			  this.roi,
-			  this.kerla,
-			  this.kerla_branches,
-			  this.kolk,
-			  this.kolk_branches,
-			  this.ahmedabad,
-			  this.madhyapradesh,
-			  this.madhyapradesh_branches,
-			  this.odisha,
-			  this.odisha_branches,
-			  this.madagascar,
-			  this.mozambique,
-			  this.mozambique_branches,
-			  this.rwanda,
-        this.rwanda_branches,
-			  this.mauritius,
-			  this.mauritius_branches,
-			  this.zambia,
-			  this.ghana,
-			  this.nairobi,
-			  this.uganda,
-			  this.tanzania
-			  // this.amb
-			);
-			return tempDataArr;
-		  } else {
-			return null;
-		  }
-		}else if(this.user_role=='overseas_user'){
+      if (this.user_role == 'super_user') {
+        let tempDataArr = [];
+        if (this.fileDate !== null) {
+          tempDataArr = this.group.concat(
+            this.alin,
+            this.aeh,
+            this.ahc,
+            this.cmh,
+            this.aeh_chennai,
+            this.aeh_chennai_branches,
+            this.kanchi_vel,
+            this.kanchi_vel_branches,
+            this.kum_ney_vil,
+            this.kum_ney_vil_branches,
+            this.dha_salem_krish,
+            this.dha_salem_krish_branches,
+            this.erod_hosure,
+            this.erod_hosure_branches,
+            this.jaipur,
+            this.ahc_chennai,
+            this.ahc_chennai_branches,
+            this.pondycherry,
+            this.tirunelveli,
+            this.coimbatore,
+            this.tuti_madurai,
+            this.tuti_madurai_branches,
+            this.trichy,
+            this.thanjavur,
+            this.andaman,
+            this.karnataka,
+            this.banglore,
+            this.banglore_branches,
+            this.hub_mys,
+            this.hub_mys_branches,
+            this.maharashtra,
+            this.maharashtra_branches,
+            this.telangana,
+            this.hyderabad,
+            this.hyderabad_branches,
+            this.andhra,
+            this.andhra_branches,
+            this.roi,
+            this.kerla,
+            this.kerla_branches,
+            this.kolk,
+            this.kolk_branches,
+            this.ahmedabad,
+            this.madhyapradesh,
+            this.madhyapradesh_branches,
+            this.odisha,
+            this.odisha_branches,
+            this.madagascar,
+            this.mozambique,
+            this.mozambique_branches,
+            this.rwanda,
+            this.rwanda_branches,
+            this.mauritius,
+            this.mauritius_branches,
+            this.zambia,
+            this.ghana,
+            this.nairobi,
+            this.uganda,
+            this.tanzania
+            // this.amb
+          );
+          return tempDataArr;
+        } else {
+          return null;
+        }
+      } else if (this.user_role == 'overseas_user') {
 
-			let tempDataArr = [];
-		  if (this.fileDate !== null) {
-			tempDataArr = this.ohc.concat(
-			  this.madagascar,
-			  this.mozambique,
-			  this.mozambique_branches,
-			  this.rwanda,
-         this.rwanda_branches,
-			  this.mauritius,
-			  this.mauritius_branches,
-			  this.zambia,
-			  this.ghana,
-			  this.nairobi,
-			  this.uganda,
-			  this.tanzania
-			  // this.amb
-			);
-			return tempDataArr;
-		  } else {
-			return null;
-		  }
-		}else{
+        let tempDataArr = [];
+        if (this.fileDate !== null) {
+          tempDataArr = this.ohc.concat(
+            this.madagascar,
+            this.mozambique,
+            this.mozambique_branches,
+            this.rwanda,
+            this.rwanda_branches,
+            this.mauritius,
+            this.mauritius_branches,
+            this.zambia,
+            this.ghana,
+            this.nairobi,
+            this.uganda,
+            this.tanzania
+            // this.amb
+          );
+          return tempDataArr;
+        } else {
+          return null;
+        }
+      } else {
 
-			let tempDataArr = [];
-		  if (this.fileDate !== null) {
-			tempDataArr = this.alin.concat(
-			  this.aeh,
-			  this.ahc,
-			  this.cmh,
-			  this.aeh_chennai,
-			  this.aeh_chennai_branches,
-			  this.kanchi_vel,
-			  this.kanchi_vel_branches,
-			  this.kum_ney_vil,
-			  this.kum_ney_vil_branches,
-			  this.dha_salem_krish,
-			  this.dha_salem_krish_branches,
-			  this.erod_hosure,
-			  this.erod_hosure_branches,
-			  this.jaipur,
-			  this.ahc_chennai,
-			  this.ahc_chennai_branches,
-			  this.pondycherry,
-			  this.tirunelveli,
-			  this.coimbatore,
-			  this.tuti_madurai,
-			  this.tuti_madurai_branches,
-			  this.trichy,
-			  this.thanjavur,
-			  this.karnataka,
-			  this.banglore,
-			  this.banglore_branches,
-			  this.hub_mys,
-			  this.hub_mys_branches,
-			  this.maharashtra,
-			  this.maharashtra_branches,
-			  this.telangana,
-			  this.hyderabad,
-			  this.hyderabad_branches,
-			  this.andhra,
-			  this.andhra_branches,
-			  this.roi,
-			  this.triv,
-			  this.kolk,
-			  this.kolk_branches,
-			  this.ahmedabad,
-			  this.madhyapradesh,
-			  this.madhyapradesh_branches,
-			  this.odisha,
-			  this.odisha_branches
-			  // this.amb
-			);
-			return tempDataArr;
-		  } else {
-			return null;
-		  }
-		}
+        let tempDataArr = [];
+        if (this.fileDate !== null) {
+          tempDataArr = this.alin.concat(
+            this.aeh,
+            this.ahc,
+            this.cmh,
+            this.aeh_chennai,
+            this.aeh_chennai_branches,
+            this.kanchi_vel,
+            this.kanchi_vel_branches,
+            this.kum_ney_vil,
+            this.kum_ney_vil_branches,
+            this.dha_salem_krish,
+            this.dha_salem_krish_branches,
+            this.erod_hosure,
+            this.erod_hosure_branches,
+            this.jaipur,
+            this.ahc_chennai,
+            this.ahc_chennai_branches,
+            this.pondycherry,
+            this.tirunelveli,
+            this.coimbatore,
+            this.tuti_madurai,
+            this.tuti_madurai_branches,
+            this.trichy,
+            this.thanjavur,
+            this.andaman,
+            this.karnataka,
+            this.banglore,
+            this.banglore_branches,
+            this.hub_mys,
+            this.hub_mys_branches,
+            this.maharashtra,
+            this.maharashtra_branches,
+            this.telangana,
+            this.hyderabad,
+            this.hyderabad_branches,
+            this.andhra,
+            this.andhra_branches,
+            this.roi,
+            this.triv,
+            this.kolk,
+            this.kolk_branches,
+            this.ahmedabad,
+            this.madhyapradesh,
+            this.madhyapradesh_branches,
+            this.odisha,
+            this.odisha_branches
+            // this.amb
+          );
+          return tempDataArr;
+        } else {
+          return null;
+        }
+      }
     },
 
-    changeColorOPDSuper (data) {
+    changeColorOPDSuper(data) {
       if (data.code === undefined) {
         this.rowColor = "text-xs-center";
         return true;
@@ -4526,6 +1764,7 @@ button.v-btn.v-btn--active.v-btn--icon.v-btn--floating.theme--light.primary::aft
   outline: none;
   box-shadow: none;
 }
+
 .btn:focus,
 .btn.focus {
   outline: none;
@@ -4536,17 +1775,21 @@ h1,
 h2 {
   font-weight: normal;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
+
 .customTable {
   table-layout: fixed;
   width: 100px;
@@ -4554,35 +1797,40 @@ a {
   border-collapse: collapse;
   touch-action: none;
 }
+
 table#stickyHeader thead {
   border-top: none;
   border-bottom: none;
   background-color: #000;
   touch-action: none;
 }
-.table-striped > tbody > tr:nth-child(2n + 2) > td,
-.table-striped > tbody > tr:nth-child(2n + 2) > th {
+
+.table-striped>tbody>tr:nth-child(2n + 2)>td,
+.table-striped>tbody>tr:nth-child(2n + 2)>th {
   background-color: #e5e5f2;
   touch-action: none;
 }
+
 .allindiagroup {
-background-color : #f0ae19!important
-}
-.branchesgrp{
-background-color : #7083a9!important
-}
-.rotgrp{
-background-color : #264e99!important
-}
-.whitefont{
-font-weight: 900!important;
-color : #ffffff!important
-}
-.ochfont{
-background-color : #f9e699!important;
-font-weight: 900!important;
-color : #1d1d1d!important
+  background-color: #f0ae19 !important
 }
 
+.branchesgrp {
+  background-color: #7083a9 !important
+}
 
+.rotgrp {
+  background-color: #264e99 !important
+}
+
+.whitefont {
+  font-weight: 900 !important;
+  color: #ffffff !important
+}
+
+.ochfont {
+  background-color: #f9e699 !important;
+  font-weight: 900 !important;
+  color: #1d1d1d !important
+}
 </style>

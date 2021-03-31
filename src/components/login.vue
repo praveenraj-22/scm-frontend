@@ -183,7 +183,8 @@ export default {
                 role1: response.data.role1
               }));
 
-              serverBus.$emit("changeComponent", "revenue");
+              
+			  serverBus.$emit("changeComponent", "normalrevenue");
 
             } else if (response.data.isAuthenticated === true &&
               response.data.role === "ch_user") {
@@ -193,8 +194,12 @@ export default {
                 role: response.data.role,
                 role1: response.data.role1
               }));
-
-              serverBus.$emit("changeComponent", "normalrevenue");
+			  if(this.name=="102301"){
+				serverBus.$emit("changeComponent", "Tpa");
+			  }else{
+				serverBus.$emit("changeComponent", "normalrevenue");
+			  }
+			  
 
             }
 

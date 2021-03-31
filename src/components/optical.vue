@@ -362,7 +362,6 @@ export default {
     modal: false,
     menu2: false,
     today: "",
-
     alin: null,
     AP: null,
     Chennai: null,
@@ -433,8 +432,8 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-          .get(`http://localhost:8888/api-opticals-super/${date}`)
-          //.get(`http://localhost:8888/api-opticals-super/${date}`)
+          .get(`https://mis.dragarwal.com/api-opticals-super/${date}`)
+          //.get(`https://mis.dragarwal.com/api-opticals-super/${date}`)
           .then(response => {
             this.processDataOPDSuper(response.data);
             this.isLoading = false;
@@ -453,8 +452,6 @@ export default {
       } else if (sessionStorage.getItem('optical_user')) {
         this.user_role = 'optical_user';
       }
-      console.log(data);
-
       this.Chennai = [data.group['Chennai']];
       this.AP = [data.group['AP']];
       this.ROTN = [data.group['ROTN']];

@@ -1,204 +1,74 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    class="grey lighten-3"
-  >
-    <v-slide-y-transition mode="out-in">
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs12
-          sm10
-          offset-sm1
-          md10
-          offest-md1
-          lg10
-          offset-lg1
-        >
-          <v-toolbar
-            flat
-            color="grey lighten-2"
-          >
-            <v-toolbar-title>NewOPD </v-toolbar-title>
-            <v-divider
-              class="mx-2 black"
-              inset
-              vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
-            <v-menu
-              absolute
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="date"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="200px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="date"
-                placeholder="Select Date"
-                prepend-inner-icon="event"
-                readonly
-              ></v-text-field>
-              <v-date-picker
-                color="primary"
-                v-model="date"
-                no-title
-                scrollable
-                min="2018-04-01"
-                :max="today"
-                backgroundRevenue-color="grey"
-                style="box-shadow:none"
-              >
-                <v-spacer></v-spacer>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="menu = false"
-                  style="outline:none"
-                >Cancel</v-btn>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="$refs.menu.save(date);apiRequestRevenue(date)"
-                  style="outline:none"
-                >Generate</v-btn>
-              </v-date-picker>
-            </v-menu>
-            <download-excel
-              :data="json_data"
-              :fields="json_fields"
-              type="csv"
-              :name="fileName"
-              :fetch="downloadExcelRevenue"
-            >
-              <v-btn
-                fab
-                flat
-                medium
-                color="black"
-              >
-                <v-tooltip bottom>
-                  <v-icon
-                    slot="activator"
-                    color="green darken-4"
-                  >fas fa-file-excel</v-icon>
-                  <span>Export</span>
-                </v-tooltip>
-              </v-btn>
-            </download-excel>
-          </v-toolbar>
-          <loading
-            :active.sync="isLoading"
-            :is-full-page="fullPage"
-            color="#7f0000"
-            loader="bars"
-          ></loading>
-          <!-- Vuetify Data table -->
-          <div class="table-responsive">
-            <table
-              class="table table-hover table-bordered"
-              v-if="show"
-            >
-              <thead>
-                <tr class="grey lighten-2">
-                  <th
-                    class="text-xs-left"
-                    width="15%"
-                    scope="col"
-                    rowspan="2"
-                  >Branch</th>
-                  <th
-                    class="text-xs-center"
-                    scope="col"
-                   
-                  >FTD</th>
-                  <th
-                    class="text-xs-center"
-                    scope="col"
-                  
-                  >MTD</th>
-				  <th
-                    class="text-xs-center"
-                    scope="col"
-                  
-                  >LMTD</th>
-				  <th
-                    class="text-xs-center"
-                    scope="col"
-                  
-                  >MTD%</th>
-                </tr>
-                
-              </thead>
-              <tbody>
-                <tr
-                  scope="row"
-                  v-for="(item,index) in tabledata"
-                  :key="index+item.branch"
-                  :class="changeColorRevenue(item) ? 'font-weight-black indigo lighten-2':'grey lighten-4'"
-                >
-                  <td
-                    scope="row"
-                    :class="changeColorRevenue(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'"                    
-                    style="cursor:pointer"
-                  >{{item.branch}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.ftdopdrev}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrev}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdrevlastyear}}</td>
-                  <td
-                    scope="row"
-                    class="text-xs-center"
-                  >{{item.mtdopdpercentage}}</td>
-                
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <back-to-top
-            bottom="90px"
-            right="90px"
-          >
-            <v-btn
-              class="red darken-4"
-              dark
-              absolute
-              fab
-              small
-            >
-              <v-icon>expand_less</v-icon>
+<v-container fluid fill-height class="grey lighten-3">
+  <v-slide-y-transition mode="out-in">
+    <v-layout row wrap>
+      <v-flex xs12 sm10 offset-sm1 md10 offest-md1 lg10 offset-lg1>
+        <v-toolbar flat color="grey lighten-2">
+          <v-toolbar-title>NewOPD </v-toolbar-title>
+          <v-divider class="mx-2 black" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-menu absolute ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="date" lazy transition="scale-transition" offset-y full-width min-width="200px">
+            <v-text-field slot="activator" v-model="date" placeholder="Select Date" prepend-inner-icon="event" readonly></v-text-field>
+            <v-date-picker color="primary" v-model="date" no-title scrollable min="2018-04-01" :max="today" backgroundRevenue-color="grey" style="box-shadow:none">
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu = false" style="outline:none">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu.save(date);apiRequestRevenue(date)" style="outline:none">Generate</v-btn>
+            </v-date-picker>
+          </v-menu>
+          <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelRevenue">
+            <v-btn fab flat medium color="black">
+              <v-tooltip bottom>
+                <v-icon slot="activator" color="green darken-4">fas fa-file-excel</v-icon>
+                <span>Export</span>
+              </v-tooltip>
             </v-btn>
-          </back-to-top>
-          <!-- end Data Tabel -->
-        </v-flex>
-		
-      </v-layout>
-    </v-slide-y-transition>
-  </v-container>
+          </download-excel>
+        </v-toolbar>
+        <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
+        <!-- Vuetify Data table -->
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered" v-if="show">
+            <thead>
+              <tr class="grey lighten-2">
+                <th class="text-xs-left" width="15%" scope="col" rowspan="2">Branch</th>
+                <th class="text-xs-center" scope="col">FTD</th>
+                <th class="text-xs-center" scope="col">MTD</th>
+                <th class="text-xs-center" scope="col">LMTD</th>
+                <th class="text-xs-center" scope="col">MTD%</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <tr scope="row" v-for="(item,index) in tabledata" :key="index+item.branch" :class="changeColorRevenue(item) ? 'font-weight-black indigo lighten-2':'grey lighten-4'">
+                <td scope="row" :class="changeColorRevenue(item)?'text-xs-left':'text-xs-left indigo--text font-weight-medium'" style="cursor:pointer">{{item.branch}}</td>
+                <td scope="row" class="text-xs-center">{{item.ftdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrev}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdrevlastyear}}</td>
+                <td scope="row" class="text-xs-center">{{item.mtdopdpercentage}}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <back-to-top bottom="90px" right="90px">
+          <v-btn class="red darken-4" dark absolute fab small>
+            <v-icon>expand_less</v-icon>
+          </v-btn>
+        </back-to-top>
+        <!-- end Data Tabel -->
+      </v-flex>
+
+    </v-layout>
+  </v-slide-y-transition>
+</v-container>
 </template>
 
 
 <script>
 import moment from "moment";
-import { serverBus } from "../main";
+import {
+  serverBus
+} from "../main";
 export default {
   // components: {
   //   loading
@@ -229,42 +99,40 @@ export default {
     rowdata: null,
     rowColor: null,
     headingdata: null,
-    tabledata: null,  
+    tabledata: null,
     json_data: null,
-    json_meta: [
-      {
-        key: "charset",
-        value: "utf-8"
-      }
-    ],
+    json_meta: [{
+      key: "charset",
+      value: "utf-8"
+    }],
     json_fields: {
       "Group/Branch": "branch",
       "FTD": "ftdopdrev",
       "MTD": "mtdopdrev",
-	  "LMTD": "mtdopdrevlastyear",
-	  "MTD%": "mtdopdpercentage",
+      "LMTD": "mtdopdrevlastyear",
+      "MTD%": "mtdopdpercentage",
     },
-    fileName: null    
-    
+    fileName: null
+
   }),
-  created () {
+  created() {
     this.getToday();
   },
   methods: {
-    getToday () {
+    getToday() {
       this.today = moment()
         .subtract(1, "days")
         .format("YYYY-MM-DD");
     },
-    changeColorRevenue (data) {
+    changeColorRevenue(data) {
       if (data.code === undefined) {
         return true;
       } else {
         return false;
       }
     },
-    apiRequestRevenue (date) {
-	console.log(date);
+    apiRequestRevenue(date) {
+      console.log(date);
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       if (date !== null) {
         this.fileDate = date;
@@ -272,12 +140,12 @@ export default {
         this.loading = true;
         this.isLoading = true;
         this.$http
-         .get(`https://mis.dragarwal.com/api-newpod-normal/${date}/${normalusername.name}`)
-         //.get(`http://localhost:8888/api-newpod-normal/${date}/${normalusername.name}`)
-         
-         .then(response => {
-		 
-		 //connsole.log(response.data);		 
+          .get(`https://mis.dragarwal.com/api-newpod-normal/${date}/${normalusername.name}`)
+          //.get(`http://localhost:8888/api-newpod-normal/${date}/${normalusername.name}`)
+
+          .then(response => {
+
+            //connsole.log(response.data);
             this.processDataRevenue(response.data);
             this.isLoading = false;
           });
@@ -285,7 +153,7 @@ export default {
         return null;
       }
     },
-    processDataRevenue (data) {
+    processDataRevenue(data) {
       let tempdata = [];
       let defCount = data.branch.length;
       let count = 0;
@@ -299,26 +167,36 @@ export default {
           //   tempdata.push(_.filter(data.group, { branch: element.heading })[0]);
           // } else {
           if (element.branches.length === 3) {
-            tempdata.push(_.filter(data.group, { branch: element.heading })[0]);
+            tempdata.push(_.filter(data.group, {
+              branch: element.heading
+            })[0]);
           } else {
             if (element.heading === "Karnataka") {
               let splitbranches = element.branches.split("+");
               tempdata.push(
-                _.filter(data.group, { branch: element.heading })[0]
+                _.filter(data.group, {
+                  branch: element.heading
+                })[0]
               );
               splitbranches.forEach(branchele => {
-                if (!["HUB", "MCC", "MYS","DWD"].includes(branchele)) {
-                  tempdata.push(_.filter(data.branch, { code: branchele })[0]);
+                if (!["HUB", "MCC", "MYS", "DWD"].includes(branchele)) {
+                  tempdata.push(_.filter(data.branch, {
+                    code: branchele
+                  })[0]);
                   count++;
                 }
               });
             } else {
               let splitbranches = element.branches.split("+");
               tempdata.push(
-                _.filter(data.group, { branch: element.heading })[0]
+                _.filter(data.group, {
+                  branch: element.heading
+                })[0]
               );
               splitbranches.forEach(branchele => {
-                tempdata.push(_.filter(data.branch, { code: branchele })[0]);
+                tempdata.push(_.filter(data.branch, {
+                  code: branchele
+                })[0]);
                 count++;
               });
             }
@@ -335,7 +213,7 @@ export default {
       }
       this.show = true;
     },
-    downloadExcelRevenue () {
+    downloadExcelRevenue() {
       let tempDataArr = [];
       if (this.fileDate !== null) {
         tempDataArr = this.tabledata;
@@ -344,7 +222,7 @@ export default {
         return null;
       }
     }
-   
+
   }
 };
 </script>
@@ -356,6 +234,7 @@ button.v-btn.v-btn--active.v-btn--icon.v-btn--floating.theme--light.primary::aft
   outline: none;
   box-shadow: none;
 }
+
 .btn:focus,
 .btn.focus {
   outline: none;
@@ -366,17 +245,21 @@ h1,
 h2 {
   font-weight: normal;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
+
 .customTable {
   table-layout: fixed;
   width: 100px;
@@ -384,14 +267,16 @@ a {
   border-collapse: collapse;
   touch-action: none;
 }
+
 table#stickyHeader thead {
   border-top: none;
   border-bottom: none;
   background-color: #000;
   touch-action: none;
 }
-.table-striped > tbody > tr:nth-child(2n + 2) > td,
-.table-striped > tbody > tr:nth-child(2n + 2) > th {
+
+.table-striped>tbody>tr:nth-child(2n + 2)>td,
+.table-striped>tbody>tr:nth-child(2n + 2)>th {
   background-color: #e5e5f2;
   touch-action: none;
 }
