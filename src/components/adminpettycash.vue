@@ -565,7 +565,7 @@ export default {
     loadcategory() {
 
       this.axios
-        .get(`https://mis.dragarwal.com/api-pettycashcategory`).then(response => {
+        .get(`http://localhost:8888/api-pettycashcategory`).then(response => {
           this.items = response.data;
 
         })
@@ -581,7 +581,7 @@ export default {
       }];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+        .get(`http://localhost:8888/api-finbranch`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -607,7 +607,7 @@ export default {
       //    let userid = JSON.parse(sessionStorage.getItem("fin_user"));
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`https://mis.dragarwal.com/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -637,7 +637,7 @@ export default {
       this.showgroup = true;
       this.isLoading = true;
       this.showgroupdetail = false;
-      this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbill/${id.branch}/${id.statusno}`)
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${id.branch}/${id.statusno}`)
         .then(response => {
           this.isLoading = false;
           this.groupdata = response.data;
@@ -653,7 +653,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       console.log(normalusername);
-      this.$http.get(`https://mis.dragarwal.com/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -667,7 +667,7 @@ export default {
       //  return false;
       console.log(item);
       this.isLoading = true;
-      this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status1}`).
+      this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status1}`).
       then(response => {
         console.log("group click");
         console.log(response);
@@ -714,7 +714,7 @@ export default {
       formData.append("comments", schcomments);
       formData.append("payment_receipt", this.fileBill);
 
-      this.$http.post(`https://mis.dragarwal.com/api-finptycshbillgroupapproveall`, formData, {}).then(response => {
+      this.$http.post(`http://localhost:8888/api-finptycshbillgroupapproveall`, formData, {}).then(response => {
         this.isLoading = false;
         this.refillamount = '';
         this.enabled = false;
@@ -723,7 +723,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
           console.log(normalusername);
-          this.$http.get(`https://mis.dragarwal.com/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-finpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.refillamount = '';
               this.isLoading = false;
@@ -742,7 +742,7 @@ export default {
     },
     downloadPayreceipt(filename) {
       this.axios({
-        url: `https://mis.dragarwal.com/api-payment-download/${filename}`,
+        url: `http://localhost:8888/api-payment-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -761,7 +761,7 @@ export default {
     },
     downloadvouchher(filename) {
       this.axios({
-        url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
+        url: `http://localhost:8888/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -780,8 +780,8 @@ export default {
     },
     downloadbill(filename) {
       this.axios({
-        url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
-        //url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        url: `http://localhost:8888/api-bill-download/${filename}`,
+        //url: `http://localhost:8888/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -806,7 +806,7 @@ export default {
       //  this.dialogcancel=false;
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       this.isLoading = true;
-      this.$http.post(`https://mis.dragarwal.com/api-finpcbillgroupdecline`, {
+      this.$http.post(`http://localhost:8888/api-finpcbillgroupdecline`, {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
         strch_branch: item.branch,
@@ -827,14 +827,14 @@ export default {
           alert('Cancelled');
           this.schcomments = '';
           console.log(item);
-          this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
 
-            this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;
@@ -860,7 +860,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
       this.isLoading = true;
 
-      this.$http.post(`https://mis.dragarwal.com/api-categoryupdate`, {
+      this.$http.post(`http://localhost:8888/api-categoryupdate`, {
         categoryid: category,
         itemid: item.sno,
         branch: item.branch
@@ -868,7 +868,7 @@ export default {
         if (response.data.dataupdated == true) {
           alert("Category changed")
           this.isLoading = true;
-          this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
 
             this.isLoading = false;
@@ -879,7 +879,7 @@ export default {
             this.showgroup = true;
             this.isLoading = true;
             this.showgroupdetail = false;
-            this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;
@@ -896,7 +896,7 @@ export default {
         } else {
           alert("Error in saving data")
           this.isLoading = true;
-          this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-finpcbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.status}`).
           then(response => {
 
             this.isLoading = false;
@@ -907,7 +907,7 @@ export default {
             this.showgroup = true;
             this.isLoading = true;
             this.showgroupdetail = false;
-            this.$http.get(`https://mis.dragarwal.com/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
+            this.$http.get(`http://localhost:8888/api-finpcbranchgroupbill/${item.branch}/${item.status}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;

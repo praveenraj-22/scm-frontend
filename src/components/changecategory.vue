@@ -334,7 +334,7 @@ methods:{
     }];
     this.axios
       //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-      .get(`https://mis.dragarwal.com/api-finbranch`).then(response => {
+      .get(`http://localhost:8888/api-finbranch`).then(response => {
         this.branch = arr1.concat(response.data);
         console.log(this.branch);
       })
@@ -348,7 +348,7 @@ methods:{
 
     }];
     this.axios
-      .get(`https://mis.dragarwal.com/api-pettycashcategory`).then(response => {
+      .get(`http://localhost:8888/api-pettycashcategory`).then(response => {
         this.items = arr2.concat(response.data);
       })
   },
@@ -369,7 +369,7 @@ apiRequestreportpc(SetBranch,category,fromdate){
     }
     else {
           this.isLoading = true;
-          this.axios.get(`https://mis.dragarwal.com/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
+          this.axios.get(`http://localhost:8888/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
             .then(response =>{
 
             this.processDatalistreport(response.data);
@@ -400,7 +400,7 @@ rowChange(item, category) {
   let normalusername = JSON.parse(sessionStorage.getItem("fin_user"));
   this.isLoading = true;
 
-  this.$http.post(`https://mis.dragarwal.com/api-categoryupdate`, {
+  this.$http.post(`http://localhost:8888/api-categoryupdate`, {
     categoryid: category,
     itemid: item.sno,
     branch: item.branch
@@ -411,7 +411,7 @@ rowChange(item, category) {
 
 
       this.isLoading = true;
-      this.axios.get(`https://mis.dragarwal.com/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
+      this.axios.get(`http://localhost:8888/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
         .then(response =>{
   console.log(response.data);
         this.processDatalistreport(response.data);
@@ -428,7 +428,7 @@ this.isLoading = false;
 
 
       this.isLoading = true;
-      this.axios.get(`https://mis.dragarwal.com/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
+      this.axios.get(`http://localhost:8888/api-getpcreports/${this.SetBranch}/${this.category}/${this.fromdate}`)
         .then(response =>{
 
         this.processDatalistreport(response.data);

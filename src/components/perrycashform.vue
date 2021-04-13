@@ -77,7 +77,7 @@
                   </v-date-picker>
                 </v-menu>
 							</v-flex>
-							
+
 							<v-flex xs12 sm6 md4>
 
                 <v-text-field v-model="remarks" label="Memo" v-on:change="handlecomments(remarks)"></v-text-field>
@@ -188,7 +188,7 @@ export default {
       this.today = moment().format("YYYY-MM-DD");
     },
     handlecomments(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>«»/?~!@#?……&*|{}??‘;:”“'?,??]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>ï¿½ï¿½/?~!@#?ï¿½ï¿½&*|{}??ï¿½;:ï¿½ï¿½'?,??]");
 
       if (pattern.test(a)) {
         this.remarks = '';
@@ -200,7 +200,7 @@ export default {
 
     },
     handlevendor(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>«»/?~!@#?……&*|{}??‘;:”“'?,??]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>ï¿½ï¿½/?~!@#?ï¿½ï¿½&*|{}??ï¿½;:ï¿½ï¿½'?,??]");
 
       if (pattern.test(a)) {
         this.vendorname = '';
@@ -212,7 +212,7 @@ export default {
 
     },
     handlebill(a) {
-      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>«»/?~!@#?……&*|{}??‘;:”“'?,??]");
+      var pattern = new RegExp("[`~!#$^&*=|{}':;',\\[\\]<>ï¿½ï¿½/?~!@#?ï¿½ï¿½&*|{}??ï¿½;:ï¿½ï¿½'?,??]");
 
       if (pattern.test(a)) {
         this.billno = '';
@@ -303,7 +303,7 @@ export default {
       formData.append("fileBill", this.fileBill);
       formData.append("chid", normalusername.name);
 
-      this.$http.post('https://mis.dragarwal.com/api-petty-cash-bill-submit', formData, {}).then(res => {
+      this.$http.post('http://localhost:8888/api-petty-cash-bill-submit', formData, {}).then(res => {
         this.isLoading = true;
         this.loading = true;
         alert(res.data.ResponseMsg);
@@ -317,23 +317,23 @@ export default {
 
       },
 	  handleFileUploadVoucher(){
-		this.fileVoucher = this.$refs.voucherupload.files[0];	
-		if ((this.fileVoucher.size > 500000)) {		    
+		this.fileVoucher = this.$refs.voucherupload.files[0];
+		if ((this.fileVoucher.size > 500000)) {
 			 //alert("Voucher file is greater than 500KB");
 			 return false;
-		
+
 		}
 	  },
 	  handleFileUploadBill(){
-		this.fileBill = this.$refs.billupload.files[0];	
-		if ((this.fileBill.size > 500000)) {		    
+		this.fileBill = this.$refs.billupload.files[0];
+		if ((this.fileBill.size > 500000)) {
 			 //alert("Bill file is greater than 500KB");
 			 return false;
-		
+
 		}
 	  },
-      clear () {        
-        this.voucherno = ''        
+      clear () {
+        this.voucherno = ''
         this.selbranch = [];
 		this.category = [];
 		this.remarks='';
@@ -348,17 +348,17 @@ export default {
 		this.$refs.billUploaderr.innerText = '';
 		this.fileVoucher = null;
 		this.fileBill = null;
-		
-        
+
+
       },
 	  loadbranch() {
 		  let userid = JSON.parse(sessionStorage.getItem("normal_user"));
-           
+
           var arr1 = [{TEXT: '',shortCode: 'Select All', }];
 		  this.isLoading = true;
-		  this.loading = true;		  
-		  this.axios		   
-			.get(`https://mis.dragarwal.com/api-chbranch/${userid.userName}`).then(response => {		
+		  this.loading = true;
+		  this.axios
+			.get(`http://localhost:8888/api-chbranch/${userid.userName}`).then(response => {
 			  console.log(response.data);
 			  this.branch = arr1.concat(response.data);
 			  //alert(JSON.stringify(this.branch));
@@ -366,12 +366,12 @@ export default {
 			  console.log(this.branch);
 			})
 	},
-	
+
 	branchamount(selectObj) {
 	      this.isLoading = true;
-		  this.loading = true;	
-		  this.axios		   
-			.get(`https://mis.dragarwal.com/api-bramch-allocated-amount/${selectObj}`).then(response => {			
+		  this.loading = true;
+		  this.axios
+			.get(`http://localhost:8888/api-bramch-allocated-amount/${selectObj}`).then(response => {
 				//alert(response.data[0]['credit']);
 				this.show = true;
 				this.pettycash_branch=response.data[0]['branch'];
@@ -381,22 +381,22 @@ export default {
           this.voucherno = response.data[0]['voucher_no'];
           this.pettycash_limit = response.data[0]['notify_amount'];
 				this.isLoading = false;
-				
+
 			})
 	},
-	
-	loadcategoty() {           
-          var arr2 = [{text: '',shortCode: 'Select All', }];		  
-		  this.axios		   
-			.get(`https://mis.dragarwal.com/api-pettycashcategory`).then(response => {			  
-			  this.items = arr2.concat(response.data);		  
-			 
+
+	loadcategoty() {
+          var arr2 = [{text: '',shortCode: 'Select All', }];
+		  this.axios
+			.get(`http://localhost:8888/api-pettycashcategory`).then(response => {
+			  this.items = arr2.concat(response.data);
+
 			})
 	},
 	back() {
 		serverBus.$emit('changeComponent', 'pettycash_ch_list')
 	}
-	
+
     },
   }
 </script>

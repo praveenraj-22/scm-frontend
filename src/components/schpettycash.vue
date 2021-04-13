@@ -372,7 +372,7 @@ export default {
       }];
       this.axios
         //  .get(`https://scm.dragarwal.com/api-branch/${selectObj}`).then(response =>{
-        .get(`https://mis.dragarwal.com/api-schbranch/${userid.userName}`).then(response => {
+        .get(`http://localhost:8888/api-schbranch/${userid.userName}`).then(response => {
           this.branch = arr1.concat(response.data);
           console.log(this.branch);
         })
@@ -397,7 +397,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`https://mis.dragarwal.com/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -418,7 +418,7 @@ export default {
       this.showgroup = true;
       this.isLoading = true;
       this.showgroupdetail = false;
-      this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbill/${id.branch}/${id.statusno}/${id.bill_submission}`)
+      this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${id.branch}/${id.statusno}/${id.bill_submission}`)
         .then(response => {
           this.isLoading = false;
           this.groupdata = response.data;
@@ -433,7 +433,7 @@ export default {
       this.isLoading = true;
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
-      this.$http.get(`https://mis.dragarwal.com/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+      this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
         .then(response => {
           this.isLoading = false;
           console.log(response.data);
@@ -447,7 +447,7 @@ export default {
       console.log(" grpclick");
       console.log(item);
       this.isLoading = true;
-      this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.created_date}/${item.status1}`).
+      this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.created_date}/${item.status1}`).
       then(response => {
         console.log(response);
         this.isLoading = false;
@@ -464,7 +464,7 @@ export default {
       let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
       console.log(normalusername);
       this.isLoading = true;
-      this.$http.post(`https://mis.dragarwal.com/api-strchbillgroupapproveall`, {
+      this.$http.post(`http://localhost:8888/api-strchbillgroupapproveall`, {
         strch_id: normalusername.name,
         strch_branch: item.branch,
         strch_date: item.bill_submission
@@ -476,7 +476,7 @@ export default {
           this.isLoading = true;
           let normalusername = JSON.parse(sessionStorage.getItem("normal_user"));
           console.log(normalusername);
-          this.$http.get(`https://mis.dragarwal.com/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
+          this.$http.get(`http://localhost:8888/api-schpc/${this.SetBranch}/${this.SetStatus}/${normalusername.name}`)
             .then(response => {
               this.isLoading = false;
               console.log(response.data);
@@ -498,7 +498,7 @@ export default {
       console.log(normalusername);
 
       this.isLoading = true;
-      this.$http.post(`https://mis.dragarwal.com/api-strchbillgroupapprove`, {
+      this.$http.post(`http://localhost:8888/api-strchbillgroupapprove`, {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
         strch_branch: item.branch,
@@ -512,7 +512,7 @@ export default {
           this.showgroup = true;
           this.isLoading = true;
           this.showgroupdetail = false;
-          this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
 
             .then(response => {
               this.groupdata = response.data;
@@ -527,7 +527,7 @@ export default {
           this.showgroup = true;
           this.isLoading = true;
           this.showgroupdetail = false;
-          this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status1}/${item.bill_submission}`)
             .then(response => {
               this.isLoading = false;
               this.groupdata = response.data;
@@ -541,8 +541,8 @@ export default {
     },
     downloadvouchher(filename) {
       this.axios({
-        url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
-        //url: `https://mis.dragarwal.com/api-voucher-download/${filename}`,
+        url: `http://localhost:8888/api-voucher-download/${filename}`,
+        //url: `http://localhost:8888/api-voucher-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -561,8 +561,8 @@ export default {
     },
     downloadbill(filename) {
       this.axios({
-        url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
-        //url: `https://mis.dragarwal.com/api-bill-download/${filename}`,
+        url: `http://localhost:8888/api-bill-download/${filename}`,
+        //url: `http://localhost:8888/api-bill-download/${filename}`,
         method: 'GET',
         responseType: 'blob',
       }).then(response => {
@@ -586,7 +586,7 @@ export default {
 
       this.isLoading = true;
 
-      this.$http.post(`https://mis.dragarwal.com/api-strchbillgroupdecline`, {
+      this.$http.post(`http://localhost:8888/api-strchbillgroupdecline`, {
         strch_id: normalusername.name,
         strch_groupcategory: item.category_name,
         strch_branch: item.branch,
@@ -607,21 +607,21 @@ export default {
           this.schcomments = '';
           console.log(item);
           this.isLoading = true;
-          this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
+          this.$http.get(`http://localhost:8888/api-strchbranchgroupbilldetail/${item.branch}/${item.category_id}/${item.bill_submission}/${item.status}`).
           then(response => {
             console.log(response);
 
             this.showgroupdetail = true;
             this.groupdatadetail = response.data;
 
-            this.$http.get(`https://mis.dragarwal.com/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
+            this.$http.get(`http://localhost:8888/api-strchbranchgroupbill/${item.branch}/${item.status}/${item.bill_submission}`)
               .then(response => {
                 this.isLoading = false;
                 this.groupdata = response.data;
                 console.log(response.data);
                 this.showgroup = true;
               });
-              
+
 
           });
 
