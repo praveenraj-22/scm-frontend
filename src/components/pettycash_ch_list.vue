@@ -59,9 +59,6 @@
         </v-card-title>
 
 
-
-
-
         <!-- Vuetify Data table -->
         <v-data-table :headers="headers" :items="billdata" v-model="selected" :search="search" class="elevation-1">
           <template slot="items" slot-scope="props">

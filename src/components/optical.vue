@@ -14,9 +14,8 @@
               <v-btn flat color="primary" @click="menu = false" style="outline:none">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.menu.save(date);apiRequestOPDSuper(date)" style="outline:none">Generate</v-btn>
             </v-date-picker>
-
-
           </v-menu>
+
           <download-excel :data="json_data" :fields="json_fields" type="csv" :name="fileName" :fetch="downloadExcelRevenueSuper">
             <v-btn fab flat medium color="black">
               <v-tooltip bottom>
@@ -25,6 +24,7 @@
               </v-tooltip>
             </v-btn>
           </download-excel>
+
         </v-toolbar>
         <loading :active.sync="isLoading" :is-full-page="fullPage" color="#7f0000" loader="bars"></loading>
         <!-- Vuetify Data table -->

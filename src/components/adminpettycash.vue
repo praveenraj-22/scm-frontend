@@ -943,7 +943,7 @@ export default {
 }
 </script>
 
-<style >
+<style>
 .inlineTable {
   display: inline-block;
 }

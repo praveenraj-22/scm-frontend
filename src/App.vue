@@ -85,7 +85,8 @@ import changecategory from "./components/changecategory.vue"
 import iwsr from "./components/iwsr.vue"
 import dob from './components/dob.vue'
 import snapshotrevenue from "./components/snapshotrevenue.vue"
-
+import coll_recon from "./components/collection_recon.vue"
+import coll_recon_admin from "./components/collection_recon_admin.vue"
 import {
   serverBus
 } from "./main";
@@ -157,7 +158,9 @@ export default {
     changecategory,
     iwsr,
     dob,
-    snapshotrevenue
+    snapshotrevenue,
+    coll_recon,
+    coll_recon_admin
   },
   created() {
     serverBus.$on("changeComponent", component => {
@@ -277,13 +280,13 @@ export default {
         this.tabItems = ['TPAApproval']
       } else if (this.userType == 'centerhead') {
         if (this.userId == 'itteamch' || this.userId == '104608' || this.userId == '101248' || this.userId == '106000' || this.userId == '104786' || this.userId == '100952' || this.userId == '104790') {
-          this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash', "TPA"]
+          this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash', "TPA", "Collection_recon"]
         } else if (this.userId == '103741') {
           this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash', "TPA", "FTD List"]
         } else if (this.userId == '102301') {
           this.tabItems = ["TPA"]
         } else {
-          this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash', "TPA"]
+          this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRT', 'Petty Cash', "TPA", "coll_recon"]
         }
 
 
@@ -294,9 +297,14 @@ export default {
           this.tabItems = ['Domestic', 'Cogs Vs Revn', 'NewOPD', 'DRTApproval', 'pettycashApproval']
         }
       } else if (this.userType == 'financeuser') {
+        console.log(this.userId);
         if (this.userId == 'finpc') {
           this.tabItems = ['Cashapproval']
-        } else {
+        } else if (this.userId == 'reconadmin') {
+
+          this.tabItems = ['Collection_recon_admin'];
+         }
+        else {
           this.tabItems = ['AdminApproval']
         }
 
@@ -329,6 +337,7 @@ export default {
       });
     },
     changeCategory(item) {
+      console.log(item);
       if (item === 'Domestic') {
         if ((this.userType == 'domestic') || (this.userType == 'group') || (this.userType == 'overcease') || (this.userType == 'admin')) {
           serverBus.$emit('changeComponent', 'domesticrevenue')
@@ -474,6 +483,12 @@ export default {
         serverBus.$emit('changeComponent', 'snapshotrevenue')
       }
 
+      if (item === "Collection_recon") {
+        serverBus.$emit('changeComponent', 'coll_recon')
+      }
+      if (item === "Collection_recon_admin") {
+        serverBus.$emit('changeComponent', 'coll_recon_admin')
+      }
     }
     // ,
     // home () {

@@ -70,8 +70,8 @@
                   <v-btn slot="activator" small fab color="success" @click="rowApprove(props.item)">
                     <v-icon>check</v-icon>
                   </v-btn>
-
                 </td>
+
                 <td class="text-xs-right" v-if="props.item.drtApproval_status==='Pending'">
 
                   <v-btn slot="activator" small fab @click.stop="$set(dialogcancel, props.item.Bill_no, true)" color="red">
