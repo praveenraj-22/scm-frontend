@@ -16,7 +16,7 @@
     "highcharts": "7.0.2",
     "highcharts-vue": "1.2.0",
     "lodash": "4.17.11",
-    "moment": "2.22.2",
+    "moment": "2.29.4",
     "npm": "^6.4.1",
     "simplebar-vue": "0.1.0",
     "v-scroll-lock": "1.0.1",
